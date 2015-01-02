@@ -7,4 +7,6 @@ $.get('get_historical_data', function(result) {
 
     console.log('received a result!  woo!', result);
 
+    // now do something with data...
+
 });

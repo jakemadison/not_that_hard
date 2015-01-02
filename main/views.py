@@ -21,8 +21,6 @@ def get_historical_data(request):
     print('getting historical data...')
     historical_data = Day.objects.all()
 
-    print(type(historical_data))
-
     historical_array = []
 
     for each_day in historical_data:
