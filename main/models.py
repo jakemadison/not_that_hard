@@ -26,7 +26,7 @@ class Day(models.Model):
     spend_limit_maintained = models.NullBooleanField(null=True, blank=True, default=None)
 
     def __unicode__(self):
-        return 'day instance id: {0} date: {1}'.format(self.id, self.date)
+        return 'day instance id: {0}'.format(self.id)
 
     def __str__(self):
         return unicode(self).encode('utf-8')

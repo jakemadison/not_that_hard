@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
+from main import views
 
 urlpatterns = patterns('',
     # Examples:
@@ -8,4 +9,5 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', include('main.urls')),
+    url(r'^get_historical_data$', views.get_historical_data, name='get_historical_data'),
 )
