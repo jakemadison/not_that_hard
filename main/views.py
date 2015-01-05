@@ -26,6 +26,7 @@ def get_historical_data(request):
     for each_day in historical_data:
         parsed_datum = model_to_dict(each_day, exclude='date')
         parsed_datum['date'] = str(each_day.date)
+        print(type(each_day.date))
         historical_array.append(parsed_datum)
 
     return HttpResponse(json.dumps({'message': 'success',
