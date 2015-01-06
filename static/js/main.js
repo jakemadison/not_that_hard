@@ -42,13 +42,12 @@ function create_donut(data) {
 
     console.log('create donut... ');
 
-    console.log(data);
+    console.log('data ->', data);
+
     data.forEach(function(d) {console.log(d); console.log(d.yoga)});
 
     var number_donuts = data.length;
     var number_of_segments = 4;
-
-
 
     var radius = 74;
     var padding = 10;
@@ -72,8 +71,10 @@ function create_donut(data) {
         .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
 
-    var vis = d3.select('.chart')
-        .data(data)
+    var vis = d3.select('.chart');
+
+    vis.selectAll('.pie')
+        .data([2,3,4,5,6,7,8])
         .enter().append('svg')
         .attr('class', 'pie')
         .attr('width', radius * 2)
@@ -81,14 +82,16 @@ function create_donut(data) {
         .append('g')
         .attr('transform', 'translate(' + radius + ',' + radius + ')');
 
+    var test = [[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]];
+
 
     vis.selectAll('.arc')
-        .data(function(d) {console.log('d->', d); return arcScale(25)})
+        .data(function(d, i) {return test[i];})
         .enter().append("path")
         .attr("class", "arc")
         .attr("d", arc)
-        .style("fill", color)
-        .attr("transform", "translate(300,200)");
+        .style("fill", color);
+        //.attr("transform", "translate(300,200)");
 
 
     console.log('donut done.');
