@@ -71,9 +71,7 @@ function create_donut(data) {
         .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
 
-    var vis = d3.select('.chart');
-
-    vis.selectAll('.pie')
+    var svg =d3.select('.chart').selectAll('.pie')
         .data([2,3,4,5,6,7,8])
         .enter().append('svg')
         .attr('class', 'pie')
@@ -85,13 +83,15 @@ function create_donut(data) {
     var test = [[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]];
 
 
-    vis.selectAll('.arc')
-        .data(function(d, i) {return test[i];})
-        .enter().append("path")
+    svg.selectAll('.arc')
+        //.data(function(d, i) {return test[i];})
+        .data([1,2,3,4])
+        .enter()
+        .append("path")
         .attr("class", "arc")
-        .attr("d", arc)
+        .attr("d", function(d) {return arcScale(d);})
         .style("fill", color);
-        //.attr("transform", "translate(300,200)");
+
 
 
     console.log('donut done.');
