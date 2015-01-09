@@ -5,6 +5,7 @@ from main.models import Day
 import json
 from django.forms.models import model_to_dict
 from django.http import HttpResponse
+from datetime import datetime
 
 
 # Create your views here.
@@ -25,7 +26,7 @@ def get_historical_data(request):
 
     for each_day in historical_data:
         parsed_datum = model_to_dict(each_day, exclude='date')
-        parsed_datum['date'] = str(each_day.date)
+        parsed_datum['date'] = datetime.strftime(each_day.date, '%b %d')
         print(type(each_day.date))
         historical_array.append(parsed_datum)
 

@@ -55,7 +55,7 @@ function create_donut(data) {
     // map 0 - 100 on to 0 - 2*Pi:
     var arcScale = d3.scale.linear().domain([0, 100]).range([0, 2*Math.PI]);
 
-    var arc = d3.svg.arc().innerRadius(radius - 30)
+    var arc = d3.svg.arc().innerRadius(radius - 50)
         .outerRadius(radius)
         .startAngle(function(d, i) {
             return arcScale((i+1)*25);
@@ -73,14 +73,14 @@ function create_donut(data) {
 
     var pie = d3.layout.pie()
         .sort(null)
-        .value(function (d) {return 25;});
+        .value(function (d) {return d;});
 
 
     var test_data = [1,2,3,4];
 
 
     console.log('starting svg building.');
-    var test = [[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]];
+    var test = [[0,2,3,1],[4,4,4,4],[1,2,2,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]];
     var svg =d3.select('.chart').selectAll('.pie')
         .data(test)
         .enter().append('svg')
@@ -89,9 +89,6 @@ function create_donut(data) {
         .attr('height', radius * 2)
         .append('g')
         .attr('transform', 'translate(' + radius + ',' + radius + ')');
-
-
-
 
 
     console.log('finished svg building.  starting arc/path building');
@@ -103,6 +100,13 @@ function create_donut(data) {
         .attr("class", "arc")
         .attr("d", arc)
         .style("fill", color);
+
+    svg.append("text")
+        .attr("dy", ".35em")
+        .attr("class", "legend")
+        .attr("fill", "rgb(128,128,128)")
+        .style("text-anchor", "middle")
+        .text('Jan 07');
 
 
 

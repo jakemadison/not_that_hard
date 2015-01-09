@@ -20,3 +20,20 @@ coding without smoking is hard... :<
 
 /RANT.
 
+
+=====
+
+Add a weekly = which overlays the past 7 days? showing you patterns in how dark things are?
+
+-> it would be nice if they just kinda mashed together in the JS. Accordion style.
+
+=====
+Create two rings.  One is basic/minor, the other is advanced/major.
+
+How does this work again?
+
+1 minor is OK
+1 major is better
+2 * minor = 1 major
+
+Oh, a major one should take up two minor blocks.  That's easy.
