@@ -71,6 +71,13 @@ function create_donut(data) {
         .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
 
+    var pie = d3.layout.pie()
+        .sort(null)
+        .value(function (d) {return 25;});
+
+
+    var test_data = [1,2,3,4];
+
     var svg =d3.select('.chart').selectAll('.pie')
         .data([2,3,4,5,6,7,8])
         .enter().append('svg')
@@ -82,14 +89,19 @@ function create_donut(data) {
 
     var test = [[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]];
 
+    var t2 = [];
+
+    for (var i=1; i<5; i++) {
+        t2.push(pie(i));
+    }
 
     svg.selectAll('.arc')
         //.data(function(d, i) {return test[i];})
-        .data([1,2,3,4])
+        .data(t2)
         .enter()
         .append("path")
         .attr("class", "arc")
-        .attr("d", function(d) {return arcScale(d);})
+        .attr("d", function(d) {return pie(d);})
         .style("fill", color);
 
 
