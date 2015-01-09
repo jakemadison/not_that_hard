@@ -58,10 +58,10 @@ function create_donut(data) {
     var arc = d3.svg.arc().innerRadius(radius - 30)
         .outerRadius(radius)
         .startAngle(function(d, i) {
-            return arcScale(i*25);
+            return arcScale((i+1)*25);
         })
         .endAngle(function(d, i) {
-            return arcScale(25 + (i*25));
+            return arcScale(25 + ((i+1)*25));
         });
 
 
@@ -78,8 +78,11 @@ function create_donut(data) {
 
     var test_data = [1,2,3,4];
 
+
+    console.log('starting svg building.');
+    var test = [[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]];
     var svg =d3.select('.chart').selectAll('.pie')
-        .data([2,3,4,5,6,7,8])
+        .data(test)
         .enter().append('svg')
         .attr('class', 'pie')
         .attr('width', radius * 2)
@@ -87,21 +90,18 @@ function create_donut(data) {
         .append('g')
         .attr('transform', 'translate(' + radius + ',' + radius + ')');
 
-    var test = [[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]];
 
-    var t2 = [];
 
-    for (var i=1; i<5; i++) {
-        t2.push(pie(i));
-    }
 
+
+    console.log('finished svg building.  starting arc/path building');
     svg.selectAll('.arc')
         //.data(function(d, i) {return test[i];})
-        .data(t2)
+        .data(function(d) {return d;})
         .enter()
         .append("path")
         .attr("class", "arc")
-        .attr("d", function(d) {return pie(d);})
+        .attr("d", arc)
         .style("fill", color);
 
 
