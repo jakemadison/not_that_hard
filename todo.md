@@ -50,3 +50,39 @@ we don't need a new day button.  We just go from start date to now, filling in m
 with empty donuts.
 
 Iteration 3 might be to add some hover labels on a day when you hover... hrrrrm.
+
+
+
+If we're going the major/minor route, grouped by category type, I need to change the data model around
+anyways.
+
+It needs to be:
+
+Event:
+event_id [PK]
+day = [FK on Day table]
+category => [health, wealth, smarts, arts]
+name => [biking, coding, swimming, reading] (should these be arbitrary or fixed?)
+major_event => [true, false]
+
+
+Day:
+day_id [PK]
+date = [date]
+notes [varchar] (journal stuff basically)
+number_events = (sum of events for associated for that day, convenience data, really)
+
+
+This allows for a day to have a variable number of possible events.
+
+
+
+
+the backend should probably deal with turning this into an acceptable array for JS to process.
+at the same time, it can create our missing null days.
+
+
+
+
+
+
