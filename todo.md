@@ -37,3 +37,16 @@ How does this work again?
 2 * minor = 1 major
 
 Oh, a major one should take up two minor blocks.  That's easy.
+
+
+====
+Let's also make this a journal of sorts.  I'm terrible at sticking to journals too, 
+so this might make it simpler for that too.  Or they'll each reinforce the other.
+
+Whatever, anyways, major iteration #2 is to move from django admin to:
+double click a day, gives you an enter/edit data modal.
+
+we don't need a new day button.  We just go from start date to now, filling in missing DB days
+with empty donuts.
+
+Iteration 3 might be to add some hover labels on a day when you hover... hrrrrm.

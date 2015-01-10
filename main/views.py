@@ -20,7 +20,7 @@ def index(request):
 def get_historical_data(request):
 
     print('getting historical data...')
-    historical_data = Day.objects.all().order_by('-date')
+    historical_data = Day.objects.all().order_by('date')
 
     historical_array = []
 
