@@ -18,8 +18,8 @@ $.get('get_historical_data', function(result) {
         console.log(result.data[i]);
 
 
-        var this_row = '<tr> <td>'+i+'</td><td>'+
-                                    result.data[i].date+'</td><td>'+
+        var this_row = '<tr> <td>'+result.data[i].date+'</td><td>'+
+                                    result.data[i].biking+'</td><td>'+
                                    result.data[i].yoga+'</td><td>'+
                                 result.data[i].music+'</td><td>'+
                                 result.data[i].coding+'</td></tr>';

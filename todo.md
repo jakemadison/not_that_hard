@@ -84,5 +84,19 @@ at the same time, it can create our missing null days.
 
 
 
+Major Items Left:
+- properly parse data into a usable state for front end 
+- create secondary ring to differentiate major/minor
+- hover to show tag for that event
+- figure out fill/lack of fill for missing stuff.
+- properly connect data -> presentation
+
+nice-to-haves:
+- click to edit
+- Month Choropleth as top row??
+
+
+
+
 
 

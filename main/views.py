@@ -28,5 +28,10 @@ def get_historical_data(request):
                         content_type="application/json")
 
 
+def temp_entry_point(request):
 
+    data = controller.construct_data_array_new()
 
+    return HttpResponse(json.dumps({'message': 'success',
+                                    'data': data}),
+                        content_type="application/json")
