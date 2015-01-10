@@ -22,7 +22,6 @@ $.get('get_historical_data', function(result) {
                                     result.data[i].date+'</td><td>'+
                                    result.data[i].yoga+'</td><td>'+
                                 result.data[i].music+'</td><td>'+
-                                result.data[i].biking+'</td><td>'+
                                 result.data[i].coding+'</td></tr>';
 
 
