@@ -7,7 +7,7 @@ class Day(models.Model):
 
     date = models.DateField()
     number_events = models.IntegerField(default=0)
-    notes = models.TextField(default='')
+    notes = models.TextField(default='', blank=True, null=True)
 
     # health:
     # yoga = models.NullBooleanField(null=True, blank=True, default=None)
@@ -36,7 +36,7 @@ class Day(models.Model):
 
 class Event(models.Model):
 
-    day = models.ForeignKey('Day')
+    day = models.ForeignKey('Day', related_name='events')
 
     category_choices = (
         ('health', 'health'), ('wealth', 'wealth'),
@@ -52,3 +52,13 @@ class Event(models.Model):
 
     def __str__(self):
         return unicode(self).encode('utf-8')
+
+
+# Trigger that *should* update event count in our day model:
+def update_event_count(sender, instance, **kwargs):
+    day = instance.day
+    day.number_events = day.events.count()
+    day.save(force_update=True)
+
+models.signals.post_save.connect(update_event_count, sender=Event)
+models.signals.post_delete.connect(update_event_count, sender=Event)

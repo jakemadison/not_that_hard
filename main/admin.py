@@ -5,7 +5,7 @@ from main.models import Day, Event
 
 
 class DayAdmin(admin.ModelAdmin):
-    list_display = ('id', 'date')
+    list_display = ('id', 'date', 'number_events')
 
 
 class EventAdmin(admin.ModelAdmin):
