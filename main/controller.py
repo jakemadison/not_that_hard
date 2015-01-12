@@ -24,11 +24,10 @@ def construct_data_array():
 def construct_data_array_new():
 
     parsed_data_array = []
-    historical_data = models.Event.objects.all().select_related('day')
+    historical_data = models.Event.objects.all().select_related('date')
 
     for each_day in historical_data:
         parsed_datum = model_to_dict(each_day)
-        # parsed_datum['date'] = datetime.strftime(each_day.date, '%b %d')
         parsed_data_array.append(parsed_datum)
 
     return parsed_data_array
