@@ -30,6 +30,8 @@ def get_historical_data(request):
 
 def temp_entry_point(request):
 
+    print('returning data from new controller function now.....')
+
     data = controller.construct_data_array_new()
 
     return HttpResponse(json.dumps({'message': 'success',

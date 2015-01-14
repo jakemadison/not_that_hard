@@ -36,7 +36,7 @@ class Day(models.Model):
 
 class Event(models.Model):
 
-    day = models.ForeignKey('Day', related_name='events')
+    day_link = models.ForeignKey('Day', related_name='events')
 
     category_choices = (
         ('health', 'health'), ('wealth', 'wealth'),
