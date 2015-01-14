@@ -94,8 +94,11 @@ Major Items Left:
 nice-to-haves:
 - click to edit
 - Month Choropleth as top row??
-
-
+- actually more choropleth-y.. don't limit to two events per day, but number of items in 
+pie ring segment are determined by events in that category, and the color tone of overall segment
+is determined by that number.  although min of 2 is still good.. it just gets better after that:
+minor (1/2), major (1 full), 3 minor (3 eq segments filling major, diff colour), etc.
+- streak/longest streak info.
 
 
 
