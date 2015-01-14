@@ -9,8 +9,8 @@ svg {
 .description_text {
     max-width: 900px;
     word-wrap: break-word;
-    margin-left: auto;
-    margin-right: auto;
+    /*margin-left: auto;*/
+    /*margin-right: auto;*/
 }
 
 .description_span {
