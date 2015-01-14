@@ -25,12 +25,13 @@ def construct_data_array_new():
 
     class ParsedDatum(object):
 
+        def __init__(self):
+            self.category = None
+            self.name = None
 
         def add_category(self, category, name):
             if self.category is None:
                 self.category = name
-
-
 
     parsed_data_array = []
     historical_data = models.Event.objects.all().select_related().order_by('day_link__date')
@@ -43,9 +44,6 @@ def construct_data_array_new():
     for each_event in historical_data:
         parsed_datum = {}
         event_date = datetime.strftime(each_event.day_link.date, '%b %d')
-
-
-
         parsed_data_array.append(parsed_datum)
 
     print(parsed_datum)
