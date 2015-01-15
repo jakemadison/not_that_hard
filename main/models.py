@@ -56,7 +56,7 @@ class Event(models.Model):
 
 # Trigger that *should* update event count in our day model:
 def update_event_count(sender, instance, **kwargs):
-    day = instance.day
+    day = instance.day_link
     day.number_events = day.events.count()
     day.save(force_update=True)
 
