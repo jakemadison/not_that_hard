@@ -13,21 +13,32 @@ $.get('get_historical_data', function(result) {
     console.log(result.data);
     // now do something with data...
 
+
+    function build_row(row_data) {
+        console.log('building a new row...')
+
+        var notes = row_data.notes || '-';
+        var day = row_data.day;
+        var health = row_data.health || '-';
+        var wealth = row_data.wealth || '-';
+        var arts = row_data.arts || '-';
+        var smarts = row_data.smarts || '-';
+
+        var row = '<tr title='+notes+'> <td>'+day+'</td><td>'+
+            health+'</td><td>'+ wealth+'</td><td>'+arts+'</td><td>'+smarts+'</td></tr>';
+
+        return row
+    }
+
+
     var test_table = $('.test_body');
     for (var i=0; i<result.data.length; i++) {
         console.log(result.data[i]);
 
-
-        var this_row = '<tr title='+result.data[i].notes+'> <td>'+result.data[i].day+'</td><td>'+
-                                    result.data[i].health+'</td><td>'+
-                                   result.data[i].wealth+'</td><td>'+
-                                result.data[i].arts+'</td><td>'+
-                                result.data[i].smarts+'</td></tr>';
-
+        var this_row = build_row(result.data[i]);
 
         console.log('this row: ', this_row);
         test_table.append(this_row);
-
 
     }
 
