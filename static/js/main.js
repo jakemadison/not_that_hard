@@ -142,7 +142,7 @@ function create_donut(data) {
         .attr("class", "legend")
         .attr("fill", "rgb(128,128,128)")
         .style("text-anchor", "middle")
-        .text(function(d) {return d.date;});
+        .text(function(d) {return d.day;});
 
     console.log('donut done.');
 }
