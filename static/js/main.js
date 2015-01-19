@@ -15,7 +15,7 @@ $.get('get_historical_data', function(result) {
 
 
     function build_row(row_data) {
-        console.log('building a new row...')
+        console.log('building a new row...');
 
         var notes = row_data.notes || '-';
         var day = row_data.day;
