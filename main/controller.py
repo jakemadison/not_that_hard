@@ -85,6 +85,47 @@ def construct_data_array_new():
     return parsed_data_array
 
 
+def construct_data_array_new_again():
+
+    # should be in the form: array = [{day: date, wealth: [1, 2], health}]
+
+    parsed_data_array = []
+
+    historical_data = models.Day.objects.all().order_by('date')
+
+    parsed_datum = {}
+
+    for each_day in historical_data:
+
+        # get associated events:
+        day_events = each_day.events.all()
+
+        parsed_datum['day'] = datetime.strftime(each_day.date, '%b %d')
+
+        print('adding events for day: {0}'.format(each_day))
+
+        for each_event in day_events:
+
+            if each_event.category in parsed_datum:
+                parsed_datum[str(each_event.category)].append(str(each_event.name))
+
+            else:
+                parsed_datum[str(each_event.category)] = [str(each_event.name)]
+
+                if each_event.major_event:
+                    parsed_datum[str(each_event.category)].append(str(each_event.name))
+
+        parsed_data_array.append(parsed_datum)
+        parsed_datum = {}
+
+    for each in parsed_data_array:
+        print('-------------')
+        print(each)
+
+    return parsed_data_array
+
+
+
 if __name__ == "__main__":
     x = construct_data_array()
     print(x)
