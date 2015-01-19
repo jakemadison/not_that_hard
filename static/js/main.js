@@ -18,11 +18,11 @@ $.get('get_historical_data', function(result) {
         console.log(result.data[i]);
 
 
-        var this_row = '<tr> <td>'+result.data[i].date+'</td><td>'+
-                                    result.data[i].biking+'</td><td>'+
-                                   result.data[i].yoga+'</td><td>'+
-                                result.data[i].music+'</td><td>'+
-                                result.data[i].coding+'</td></tr>';
+        var this_row = '<tr> <td>'+result.data[i].day+'</td><td>'+
+                                    result.data[i].health+'</td><td>'+
+                                   result.data[i].wealth+'</td><td>'+
+                                result.data[i].arts+'</td><td>'+
+                                result.data[i].smarts+'</td></tr>';
 
 
         console.log('this row: ', this_row);

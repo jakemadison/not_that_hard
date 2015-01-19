@@ -19,7 +19,7 @@ def get_historical_data(request):
 
     print('getting historical data...')
 
-    data_array = controller.construct_data_array()
+    data_array = controller.construct_data_array_new()
 
     print(data_array)
 
