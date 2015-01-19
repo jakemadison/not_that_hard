@@ -15,7 +15,7 @@ $.get('get_historical_data', function(result) {
 
 
     function build_row(row_data) {
-        console.log('building a new row...');
+        //console.log('building a new row...');
 
         var notes = row_data.notes || '-';
         var day = row_data.day;
@@ -37,7 +37,7 @@ $.get('get_historical_data', function(result) {
 
         var this_row = build_row(result.data[i]);
 
-        console.log('this row: ', this_row);
+        //console.log('this row: ', this_row);
         test_table.append(this_row);
 
     }
@@ -59,6 +59,7 @@ function create_donut(data) {
     var number_donuts = data.length;
     var number_of_segments = 4;
 
+    //var radius = 74;
     var radius = 74;
     var padding = 10;
 
@@ -67,18 +68,35 @@ function create_donut(data) {
     // map 0 - 100 on to 0 - 2*Pi:
     var arcScale = d3.scale.linear().domain([0, 100]).range([0, 2*Math.PI]);
 
-    var arc = d3.svg.arc().innerRadius(radius - 50)
-        .outerRadius(radius)
+
+    var create_arc = function(r, l) {
+      var arc_obj = d3.svg.arc().innerRadius(r - 20)
+        .outerRadius(r)
         .startAngle(function(d, i) {
             console.log('start angle for i: ', i, 'on data point d: ', d);
 
-
-
-            return arcScale((i+1)*(100/total_record_length));
+            return arcScale((i+1)*(100/l));
         })
         .endAngle(function(d, i) {
-            return arcScale(25 + ((i+1)*(100/total_record_length)));
+            return arcScale(25 + ((i+1)*(100/l)));
         });
+
+        return arc_obj;
+
+    };
+
+    var arc = create_arc(radius, total_record_length);
+
+    //var arc = d3.svg.arc().innerRadius(radius - 20)
+    //    .outerRadius(radius)
+    //    .startAngle(function(d, i) {
+    //        console.log('start angle for i: ', i, 'on data point d: ', d);
+    //
+    //        return arcScale((i+1)*(100/total_record_length));
+    //    })
+    //    .endAngle(function(d, i) {
+    //        return arcScale(25 + ((i+1)*(100/total_record_length)));
+    //    });
 
 
       var colour_array = ["#AA8888", "#88BB88", "#8888CC", "#AA88CC"];
@@ -120,18 +138,26 @@ function create_donut(data) {
         .data(function(d, i) {
             //console.log('arc data: ', d);
 
-            var ignore_vals = ['id', 'date'];
+            var ignore_vals = ['id', 'day'];
             var arc_array = [];
+            var outer_arc_array = [];
 
             for (prop in d) {
+                console.log('checking prop ', prop, 'in d ', d);
                 if (!d.hasOwnProperty(prop)){
                     continue;
                 }
 
-                if (true || ignore_vals.indexOf(prop) === -1 ){
+                if (true && ignore_vals.indexOf(prop) === -1 ){
+                    console.log(d[prop][0]);
                     arc_array.push(true);
-                }
 
+                    if (d[prop].length == 2) {
+                        console.log('second val found: ', d[prop][1]);
+                        outer_arc_array.push(true);
+                    }
+
+                }
 
                 //console.log('property of d: ', prop, d[prop]);
 

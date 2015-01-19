@@ -8,6 +8,7 @@ from datetime import datetime
 import models
 
 
+# this can probably be considered dead now..
 def construct_data_array():
 
     historical_data_array = []
