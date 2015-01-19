@@ -26,6 +26,8 @@ def construct_data_array_new():
     # should be in the form: array = [{day: date, wealth: [1, 2], health}]
 
     parsed_data_array = []
+
+    # crap, this needs to be an outer join on day
     historical_data = models.Event.objects.all().select_related().order_by('day_link__date')
 
     # for each in historical_data[0].events:
@@ -41,6 +43,7 @@ def construct_data_array_new():
 
         if 'day' not in parsed_datum:
             parsed_datum['day'] = datetime.strftime(each_event.day_link.date, '%b %d')
+            parsed_datum['notes'] = each_event.day_link.notes
 
         elif parsed_datum['day'] != datetime.strftime(each_event.day_link.date, '%b %d'):
             # print('testing {0} against {1}'.format(parsed_datum['day'],

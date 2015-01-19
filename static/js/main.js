@@ -18,7 +18,7 @@ $.get('get_historical_data', function(result) {
         console.log(result.data[i]);
 
 
-        var this_row = '<tr> <td>'+result.data[i].day+'</td><td>'+
+        var this_row = '<tr title='+result.data[i].notes+'> <td>'+result.data[i].day+'</td><td>'+
                                     result.data[i].health+'</td><td>'+
                                    result.data[i].wealth+'</td><td>'+
                                 result.data[i].arts+'</td><td>'+
