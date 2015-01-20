@@ -33,7 +33,7 @@ $.get('get_historical_data', function(result) {
 
     var test_table = $('.test_body');
     for (var i=0; i<result.data.length; i++) {
-        console.log(result.data[i]);
+        //console.log(result.data[i]);
 
         var this_row = build_row(result.data[i]);
 
@@ -54,7 +54,7 @@ function create_donut(data) {
 
     console.log('data ->', data);
 
-    data.forEach(function(d) {console.log(d); console.log(d.yoga)});
+    //data.forEach(function(d) {console.log(d); console.log(d.yoga)});
 
     var number_donuts = data.length;
     var number_of_segments = 4;
@@ -68,6 +68,25 @@ function create_donut(data) {
     // map 0 - 100 on to 0 - 2*Pi:
     var arcScale = d3.scale.linear().domain([0, 100]).range([0, 2*Math.PI]);
 
+
+
+    function create_arc_new(config) {
+
+        return function myArc() {
+              var arc_obj = d3.svg.arc().innerRadius(config.r - 20)
+                .outerRadius(config.r)
+                .startAngle(function(d, i) {
+                    console.log('start angle for i: ', i, 'on data point d: ', d);
+
+                    return arcScale((i+1)*(100/config.l));
+                })
+                .endAngle(function(d, i) {
+                    return arcScale(25 + ((i+1)*(100/config.l)));
+                });
+
+                return arc_obj;
+        }
+    }
 
     var create_arc = function(r, l) {
       var arc_obj = d3.svg.arc().innerRadius(r - 20)
@@ -85,7 +104,13 @@ function create_donut(data) {
 
     };
 
-    var arc = create_arc(radius, total_record_length);
+    var arc = create_arc_new({'r': radius, 'l': total_record_length});
+    var arc_old = create_arc({'r': radius, 'l': total_record_length});
+    var second_arc = create_arc_new({'r': 50, 'l': total_record_length});
+
+
+    console.log('old arc was returned as: ', arc_old);
+    console.log('new arc was returned as: ', arc);
 
     //var arc = d3.svg.arc().innerRadius(radius - 20)
     //    .outerRadius(radius)
@@ -143,17 +168,17 @@ function create_donut(data) {
             var outer_arc_array = [];
 
             for (prop in d) {
-                console.log('checking prop ', prop, 'in d ', d);
+                //console.log('checking prop ', prop, 'in d ', d);
                 if (!d.hasOwnProperty(prop)){
                     continue;
                 }
 
-                if (true && ignore_vals.indexOf(prop) === -1 ){
-                    console.log(d[prop][0]);
+                if (ignore_vals.indexOf(prop) === -1 ){
+                    //console.log(d[prop][0]);
                     arc_array.push(true);
 
                     if (d[prop].length == 2) {
-                        console.log('second val found: ', d[prop][1]);
+                        //console.log('second val found: ', d[prop][1]);
                         outer_arc_array.push(true);
                     }
 
@@ -171,7 +196,8 @@ function create_donut(data) {
         .enter()
         .append("path")
         .attr("class", "arc")
-        .attr("d", arc)
+        .attr("d", arc())
+        .attr("d", second_arc())
         .style("fill", function(d, i) {return color(i+1)});
 
     svg.append("text")
