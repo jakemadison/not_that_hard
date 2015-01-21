@@ -154,6 +154,19 @@ function create_donut(data) {
 
 
     console.log('finished svg building.  starting arc/path building');
+
+
+    function create_pies(config) {
+
+        return function myPie() {
+
+
+        }
+
+
+    }
+
+
     svg.selectAll('.arc')
 
         //.data(function(d, i) {return test[i];})
@@ -167,7 +180,7 @@ function create_donut(data) {
             var arc_array = [];
             var outer_arc_array = [];
 
-            for (prop in d) {
+            for (var prop in d) {
                 //console.log('checking prop ', prop, 'in d ', d);
                 if (!d.hasOwnProperty(prop)){
                     continue;
