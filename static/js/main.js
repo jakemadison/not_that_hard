@@ -138,11 +138,12 @@ function create_donut(data) {
         .value(function (d) {return d;});
 
 
-    var test_data = [1,2,3,4];
+    //var test_data = [1,2,3,4];
 
 
     console.log('starting svg building.');
-    var test = [[0,2,3,1],[4,4,4,4],[1,2,2,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]];
+    //var test = [[0,2,3,1],[4,4,4,4],[1,2,2,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]];
+
     var svg =d3.select('.chart').selectAll('.pie')
         .data(data)
         .enter().append('svg')
@@ -159,10 +160,53 @@ function create_donut(data) {
     function create_pies(config) {
 
         return function myPie() {
+                return svg.selectAll('.arc')
 
+                    //.data(function(d, i) {return test[i];})
+                    //        .data(function(d) {return d;}) <- this worked when what was coming back was
+                    // [1,2,3,4].  What it's doing is building the path element...
 
-        }
+                    .data(function(d, i) {
+                        //console.log('arc data: ', d);
 
+                        var ignore_vals = ['id', 'day'];
+                        var arc_array = [];
+                        var outer_arc_array = [];
+
+                        for (var prop in d) {
+                            //console.log('checking prop ', prop, 'in d ', d);
+                            if (!d.hasOwnProperty(prop)){
+                                continue;
+                            }
+
+                            if (ignore_vals.indexOf(prop) === -1 ){
+                                //console.log(d[prop][0]);
+                                arc_array.push(true);
+
+                                if (d[prop].length == 2) {
+                                    //console.log('second val found: ', d[prop][1]);
+                                    outer_arc_array.push(true);
+                                }
+
+                            }
+
+                            //console.log('property of d: ', prop, d[prop]);
+
+                        }
+
+                        //console.log(Object.keys(d).length);
+                        //console.log(arc_array);
+                        return arc_array
+
+                    })
+                    .enter()
+                    .append("path")
+                    .attr("class", "arc")
+                    .attr("d", arc())
+                    .attr("d", second_arc())
+                    .style("fill", function(d, i) {return color(i+1)});
+
+                    }
 
     }
 
@@ -212,6 +256,11 @@ function create_donut(data) {
         .attr("d", arc())
         .attr("d", second_arc())
         .style("fill", function(d, i) {return color(i+1)});
+
+
+
+
+    // this should only happen once...
 
     svg.append("text")
         .attr("dy", ".35em")
