@@ -89,7 +89,7 @@ function create_donut(data) {
     }
 
     var create_arc = function(r, l) {
-      var arc_obj = d3.svg.arc().innerRadius(r - 20)
+      return d3.svg.arc().innerRadius(r - 20)
         .outerRadius(r)
         .startAngle(function(d, i) {
             console.log('start angle for i: ', i, 'on data point d: ', d);
@@ -99,8 +99,6 @@ function create_donut(data) {
         .endAngle(function(d, i) {
             return arcScale(25 + ((i+1)*(100/l)));
         });
-
-        return arc_obj;
 
     };
 
@@ -144,30 +142,26 @@ function create_donut(data) {
     console.log('starting svg building.');
     //var test = [[0,2,3,1],[4,4,4,4],[1,2,2,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]];
 
-    var svg =d3.select('.chart').selectAll('.pie')
-        .data(data)
-        .enter().append('svg')
-        .attr('class', 'pie')
-        .attr('width', radius * 2)
-        .attr('height', radius * 2)
-        .append('g')
-        .attr('transform', 'translate(' + radius + ',' + radius + ')');
+
 
 
     console.log('finished svg building.  starting arc/path building');
+
+            var svg = d3.select('.chart').selectAll('.pie').data(data)
+                .enter().append('svg')
+                .attr('class', 'pie')
+                .attr('width', radius * 2)
+                .attr('height', radius * 2)
+                .append('g');
 
 
     function create_pies(config) {
 
         return function myPie() {
-                return svg.selectAll('.arc')
 
-                    //.data(function(d, i) {return test[i];})
-                    //        .data(function(d) {return d;}) <- this worked when what was coming back was
-                    // [1,2,3,4].  What it's doing is building the path element...
-
+             return svg.attr('transform', 'translate(' + radius + ',' + radius + ')')
+                 .selectAll('.arc')
                     .data(function(d, i) {
-                        //console.log('arc data: ', d);
 
                         var ignore_vals = ['id', 'day'];
                         var arc_array = [];
@@ -178,7 +172,6 @@ function create_donut(data) {
                             if (!d.hasOwnProperty(prop)){
                                 continue;
                             }
-
                             if (ignore_vals.indexOf(prop) === -1 ){
                                 //console.log(d[prop][0]);
                                 arc_array.push(true);
@@ -187,17 +180,11 @@ function create_donut(data) {
                                     //console.log('second val found: ', d[prop][1]);
                                     outer_arc_array.push(true);
                                 }
-
                             }
-
-                            //console.log('property of d: ', prop, d[prop]);
-
                         }
-
                         //console.log(Object.keys(d).length);
                         //console.log(arc_array);
                         return arc_array
-
                     })
                     .enter()
                     .append("path")
@@ -206,58 +193,54 @@ function create_donut(data) {
                     .attr("d", second_arc())
                     .style("fill", function(d, i) {return color(i+1)});
 
-                    }
+                }
 
     }
 
-
-    svg.selectAll('.arc')
-
-        //.data(function(d, i) {return test[i];})
-        //        .data(function(d) {return d;}) <- this worked when what was coming back was
-        // [1,2,3,4].  What it's doing is building the path element...
-
-        .data(function(d, i) {
-            //console.log('arc data: ', d);
-
-            var ignore_vals = ['id', 'day'];
-            var arc_array = [];
-            var outer_arc_array = [];
-
-            for (var prop in d) {
-                //console.log('checking prop ', prop, 'in d ', d);
-                if (!d.hasOwnProperty(prop)){
-                    continue;
-                }
-
-                if (ignore_vals.indexOf(prop) === -1 ){
-                    //console.log(d[prop][0]);
-                    arc_array.push(true);
-
-                    if (d[prop].length == 2) {
-                        //console.log('second val found: ', d[prop][1]);
-                        outer_arc_array.push(true);
-                    }
-
-                }
-
-                //console.log('property of d: ', prop, d[prop]);
-
-            }
-
-            //console.log(Object.keys(d).length);
-            //console.log(arc_array);
-            return arc_array
-
-        })
-        .enter()
-        .append("path")
-        .attr("class", "arc")
-        .attr("d", arc())
-        .attr("d", second_arc())
-        .style("fill", function(d, i) {return color(i+1)});
+    var pie_creator = create_pies();
+    pie_creator();
 
 
+    //svg.selectAll('.arc')
+    //
+    //    //.data(function(d, i) {return test[i];})
+    //    //        .data(function(d) {return d;}) <- this worked when what was coming back was
+    //    // [1,2,3,4].  What it's doing is building the path element...
+    //
+    //    .data(function(d, i) {
+    //        //console.log('arc data: ', d);
+    //
+    //        var ignore_vals = ['id', 'day'];
+    //        var arc_array = [];
+    //        var outer_arc_array = [];
+    //
+    //        for (var prop in d) {
+    //            //console.log('checking prop ', prop, 'in d ', d);
+    //            if (!d.hasOwnProperty(prop)){
+    //                continue;
+    //            }
+    //
+    //            if (ignore_vals.indexOf(prop) === -1 ){
+    //                //console.log(d[prop][0]);
+    //                arc_array.push(true);
+    //
+    //                if (d[prop].length == 2) {
+    //                    //console.log('second val found: ', d[prop][1]);
+    //                    outer_arc_array.push(true);
+    //                }
+    //
+    //            }
+    //
+    //        }
+    //
+    //        return arc_array
+    //
+    //    })
+    //    .enter()
+    //    .append("path")
+    //    .attr("class", "arc")
+    //    .attr("d", arc())
+    //    .style("fill", function(d, i) {return color(i+1)});
 
 
     // this should only happen once...
