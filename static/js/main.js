@@ -148,6 +148,12 @@ function create_donut(data) {
 
         return function myPie() {
 
+
+
+            if (config.outer) {
+
+                console.log('running myPie...., outer true');
+
                 return svg
                     .attr('transform', 'translate(' + radius + ',' + radius + ')')
                     .selectAll('.arc')
@@ -184,15 +190,60 @@ function create_donut(data) {
                     .style("fill", function (d, i) {
                         return color(i + 1)
                     });
+            }
+
+            else {
+
+                console.log('running myPie...., outer false');
+
+                return svg
+                    .attr('transform', 'translate(' + radius + ',' + radius + ')')
+                    .selectAll('.arc')
+                    .data(function (d, i) {
+
+                        var ignore_vals = ['id', 'day'];
+                        var arc_array = [];
+                        var outer_arc_array = [];
+
+                        for (var prop in d) {
+                            //console.log('checking prop ', prop, 'in d ', d);
+                            if (!d.hasOwnProperty(prop)) {
+                                continue;
+                            }
+                            if (ignore_vals.indexOf(prop) === -1) {
+                                //console.log(d[prop][0]);
+                                arc_array.push(true);
+
+                                if (d[prop].length == 2) {
+                                    //console.log('second val found: ', d[prop][1]);
+                                    outer_arc_array.push(true);
+                                }
+                            }
+                        }
+                        //console.log(Object.keys(d).length);
+                        //console.log(arc_array);
+                        return arc_array
+                    })
+                    .enter()
+                    .append("path")
+                    .attr("class", "arc")
+                    //.attr("d", arc())
+                    .attr("d", second_arc())
+                    .style("fill", function (d, i) {
+                        return color(i + 1)
+                    });
+
+
+            }
 
                 }
 
     }
 
     var pie_creator = create_pies({outer: true});
-    //var pie_creator2 = create_pies({outer: true});
+    var pie_creator2 = create_pies({outer: false});
     pie_creator();
-    //pie_creator2();
+    pie_creator2();
 
 
     //svg.selectAll('.arc')
