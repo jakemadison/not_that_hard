@@ -100,6 +100,9 @@ is determined by that number.  although min of 2 is still good.. it just gets be
 minor (1/2), major (1 full), 3 minor (3 eq segments filling major, diff colour), etc.
 - streak/longest streak info.
 
+- suggestion box?  It looks like it's been a while since you've done this... maybe you'd like to...
+
+
 
 
 

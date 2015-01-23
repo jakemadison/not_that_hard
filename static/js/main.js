@@ -142,24 +142,21 @@ function create_donut(data) {
     console.log('starting svg building.');
     //var test = [[0,2,3,1],[4,4,4,4],[1,2,2,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]];
 
-
-
-
     console.log('finished svg building.  starting arc/path building');
 
             var svg = d3.select('.chart').selectAll('.pie').data(data)
                 .enter().append('svg')
-                .attr('class', 'pie')
-                .attr('width', radius * 2)
-                .attr('height', radius * 2)
-                .append('g');
+                .attr('class', 'pie').attr('width', radius * 2)
+                 .attr('height', radius * 2).append('g');
 
 
     function create_pies(config) {
 
         return function myPie() {
 
-             return svg.attr('transform', 'translate(' + radius + ',' + radius + ')')
+             return d3.selectAll('svg')
+
+                 .attr('transform', 'translate(' + radius + ',' + radius + ')')
                  .selectAll('.arc')
                     .data(function(d, i) {
 
@@ -190,15 +187,17 @@ function create_donut(data) {
                     .append("path")
                     .attr("class", "arc")
                     .attr("d", arc())
-                    .attr("d", second_arc())
+                    //.attr("d", second_arc())
                     .style("fill", function(d, i) {return color(i+1)});
 
                 }
 
     }
 
-    var pie_creator = create_pies();
+    var pie_creator = create_pies({outer: true});
+    var pie_creator2 = create_pies({outer: true});
     pie_creator();
+    pie_creator2();
 
 
     //svg.selectAll('.arc')
@@ -244,6 +243,8 @@ function create_donut(data) {
 
 
     // this should only happen once...
+
+
 
     svg.append("text")
         .attr("dy", ".35em")
