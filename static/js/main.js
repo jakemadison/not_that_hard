@@ -8,8 +8,6 @@ $.get('get_historical_data', function(result) {
     console.log('received a result!  woo!', result);
 
     console.log('yessssssss');
-
-
     console.log(result.data);
     // now do something with data...
 
@@ -41,7 +39,6 @@ $.get('get_historical_data', function(result) {
         test_table.append(this_row);
 
     }
-
 
     create_donut(result.data);
 
@@ -92,10 +89,10 @@ function create_donut(data) {
       return d3.svg.arc().innerRadius(r - 20)
         .outerRadius(r)
         .startAngle(function(d, i) {
-            console.log('start angle for i: ', i, 'on data point d: ', d);
-
             return arcScale((i+1)*(100/l));
-        })
+
+              //console.log('start angle for i: ', i, 'on data point d: ', d);
+          })
         .endAngle(function(d, i) {
             return arcScale(25 + ((i+1)*(100/l)));
         });
@@ -121,8 +118,8 @@ function create_donut(data) {
     //        return arcScale(25 + ((i+1)*(100/total_record_length)));
     //    });
 
-
       var colour_array = ["#AA8888", "#88BB88", "#8888CC", "#AA88CC"];
+
       var color = d3.scale.ordinal()
         //.domain(colour_array)
           .domain(d3.keys(data[0]).filter(function(key) {
@@ -135,12 +132,7 @@ function create_donut(data) {
         .sort(null)
         .value(function (d) {return d;});
 
-
-    //var test_data = [1,2,3,4];
-
-
     console.log('starting svg building.');
-    //var test = [[0,2,3,1],[4,4,4,4],[1,2,2,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4],[1,2,3,4]];
 
     console.log('finished svg building.  starting arc/path building');
 
@@ -149,16 +141,17 @@ function create_donut(data) {
                 .attr('class', 'pie').attr('width', radius * 2)
                  .attr('height', radius * 2).append('g');
 
-
     function create_pies(config) {
+
+        console.log(config);
+        console.log(config.outer);
 
         return function myPie() {
 
-             return d3.selectAll('svg')
-
-                 .attr('transform', 'translate(' + radius + ',' + radius + ')')
-                 .selectAll('.arc')
-                    .data(function(d, i) {
+                return svg
+                    .attr('transform', 'translate(' + radius + ',' + radius + ')')
+                    .selectAll('.arc')
+                    .data(function (d, i) {
 
                         var ignore_vals = ['id', 'day'];
                         var arc_array = [];
@@ -166,10 +159,10 @@ function create_donut(data) {
 
                         for (var prop in d) {
                             //console.log('checking prop ', prop, 'in d ', d);
-                            if (!d.hasOwnProperty(prop)){
+                            if (!d.hasOwnProperty(prop)) {
                                 continue;
                             }
-                            if (ignore_vals.indexOf(prop) === -1 ){
+                            if (ignore_vals.indexOf(prop) === -1) {
                                 //console.log(d[prop][0]);
                                 arc_array.push(true);
 
@@ -188,16 +181,18 @@ function create_donut(data) {
                     .attr("class", "arc")
                     .attr("d", arc())
                     //.attr("d", second_arc())
-                    .style("fill", function(d, i) {return color(i+1)});
+                    .style("fill", function (d, i) {
+                        return color(i + 1)
+                    });
 
                 }
 
     }
 
     var pie_creator = create_pies({outer: true});
-    var pie_creator2 = create_pies({outer: true});
+    //var pie_creator2 = create_pies({outer: true});
     pie_creator();
-    pie_creator2();
+    //pie_creator2();
 
 
     //svg.selectAll('.arc')
@@ -243,8 +238,6 @@ function create_donut(data) {
 
 
     // this should only happen once...
-
-
 
     svg.append("text")
         .attr("dy", ".35em")
