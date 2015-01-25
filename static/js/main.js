@@ -70,10 +70,10 @@ function create_donut(data) {
     function create_arc_new(config) {
 
         return function myArc() {
-              var arc_obj = d3.svg.arc().innerRadius(config.r - 20)
+              var arc_obj = d3.svg.arc().innerRadius(config.r - 24)
                 .outerRadius(config.r)
                 .startAngle(function(d, i) {
-                    console.log('start angle for i: ', i, 'on data point d: ', d);
+                    //console.log('start angle for i: ', i, 'on data point d: ', d);
 
                     return arcScale((i+1)*(100/config.l));
                 })
@@ -85,27 +85,27 @@ function create_donut(data) {
         }
     }
 
-    var create_arc = function(r, l) {
-      return d3.svg.arc().innerRadius(r - 20)
-        .outerRadius(r)
-        .startAngle(function(d, i) {
-            return arcScale((i+1)*(100/l));
-
-              //console.log('start angle for i: ', i, 'on data point d: ', d);
-          })
-        .endAngle(function(d, i) {
-            return arcScale(25 + ((i+1)*(100/l)));
-        });
-
-    };
+    //var create_arc = function(r, l) {
+    //  return d3.svg.arc().innerRadius(r - 20)
+    //    .outerRadius(r)
+    //    .startAngle(function(d, i) {
+    //        return arcScale((i+1)*(100/l));
+    //
+    //          //console.log('start angle for i: ', i, 'on data point d: ', d);
+    //      })
+    //    .endAngle(function(d, i) {
+    //        return arcScale(25 + ((i+1)*(100/l)));
+    //    });
+    //
+    //};
 
     var arc = create_arc_new({'r': radius, 'l': total_record_length});
-    var arc_old = create_arc({'r': radius, 'l': total_record_length});
+    //var arc_old = create_arc({'r': radius, 'l': total_record_length});
     var second_arc = create_arc_new({'r': 50, 'l': total_record_length});
 
 
-    console.log('old arc was returned as: ', arc_old);
-    console.log('new arc was returned as: ', arc);
+    //console.log('old arc was returned as: ', arc_old);
+    //console.log('new arc was returned as: ', arc);
 
     //var arc = d3.svg.arc().innerRadius(radius - 20)
     //    .outerRadius(radius)
@@ -136,14 +136,16 @@ function create_donut(data) {
 
     console.log('finished svg building.  starting arc/path building');
 
-    var svg = d3.select('.chart').selectAll('.pie').data(data)
-        .enter().append('svg')
-        .attr('class', 'pie').attr('width', radius * 2)
-         .attr('height', radius * 2).append('g')
-        .attr('transform', 'translate(' + radius + ',' + radius + ')');
-
-    console.log('svg: ', svg);
-
+    var svg = d3.select('.chart')
+        .selectAll('.pie')
+        .data(data)
+        .enter()
+            .append('svg')
+            .attr('class', 'pie')
+            .attr('width', radius * 2)
+            .attr('height', radius * 2)
+            .append('g')
+            .attr('transform', 'translate(' + radius + ',' + radius + ')');
 
 
 
@@ -178,8 +180,6 @@ function create_donut(data) {
                 }
 
             }
-
-            console.log('arc_array', arc_array);
 
             return arc_array
 
@@ -217,10 +217,7 @@ function create_donut(data) {
                         outer_arc_array.push(true);
                     }
                 }
-
             }
-
-            console.log('arc_array', arc_array);
 
             return outer_arc_array;
 
@@ -232,12 +229,6 @@ function create_donut(data) {
         .style("fill", function (d, i) {
           return color(i+2)
         });
-
-
-
-
-
-
 
     // this should only happen once...
 
