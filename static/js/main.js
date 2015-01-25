@@ -140,15 +140,13 @@ function create_donut(data) {
             var arc_array = [];
             var outer_arc_array = [];
 
-
             for (var prop in d) {
-                //console.log('checking prop ', prop, 'in d ', d);
+                console.log('checking prop ', prop, 'in d ', d);
                 if (!d.hasOwnProperty(prop)){
                     continue;
                 }
 
                 if (ignore_vals.indexOf(prop) === -1 ){
-                    //console.log(d[prop][0]);
                     arc_array.push(true);
 
                     if (d[prop].length == 2) {
@@ -156,7 +154,6 @@ function create_donut(data) {
                         outer_arc_array.push(true);
                     }
                 }
-
             }
 
             if (config.outer) {
