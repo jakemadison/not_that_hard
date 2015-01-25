@@ -136,156 +136,75 @@ function create_donut(data) {
 
     console.log('finished svg building.  starting arc/path building');
 
-            var svg = d3.select('.chart').selectAll('.pie').data(data)
-                .enter().append('svg')
-                .attr('class', 'pie').attr('width', radius * 2)
-                 .attr('height', radius * 2).append('g');
+    var svg = d3.select('.chart').selectAll('.pie').data(data)
+        .enter().append('svg')
+        .attr('class', 'pie').attr('width', radius * 2)
+         .attr('height', radius * 2).append('g')
+        .attr('transform', 'translate(' + radius + ',' + radius + ')');
 
-    function create_pies(config) {
-
-        console.log(config);
-        console.log(config.outer);
-
-        return function myPie() {
+    console.log('svg: ', svg);
 
 
+    var outer_arc_array = [];
 
-            if (config.outer) {
+    svg.selectAll('.arc')
 
-                console.log('running myPie...., outer true');
+        //.data(function(d, i) {return test[i];})
+        //        .data(function(d) {return d;}) <- this worked when what was coming back was
+        // [1,2,3,4].  What it's doing is building the path element...
 
-                return svg
-                    .attr('transform', 'translate(' + radius + ',' + radius + ')')
-                    .selectAll('.arc')
-                    .data(function (d, i) {
+        .data(function(d, i) {
+            //console.log('arc data: ', d);
 
-                        var ignore_vals = ['id', 'day'];
-                        var arc_array = [];
-                        var outer_arc_array = [];
-
-                        for (var prop in d) {
-                            //console.log('checking prop ', prop, 'in d ', d);
-                            if (!d.hasOwnProperty(prop)) {
-                                continue;
-                            }
-                            if (ignore_vals.indexOf(prop) === -1) {
-                                //console.log(d[prop][0]);
-                                arc_array.push(true);
-
-                                if (d[prop].length == 2) {
-                                    //console.log('second val found: ', d[prop][1]);
-                                    outer_arc_array.push(true);
-                                }
-                            }
-                        }
-                        //console.log(Object.keys(d).length);
-                        //console.log(arc_array);
-                        return arc_array
-                    })
-                    .enter()
-                    .append("path")
-                    .attr("class", "arc")
-                    .attr("d", arc())
-                    //.attr("d", second_arc())
-                    .style("fill", function (d, i) {
-                        return color(i + 1)
-                    });
-            }
-
-            else {
-
-                console.log('running myPie...., outer false');
-
-                return svg
-                    .attr('transform', 'translate(' + radius + ',' + radius + ')')
-                    .selectAll('.arc')
-                    .data(function (d, i) {
-
-                        var ignore_vals = ['id', 'day'];
-                        var arc_array = [];
-                        var outer_arc_array = [];
-
-                        for (var prop in d) {
-                            //console.log('checking prop ', prop, 'in d ', d);
-                            if (!d.hasOwnProperty(prop)) {
-                                continue;
-                            }
-                            if (ignore_vals.indexOf(prop) === -1) {
-                                //console.log(d[prop][0]);
-                                arc_array.push(true);
-
-                                if (d[prop].length == 2) {
-                                    //console.log('second val found: ', d[prop][1]);
-                                    outer_arc_array.push(true);
-                                }
-                            }
-                        }
-                        //console.log(Object.keys(d).length);
-                        //console.log(arc_array);
-                        return arc_array
-                    })
-                    .enter()
-                    .append("path")
-                    .attr("class", "arc")
-                    //.attr("d", arc())
-                    .attr("d", second_arc())
-                    .style("fill", function (d, i) {
-                        return color(i + 1)
-                    });
+            var ignore_vals = ['id', 'day'];
+            var arc_array = [];
 
 
-            }
-
+            for (var prop in d) {
+                //console.log('checking prop ', prop, 'in d ', d);
+                if (!d.hasOwnProperty(prop)){
+                    continue;
                 }
 
-    }
+                if (ignore_vals.indexOf(prop) === -1 ){
+                    //console.log(d[prop][0]);
+                    arc_array.push(true);
 
-    var pie_creator = create_pies({outer: true});
-    var pie_creator2 = create_pies({outer: false});
-    pie_creator();
-    pie_creator2();
+                    if (d[prop].length == 2) {
+                        //console.log('second val found: ', d[prop][1]);
+                        outer_arc_array.push(true);
+                    }
+                }
+
+            }
+
+            console.log('arc_array', arc_array);
+
+            return arc_array
+
+        })
+        .enter()
+        .append("path")
+        .attr("class", "arc")
+        .attr("d", second_arc())
+        .style("fill", function(d, i) {return color(i+1)});
+
+    console.log('svg: ', svg);
+
+    svg.selectAll('.arc_outer')
+        .data(outer_arc_array)
+        .enter()
+        .append("path")
+        .attr("class", "arc_outer")
+        .attr("d", arc())
+        .style("fill", function (d, i) {
+          return color(i+2)
+        });
 
 
-    //svg.selectAll('.arc')
-    //
-    //    //.data(function(d, i) {return test[i];})
-    //    //        .data(function(d) {return d;}) <- this worked when what was coming back was
-    //    // [1,2,3,4].  What it's doing is building the path element...
-    //
-    //    .data(function(d, i) {
-    //        //console.log('arc data: ', d);
-    //
-    //        var ignore_vals = ['id', 'day'];
-    //        var arc_array = [];
-    //        var outer_arc_array = [];
-    //
-    //        for (var prop in d) {
-    //            //console.log('checking prop ', prop, 'in d ', d);
-    //            if (!d.hasOwnProperty(prop)){
-    //                continue;
-    //            }
-    //
-    //            if (ignore_vals.indexOf(prop) === -1 ){
-    //                //console.log(d[prop][0]);
-    //                arc_array.push(true);
-    //
-    //                if (d[prop].length == 2) {
-    //                    //console.log('second val found: ', d[prop][1]);
-    //                    outer_arc_array.push(true);
-    //                }
-    //
-    //            }
-    //
-    //        }
-    //
-    //        return arc_array
-    //
-    //    })
-    //    .enter()
-    //    .append("path")
-    //    .attr("class", "arc")
-    //    .attr("d", arc())
-    //    .style("fill", function(d, i) {return color(i+1)});
+
+
+
 
 
     // this should only happen once...
