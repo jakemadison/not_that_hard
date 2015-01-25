@@ -7,6 +7,8 @@ $.get('get_historical_data', function(result) {
 
     console.log('received a result!  woo!', result);
 
+    $('#month_name').text(result.month);
+
     console.log('yessssssss');
     console.log(result.data);
     // now do something with data...
@@ -57,7 +59,7 @@ function create_donut(data) {
     var number_of_segments = 4;
 
     //var radius = 74;
-    var radius = 74;
+    var radius = 40;
     var padding = 10;
 
     console.log('object keys: ', Object.keys(data[0]));
@@ -102,7 +104,7 @@ function create_donut(data) {
     function create_arc_new(config) {
 
             return function myArc() {
-                  var arc_obj = d3.svg.arc().innerRadius(config.r - 23)
+                  var arc_obj = d3.svg.arc().innerRadius(config.r - 13)
                     .outerRadius(config.r)
                     .startAngle(function(d, i) {
                         //console.log('start angle for i: ', i, 'on data point d: ', d);
@@ -118,7 +120,7 @@ function create_donut(data) {
         }
 
     var outer_arc = create_arc_new({'r': radius, 'l': total_record_length});
-    var inner_arc = create_arc_new({'r': 50, 'l': total_record_length});
+    var inner_arc = create_arc_new({'r': 25, 'l': total_record_length});
 
     function compute_arc_array(d, config) {
         var ignore_vals = ['id', 'day'];

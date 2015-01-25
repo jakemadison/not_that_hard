@@ -1,6 +1,6 @@
 from __future__ import print_function
-import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "not_that_hard.settings")
+# import os
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "not_that_hard.settings")
 from django.forms.models import model_to_dict
 from datetime import datetime
 # import django
@@ -40,7 +40,7 @@ def construct_data_array_new_again():
         # get associated events:
         day_events = each_day.events.all()
 
-        parsed_datum['day'] = datetime.strftime(each_day.date, '%b %d')
+        parsed_datum['day'] = datetime.strftime(each_day.date, '%d')
 
         print('adding events for day: {0}'.format(each_day))
 
@@ -62,7 +62,7 @@ def construct_data_array_new_again():
         print('-------------')
         print(each)
 
-    return parsed_data_array
+    return parsed_data_array, 'January 2015'
 
 
 if __name__ == "__main__":

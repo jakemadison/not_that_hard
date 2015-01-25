@@ -18,6 +18,23 @@
 
 </head>
 <body>
+{#<p>#}
+{#    <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>#}
+{#    <b><span id="month_left">&laquo;</span>#}
+{#        <span id="month_name">Month Name here</span>#}
+{#    <span id="month_right">&raquo;</span></b>#}
+{#<span class="glyphicon glyphicon-circle-arrow-left"></span>#}
+{#</p>#}
+
+{#<div>#}
+
+
+{#</div>#}
+
+
+
+<div>&nbsp;</div>
+
 <p class="lead text-muted pull-right">It's not that hard. &nbsp;</p>
 
 <div class="well well-sm chart">
@@ -26,13 +43,31 @@
 
 {#okay, yeah, this was a bit much.. ahem..#}
 
-<blockquote class="quote">
-  <p><b>Current Streak</b> Thirteen Days!</p>
-   <p><b>Longest Streak</b> Fifteen Days</p>
-</blockquote>
+{#<blockquote class="quote">#}
+{#  <p><b>Current Streak</b> Thirteen Days!</p>#}
+{#   <p><b>Longest Streak</b> Fifteen Days</p>#}
+{#</blockquote>#}
 
+{#<div></div>#}
 
-<div></div>
+<div class="month_nav">
+<nav>
+  <ul class="pagination pagination-sm">
+    <li>
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li><span class="text-muted">January 2015</span></li>
+    <li>
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+</div>
+
 
 <div class="description_text">
        <hr>

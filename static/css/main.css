@@ -21,3 +21,8 @@ svg {
 .quote {
     margin-left: 10px;
 }
+
+.month_nav {
+    margin-bottom: -30px;
+    margin-top: -30px;
+}

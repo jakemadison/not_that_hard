@@ -19,12 +19,13 @@ def get_historical_data(request):
 
     print('getting historical data...')
 
-    data_array = controller.construct_data_array_new_again()
+    data_array, month = controller.construct_data_array_new_again()
 
     # print(data_array)
 
     return HttpResponse(json.dumps({'message': 'success',
-                                    'data': data_array}),
+                                    'data': data_array,
+                                    'month': month}),
                         content_type="application/json")
 
 
