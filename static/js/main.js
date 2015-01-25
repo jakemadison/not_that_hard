@@ -63,11 +63,6 @@ function create_donut(data) {
     console.log('object keys: ', Object.keys(data[0]));
     var total_record_length = 4;
 
-
-
-    var mapping = ['health', 'wealth', 'arts', 'smarts'];
-
-
     var colour_array = ["#AA8888", "#88BB88", "#8888CC", "#AA88CC"];
 
     var color = d3.scale.ordinal()
@@ -177,7 +172,7 @@ function create_donut(data) {
                 return color(i + 1);
             }
             else {
-                return '#D3CDCD';
+                return '#DDDADA';
             }
         });
 
