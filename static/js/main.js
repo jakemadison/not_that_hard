@@ -100,8 +100,6 @@ function create_donut(data) {
 
     console.log('starting svg building.');
 
-    console.log('finished svg building.  starting arc/path building');
-
     var svg = d3.select('.chart')
         .selectAll('.pie')
         .data(data)
@@ -113,6 +111,8 @@ function create_donut(data) {
             .append('g')
             .attr('transform', 'translate(' + radius + ',' + radius + ')');
 
+
+    console.log('finished svg building.  starting arc/path building');
 
     function create_arc_new(config) {
 
@@ -135,17 +135,8 @@ function create_donut(data) {
     var outer_arc = create_arc_new({'r': radius, 'l': total_record_length});
     var inner_arc = create_arc_new({'r': 50, 'l': total_record_length});
 
-
-    svg.selectAll('.arc')
-
-        //.data(function(d, i) {return test[i];})
-        //        .data(function(d) {return d;}) <- this worked when what was coming back was
-        // [1,2,3,4].  What it's doing is building the path element...
-
-        .data(function(d, i) {
-            //console.log('arc data: ', d);
-
-            var ignore_vals = ['id', 'day'];
+    function compute_arc_array(d, config) {
+        var ignore_vals = ['id', 'day'];
             var arc_array = [];
             var outer_arc_array = [];
 
@@ -168,47 +159,27 @@ function create_donut(data) {
 
             }
 
-            return arc_array
+            if (config.outer) {
+                return outer_arc_array;
+            }
+        else {
+                return arc_array;
+            }
 
-        })
+    }
+
+
+    svg.selectAll('.arc')
+        .data(function(d) {return compute_arc_array(d, {outer: false})})
         .enter()
         .append("path")
         .attr("class", "arc")
         .attr("d", inner_arc())
         .style("fill", function(d, i) {return color(i+1)});
 
-    console.log('svg: ', svg);
-
 
     svg.selectAll('.arc_outer')
-        .data(function(d, i) {
-            //console.log('arc data: ', d);
-
-            var ignore_vals = ['id', 'day'];
-            var arc_array = [];
-            var outer_arc_array = [];
-
-
-            for (var prop in d) {
-                //console.log('checking prop ', prop, 'in d ', d);
-                if (!d.hasOwnProperty(prop)){
-                    continue;
-                }
-
-                if (ignore_vals.indexOf(prop) === -1 ){
-                    //console.log(d[prop][0]);
-                    arc_array.push(true);
-
-                    if (d[prop].length == 2) {
-                        //console.log('second val found: ', d[prop][1]);
-                        outer_arc_array.push(true);
-                    }
-                }
-            }
-
-            return outer_arc_array;
-
-        })
+        .data(function(d) {return compute_arc_array(d, {outer: true})})
         .enter()
         .append("path")
         .attr("class", "arc_outer")
@@ -217,8 +188,8 @@ function create_donut(data) {
           return color(i+1)
         });
 
-    // this should only happen once...
 
+    // this should only happen once...
     svg.append("text")
         .attr("dy", ".35em")
         .attr("class", "legend")
