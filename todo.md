@@ -103,6 +103,12 @@ minor (1/2), major (1 full), 3 minor (3 eq segments filling major, diff colour),
 - suggestion box?  It looks like it's been a while since you've done this... maybe you'd like to...
 
 
+======
+
+- Click on column name should do some kind of transition to only showing that grouping
+- still need input on front end modal
+- need to finish month transitions and controller work
+- auto-add current day in DB (or just build from max(day) vs sysdate?)
 
 
 
