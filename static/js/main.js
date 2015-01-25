@@ -67,41 +67,7 @@ function create_donut(data) {
 
 
 
-    function create_arc_new(config) {
 
-        return function myArc() {
-              var arc_obj = d3.svg.arc().innerRadius(config.r - 24)
-                .outerRadius(config.r)
-                .startAngle(function(d, i) {
-                    //console.log('start angle for i: ', i, 'on data point d: ', d);
-
-                    return arcScale((i+1)*(100/config.l));
-                })
-                .endAngle(function(d, i) {
-                    return arcScale(25 + ((i+1)*(100/config.l)));
-                });
-
-                return arc_obj;
-        }
-    }
-
-    //var create_arc = function(r, l) {
-    //  return d3.svg.arc().innerRadius(r - 20)
-    //    .outerRadius(r)
-    //    .startAngle(function(d, i) {
-    //        return arcScale((i+1)*(100/l));
-    //
-    //          //console.log('start angle for i: ', i, 'on data point d: ', d);
-    //      })
-    //    .endAngle(function(d, i) {
-    //        return arcScale(25 + ((i+1)*(100/l)));
-    //    });
-    //
-    //};
-
-    var arc = create_arc_new({'r': radius, 'l': total_record_length});
-    //var arc_old = create_arc({'r': radius, 'l': total_record_length});
-    var second_arc = create_arc_new({'r': 50, 'l': total_record_length});
 
 
     //console.log('old arc was returned as: ', arc_old);
@@ -148,6 +114,27 @@ function create_donut(data) {
             .attr('transform', 'translate(' + radius + ',' + radius + ')');
 
 
+    function create_arc_new(config) {
+
+            return function myArc() {
+                  var arc_obj = d3.svg.arc().innerRadius(config.r - 24)
+                    .outerRadius(config.r)
+                    .startAngle(function(d, i) {
+                        //console.log('start angle for i: ', i, 'on data point d: ', d);
+
+                        return arcScale((i+1)*(100/config.l));
+                    })
+                    .endAngle(function(d, i) {
+                        return arcScale(25 + ((i+1)*(100/config.l)));
+                    });
+
+                    return arc_obj;
+            }
+        }
+
+    var outer_arc = create_arc_new({'r': radius, 'l': total_record_length});
+    var inner_arc = create_arc_new({'r': 50, 'l': total_record_length});
+
 
     svg.selectAll('.arc')
 
@@ -187,7 +174,7 @@ function create_donut(data) {
         .enter()
         .append("path")
         .attr("class", "arc")
-        .attr("d", second_arc())
+        .attr("d", inner_arc())
         .style("fill", function(d, i) {return color(i+1)});
 
     console.log('svg: ', svg);
@@ -225,9 +212,9 @@ function create_donut(data) {
         .enter()
         .append("path")
         .attr("class", "arc_outer")
-        .attr("d", arc())
+        .attr("d", outer_arc())
         .style("fill", function (d, i) {
-          return color(i+2)
+          return color(i+1)
         });
 
     // this should only happen once...
