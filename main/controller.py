@@ -30,7 +30,10 @@ def construct_data_array_new_again():
 
     historical_data = models.Day.objects.all().order_by('date')
 
-    parsed_datum = {}
+    parsed_datum = {'health': [None, None],
+                    'wealth': [None, None],
+                    'arts': [None, None],
+                    'smarts': [None, None]}
 
     for each_day in historical_data:
 
@@ -43,17 +46,17 @@ def construct_data_array_new_again():
 
         for each_event in day_events:
 
-            if each_event.category in parsed_datum:
-                parsed_datum[str(each_event.category)].append(str(each_event.name))
+            if parsed_datum[str(each_event.category)][0] is None:
+                parsed_datum[str(each_event.category)][0] = str(each_event.name)
 
             else:
-                parsed_datum[str(each_event.category)] = [str(each_event.name)]
-
-                if each_event.major_event:
-                    parsed_datum[str(each_event.category)].append(str(each_event.name))
+                parsed_datum[str(each_event.category)][1] = [str(each_event.name)]
 
         parsed_data_array.append(parsed_datum)
-        parsed_datum = {}
+        parsed_datum = {'health': [None, None],
+                        'wealth': [None, None],
+                        'arts': [None, None],
+                        'smarts': [None, None]}
 
     for each in parsed_data_array:
         print('-------------')

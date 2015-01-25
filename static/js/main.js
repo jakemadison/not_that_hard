@@ -112,10 +112,10 @@ function create_donut(data) {
                     .startAngle(function(d, i) {
                         //console.log('start angle for i: ', i, 'on data point d: ', d);
 
-                        return arcScale((i+1)*(100/config.l));
+                        return arcScale((i)*(100/config.l));
                     })
                     .endAngle(function(d, i) {
-                        return arcScale(25 + ((i+1)*(100/config.l)));
+                        return arcScale(25 + ((i)*(100/config.l)));
                     });
 
                     return arc_obj;
@@ -130,6 +130,8 @@ function create_donut(data) {
             var arc_array = [];
             var outer_arc_array = [];
 
+        console.log('this is d for arc array: ', d);
+
             for (var prop in d) {
                 //console.log('checking prop ', prop, 'in d ', d);
                 if (!d.hasOwnProperty(prop)){
@@ -137,11 +139,19 @@ function create_donut(data) {
                 }
 
                 if (ignore_vals.indexOf(prop) === -1 ){
-                    arc_array.push(true);
 
-                    if (d[prop].length == 2) {
-                        //console.log('second val found: ', d[prop][1]);
+                    console.log('index of d: ', d);
+                    if (d[prop][0]) {
+                        arc_array.push(true);
+                    }
+                    else {
+                        arc_array.push(false)
+                    }
+                    if (d[prop][1]) {
                         outer_arc_array.push(true);
+                    }
+                    else {
+                        outer_arc_array.push(false);
                     }
                 }
             }
@@ -162,7 +172,14 @@ function create_donut(data) {
         .append("path")
         .attr("class", "arc")
         .attr("d", inner_arc())
-        .style("fill", function(d, i) {console.log('this is d after: ', d); return color(i+1)});
+        .style("fill", function(d, i) {
+            if (d) {
+                return color(i + 1);
+            }
+            else {
+                return '#D3CDCD';
+            }
+        });
 
 
     svg.selectAll('.arc_outer')
@@ -173,6 +190,12 @@ function create_donut(data) {
         .attr("d", outer_arc())
         .style("fill", function(d, i) {
             console.log('what is the i of this d?', i, d);
+            if (d) {
+                return color(i + 1);
+            }
+            else {
+                return '#DDDADA';
+            }
         })
 
         //.style("fill", function (d, i) {
