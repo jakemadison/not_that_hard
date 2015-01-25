@@ -22,9 +22,12 @@ def construct_data_array():
     return historical_data_array
 
 
-def construct_data_array_new_again():
+def construct_data_array_new_again(month=None):
 
     # should be in the form: array = [{day: date, wealth: [1, 2], health}]
+
+    if month is None:
+        month = None
 
     parsed_data_array = []
 
@@ -40,7 +43,7 @@ def construct_data_array_new_again():
         # get associated events:
         day_events = each_day.events.all()
 
-        parsed_datum['day'] = datetime.strftime(each_day.date, '%d')
+        parsed_datum['day'] = datetime.strftime(each_day.date, '%b %d')
 
         print('adding events for day: {0}'.format(each_day))
 

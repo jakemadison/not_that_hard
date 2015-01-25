@@ -31,11 +31,30 @@
 
 {#</div>#}
 
+<div class="month_nav">
+<nav>
+  <ul class="pagination pagination-sm">
+    <li>
+      <a href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <li><span class="text-muted" id="month_name">month</span></li>
+    <li>
+      <a href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+</div>
 
 
-<div>&nbsp;</div>
+{#<div>&nbsp;</div>#}
 
 <p class="lead text-muted pull-right">It's not that hard. &nbsp;</p>
+
+{#<div>&nbsp;</div>#}
 
 <div class="well well-sm chart">
 
@@ -50,27 +69,14 @@
 
 {#<div></div>#}
 
-<div class="month_nav">
-<nav>
-  <ul class="pagination pagination-sm">
-    <li>
-      <a href="#" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-    <li><span class="text-muted">January 2015</span></li>
-    <li>
-      <a href="#" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-  </ul>
-</nav>
-</div>
 
 
-<div class="description_text">
-       <hr>
+
+<hr>
+<div class="description_text"
+{#     style="display: none;"#}
+        >
+
        <ul>
            <span class="help-block description_span">
      <li>Okay, so I guess the idea behind this was to throw together a quick and
@@ -97,10 +103,10 @@
       <thead>
     <tr>
       <th></th>
-      <th>Health</th>
-      <th>Wealth</th>
-      <th>Arts</th>
-      <th>Smarts</th>
+      <th id="health_col">Health</th>
+      <th id="wealth_col">Wealth</th>
+      <th id="arts_col">Arts</th>
+      <th id="smarts_col">Smarts</th>
     </tr>
   </thead>
     <tbody class="test_body">

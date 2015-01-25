@@ -23,6 +23,28 @@ svg {
 }
 
 .month_nav {
-    margin-bottom: -30px;
-    margin-top: -30px;
+    margin-bottom: -18px;
+    margin-top: -14px;
+}
+
+/*#month_name {*/
+    /*color: #02749c;*/
+/*}*/
+
+
+
+#smarts_col {
+    color: #d0743c;
+}
+
+#arts_col {
+    color: #ff8c00;
+}
+
+#health_col {
+    color: #98abc5;
+}
+
+#wealth_col {
+    color: #8a89a6;
 }

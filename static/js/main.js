@@ -211,7 +211,7 @@ function create_donut(data) {
         .attr("class", "legend")
         .attr("fill", "rgb(128,128,128)")
         .style("text-anchor", "middle")
-        .text(function(d) {return d.day;});
+        .text(function(d) {return d.day.split(' ')[1];});
 
     console.log('donut done.');
 }
