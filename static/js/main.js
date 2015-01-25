@@ -60,36 +60,22 @@ function create_donut(data) {
     var radius = 74;
     var padding = 10;
 
-    var total_record_length = Object.keys(data[0]).length;
-
-    // map 0 - 100 on to 0 - 2*Pi:
-    var arcScale = d3.scale.linear().domain([0, 100]).range([0, 2*Math.PI]);
+    console.log('object keys: ', Object.keys(data[0]));
+    var total_record_length = 4;
 
 
 
+    var mapping = ['health', 'wealth', 'arts', 'smarts'];
 
 
+    var colour_array = ["#AA8888", "#88BB88", "#8888CC", "#AA88CC"];
 
-    //console.log('old arc was returned as: ', arc_old);
-    //console.log('new arc was returned as: ', arc);
-
-    //var arc = d3.svg.arc().innerRadius(radius - 20)
-    //    .outerRadius(radius)
-    //    .startAngle(function(d, i) {
-    //        console.log('start angle for i: ', i, 'on data point d: ', d);
-    //
-    //        return arcScale((i+1)*(100/total_record_length));
-    //    })
-    //    .endAngle(function(d, i) {
-    //        return arcScale(25 + ((i+1)*(100/total_record_length)));
-    //    });
-
-      var colour_array = ["#AA8888", "#88BB88", "#8888CC", "#AA88CC"];
-
-      var color = d3.scale.ordinal()
+    var color = d3.scale.ordinal()
         //.domain(colour_array)
           .domain(d3.keys(data[0]).filter(function(key) {
               var ignore_vals = ['id', 'date'];
+              console.log('anything???', d3.keys(data[0]));
+
               return ignore_vals.indexOf(key) === -1}))
         .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
@@ -114,10 +100,14 @@ function create_donut(data) {
 
     console.log('finished svg building.  starting arc/path building');
 
+
+    // map 0 - 100 on to 0 - 2*Pi:
+    var arcScale = d3.scale.linear().domain([0, 100]).range([0, 2*Math.PI]);
+
     function create_arc_new(config) {
 
             return function myArc() {
-                  var arc_obj = d3.svg.arc().innerRadius(config.r - 24)
+                  var arc_obj = d3.svg.arc().innerRadius(config.r - 23)
                     .outerRadius(config.r)
                     .startAngle(function(d, i) {
                         //console.log('start angle for i: ', i, 'on data point d: ', d);
@@ -141,7 +131,7 @@ function create_donut(data) {
             var outer_arc_array = [];
 
             for (var prop in d) {
-                console.log('checking prop ', prop, 'in d ', d);
+                //console.log('checking prop ', prop, 'in d ', d);
                 if (!d.hasOwnProperty(prop)){
                     continue;
                 }
@@ -167,12 +157,12 @@ function create_donut(data) {
 
 
     svg.selectAll('.arc')
-        .data(function(d) {return compute_arc_array(d, {outer: false})})
+        .data(function(d) {console.log('this is d before: ', d); return compute_arc_array(d, {outer: false})})
         .enter()
         .append("path")
         .attr("class", "arc")
         .attr("d", inner_arc())
-        .style("fill", function(d, i) {return color(i+1)});
+        .style("fill", function(d, i) {console.log('this is d after: ', d); return color(i+1)});
 
 
     svg.selectAll('.arc_outer')
@@ -181,9 +171,18 @@ function create_donut(data) {
         .append("path")
         .attr("class", "arc_outer")
         .attr("d", outer_arc())
-        .style("fill", function (d, i) {
-          return color(i+1)
-        });
+        .style("fill", function(d, i) {
+            console.log('what is the i of this d?', i, d);
+        })
+
+        //.style("fill", function (d, i) {
+        //  return color(function(d) {
+        //
+        //      return colour_array[mapping.indexOf(d[0])]
+        //  })
+
+        //})
+;
 
 
     // this should only happen once...
