@@ -145,7 +145,7 @@ function create_donut(data) {
     console.log('svg: ', svg);
 
 
-    var outer_arc_array = [];
+
 
     svg.selectAll('.arc')
 
@@ -158,6 +158,7 @@ function create_donut(data) {
 
             var ignore_vals = ['id', 'day'];
             var arc_array = [];
+            var outer_arc_array = [];
 
 
             for (var prop in d) {
@@ -191,8 +192,39 @@ function create_donut(data) {
 
     console.log('svg: ', svg);
 
+
     svg.selectAll('.arc_outer')
-        .data(outer_arc_array)
+        .data(function(d, i) {
+            //console.log('arc data: ', d);
+
+            var ignore_vals = ['id', 'day'];
+            var arc_array = [];
+            var outer_arc_array = [];
+
+
+            for (var prop in d) {
+                //console.log('checking prop ', prop, 'in d ', d);
+                if (!d.hasOwnProperty(prop)){
+                    continue;
+                }
+
+                if (ignore_vals.indexOf(prop) === -1 ){
+                    //console.log(d[prop][0]);
+                    arc_array.push(true);
+
+                    if (d[prop].length == 2) {
+                        //console.log('second val found: ', d[prop][1]);
+                        outer_arc_array.push(true);
+                    }
+                }
+
+            }
+
+            console.log('arc_array', arc_array);
+
+            return outer_arc_array;
+
+        })
         .enter()
         .append("path")
         .attr("class", "arc_outer")
