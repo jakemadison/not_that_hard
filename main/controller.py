@@ -51,6 +51,8 @@ def construct_data_array_new_again(month=None):
 
             if parsed_datum[str(each_event.category)][0] is None:
                 parsed_datum[str(each_event.category)][0] = str(each_event.name)
+                if each_event.major_event:
+                    parsed_datum[str(each_event.category)][1] = [str(each_event.name)]
 
             else:
                 parsed_datum[str(each_event.category)][1] = [str(each_event.name)]
