@@ -127,7 +127,7 @@ function create_donut(data) {
             var arc_array = [];
             var outer_arc_array = [];
 
-        console.log('this is d for arc array: ', d);
+        //console.log('this is d for arc array: ', d);
 
             for (var prop in d) {
                 //console.log('checking prop ', prop, 'in d ', d);
@@ -137,7 +137,7 @@ function create_donut(data) {
 
                 if (ignore_vals.indexOf(prop) === -1 ){
 
-                    console.log('index of d: ', d);
+                    //console.log('index of d: ', d);
                     if (d[prop][0]) {
                         arc_array.push(true);
                     }
@@ -164,7 +164,7 @@ function create_donut(data) {
 
 
     svg.selectAll('.arc')
-        .data(function(d) {console.log('this is d before: ', d); return compute_arc_array(d, {outer: false})})
+        .data(function(d) {return compute_arc_array(d, {outer: false})})
         .enter()
         .append("path")
         .attr("class", "arc")
@@ -186,7 +186,7 @@ function create_donut(data) {
         .attr("class", "arc_outer")
         .attr("d", outer_arc())
         .style("fill", function(d, i) {
-            console.log('what is the i of this d?', i, d);
+            //console.log('what is the i of this d?', i, d);
             if (d) {
                 return color(i + 1);
             }
@@ -219,7 +219,19 @@ function create_donut(data) {
 
 
 
+function change_month(amount) {
 
+    console.log('change month function active...');
+
+    var current = $('#month_name').text();
+
+    $.get('get_historical_data', {'amount': amount, 'current': current}, function (result) {
+        console.log('I received a result!!', result);
+
+    });
+
+
+}
 
 
 

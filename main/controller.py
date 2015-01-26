@@ -22,16 +22,21 @@ def construct_data_array():
     return historical_data_array
 
 
-def construct_data_array_new_again(month=None):
+def construct_data_array_new_again(current_val=None, amount=None):
 
     # should be in the form: array = [{day: date, wealth: [1, 2], health}]
 
-    if month is None:
-        month = None
+    if current_val is None:
+        month = str(datetime.now().month)
+        year = str(datetime.now().year)
+        month_name = datetime.now().strftime('%B')
+
+    else:
+        pass
 
     parsed_data_array = []
 
-    historical_data = models.Day.objects.all().order_by('date')
+    historical_data = models.Day.objects.all().order_by('date').filter(date__year=year, date__month=month)
 
     parsed_datum = {'health': [None, None],
                     'wealth': [None, None],
@@ -67,7 +72,7 @@ def construct_data_array_new_again(month=None):
         print('-------------')
         print(each)
 
-    return parsed_data_array, 'January 2015'
+    return parsed_data_array, month_name + ' ' + year
 
 
 if __name__ == "__main__":

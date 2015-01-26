@@ -19,9 +19,11 @@ def get_historical_data(request):
 
     print('getting historical data...')
 
-    data_array, month = controller.construct_data_array_new_again()
+    amount = request.GET.get('amount', None)
+    current_val = request.GET.get('current', None)
 
-    # print(data_array)
+    print('i received current: {c}, amount: {a}'.format(c=current_val, a=amount))
+    data_array, month = controller.construct_data_array_new_again()
 
     return HttpResponse(json.dumps({'message': 'success',
                                     'data': data_array,
@@ -29,6 +31,10 @@ def get_historical_data(request):
                         content_type="application/json")
 
 
+#
+#
+#
+#
 def temp_entry_point(request):
 
     print('returning data from new controller function now.....')
