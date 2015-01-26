@@ -23,6 +23,7 @@ svg {
 }
 
 .month_nav {
+    margin-left: 5px;
     margin-bottom: -18px;
     margin-top: -14px;
 }

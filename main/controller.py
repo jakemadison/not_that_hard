@@ -27,7 +27,7 @@ def construct_data_array_new_again(current_val=None, amount=None):
 
     # should be in the form: array = [{day: date, wealth: [1, 2], health}]
 
-    if current_val is None:
+    if current_val is None or amount is None:
         month = str(datetime.now().month)
         year = str(datetime.now().year)
         month_name = datetime.now().strftime('%B')
@@ -74,10 +74,6 @@ def construct_data_array_new_again(current_val=None, amount=None):
                         'wealth': [None, None],
                         'arts': [None, None],
                         'smarts': [None, None]}
-
-    # for each in parsed_data_array:
-    #     print('-------------')
-    #     print(each)
 
     return parsed_data_array, month_name + ' ' + year
 

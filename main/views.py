@@ -34,7 +34,7 @@ def get_historical_data(request):
 #
 #
 #
-#
+# Can I kill this now?
 def temp_entry_point(request):
 
     print('returning data from new controller function now.....')

@@ -3,16 +3,44 @@
  */
 
 // get some data:
-$.get('get_historical_data', function(result) {
+//$.get('get_historical_data', function(result) {
+//
+//    console.log('received a result!  woo!', result);
+//
+//    $('#month_name').text(result.month);
+//
+//    console.log('yessssssss');
+//    console.log(result.data);
+//    // now do something with data...
+//
+//    populate_page(result);
+//
+//    create_donut(result.data);
+//
+//});
 
-    console.log('received a result!  woo!', result);
+get_historical_data();
 
-    $('#month_name').text(result.month);
 
-    console.log('yessssssss');
-    console.log(result.data);
-    // now do something with data...
+function get_historical_data(amount) {
 
+    console.log('change month function active...');
+
+    var current = $('#month_name').text();
+
+    $.get('get_historical_data', {'amount': amount, 'current': current}, function (result) {
+        console.log('I received a result!!', result);
+        $('#month_name').text(result.month);
+
+        populate_page(result);
+        create_donut(result.data);
+
+    });
+
+}
+
+
+function populate_page(result) {
 
     function build_row(row_data) {
         //console.log('building a new row...');
@@ -24,12 +52,13 @@ $.get('get_historical_data', function(result) {
         var arts = row_data.arts || '-';
         var smarts = row_data.smarts || '-';
 
-        var row = '<tr title='+notes+'> <td>'+day+'</td><td>'+
+        var row = '<tr class="row_data" title='+notes+'> <td>'+day+'</td><td>'+
             health+'</td><td>'+ wealth+'</td><td>'+arts+'</td><td>'+smarts+'</td></tr>';
 
         return row
     }
 
+    $('.row_data').remove();
 
     var test_table = $('.test_body');
     for (var i=0; i<result.data.length; i++) {
@@ -42,9 +71,9 @@ $.get('get_historical_data', function(result) {
 
     }
 
-    create_donut(result.data);
+}
 
-});
+
 
 
 function create_donut(data) {
@@ -83,10 +112,14 @@ function create_donut(data) {
 
     console.log('starting svg building.');
 
-    var svg = d3.select('.chart')
-        .selectAll('.pie')
-        .data(data)
-        .enter()
+    var chart = d3.select('.chart');
+
+    var pies = chart.selectAll('.pie').data(data);
+
+    pies.exit().remove();
+
+
+    var svg = pies.enter()
             .append('svg')
             .attr('class', 'pie')
             .attr('width', radius * 2)
@@ -219,19 +252,7 @@ function create_donut(data) {
 
 
 
-function change_month(amount) {
 
-    console.log('change month function active...');
-
-    var current = $('#month_name').text();
-
-    $.get('get_historical_data', {'amount': amount, 'current': current}, function (result) {
-        console.log('I received a result!!', result);
-
-    });
-
-
-}
 
 
 
