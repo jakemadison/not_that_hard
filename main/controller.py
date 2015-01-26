@@ -6,6 +6,7 @@ from datetime import datetime
 # import django
 # django.setup()
 import models
+import monthdelta
 
 
 # this can probably be considered dead now..
@@ -32,8 +33,14 @@ def construct_data_array_new_again(current_val=None, amount=None):
         month_name = datetime.now().strftime('%B')
 
     else:
-        pass
+        new_date = datetime.strptime(current_val, '%B %Y') + monthdelta.monthdelta(int(amount))
+        print('current date: {0}'.format(new_date))
 
+        month = new_date.strftime('%m')
+        year = new_date.strftime('%Y')
+        month_name = new_date.strftime('%B')
+
+    # now to actually get our data:
     parsed_data_array = []
 
     historical_data = models.Day.objects.all().order_by('date').filter(date__year=year, date__month=month)
@@ -50,7 +57,7 @@ def construct_data_array_new_again(current_val=None, amount=None):
 
         parsed_datum['day'] = datetime.strftime(each_day.date, '%b %d')
 
-        print('adding events for day: {0}'.format(each_day))
+        # print('adding events for day: {0}'.format(each_day))
 
         for each_event in day_events:
 
@@ -68,9 +75,9 @@ def construct_data_array_new_again(current_val=None, amount=None):
                         'arts': [None, None],
                         'smarts': [None, None]}
 
-    for each in parsed_data_array:
-        print('-------------')
-        print(each)
+    # for each in parsed_data_array:
+    #     print('-------------')
+    #     print(each)
 
     return parsed_data_array, month_name + ' ' + year
 

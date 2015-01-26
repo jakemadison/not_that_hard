@@ -23,7 +23,7 @@ def get_historical_data(request):
     current_val = request.GET.get('current', None)
 
     print('i received current: {c}, amount: {a}'.format(c=current_val, a=amount))
-    data_array, month = controller.construct_data_array_new_again()
+    data_array, month = controller.construct_data_array_new_again(current_val, amount)
 
     return HttpResponse(json.dumps({'message': 'success',
                                     'data': data_array,
