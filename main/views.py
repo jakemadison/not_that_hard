@@ -9,10 +9,7 @@ import controller
 # Create your views here.
 def index(request):
     context = RequestContext(request)
-
-    context_dict = {'boldmessage': "Testing.....1,2,3"}
-
-    return render_to_response('index.html', context_dict, context)
+    return render_to_response('index.html', context)
 
 
 def get_historical_data(request):
@@ -31,16 +28,3 @@ def get_historical_data(request):
                         content_type="application/json")
 
 
-#
-#
-#
-# Can I kill this now?
-def temp_entry_point(request):
-
-    print('returning data from new controller function now.....')
-
-    data = controller.construct_data_array_new()
-
-    return HttpResponse(json.dumps({'message': 'success',
-                                    'data': data}),
-                        content_type="application/json")

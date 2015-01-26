@@ -10,5 +10,4 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', include('main.urls')),
     url(r'^get_historical_data$', views.get_historical_data, name='get_historical_data'),
-    url(r'^get_data$', views.temp_entry_point, name='get_data_temp'),
 )

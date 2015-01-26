@@ -9,20 +9,6 @@ import models
 import monthdelta
 
 
-# this can probably be considered dead now..
-def construct_data_array():
-
-    historical_data_array = []
-    historical_data = models.Day.objects.all().order_by('date')
-
-    for each_day in historical_data:
-        parsed_datum = model_to_dict(each_day, exclude='date')
-        parsed_datum['date'] = datetime.strftime(each_day.date, '%b %d')
-        historical_data_array.append(parsed_datum)
-
-    return historical_data_array
-
-
 def construct_data_array_new_again(current_val=None, amount=None):
 
     # should be in the form: array = [{day: date, wealth: [1, 2], health}]
@@ -79,5 +65,5 @@ def construct_data_array_new_again(current_val=None, amount=None):
 
 
 if __name__ == "__main__":
-    x = construct_data_array()
+    x = None
     print(x)

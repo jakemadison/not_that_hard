@@ -2,22 +2,6 @@
  * Created by jmadison on 1/2/15.
  */
 
-// get some data:
-//$.get('get_historical_data', function(result) {
-//
-//    console.log('received a result!  woo!', result);
-//
-//    $('#month_name').text(result.month);
-//
-//    console.log('yessssssss');
-//    console.log(result.data);
-//    // now do something with data...
-//
-//    populate_page(result);
-//
-//    create_donut(result.data);
-//
-//});
 
 get_historical_data();
 
