@@ -6,3 +6,5 @@ The title comes from the fact that none of these activities is all that hard.
 Figuring out a way to make them a consistent part of your routine though, is.  So this is a tool to try and do just that.
 
 So obviously this thing was started right around new years, right?
+
+![alt tag](static/assets/screen1.png)
