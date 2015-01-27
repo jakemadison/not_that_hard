@@ -69,11 +69,9 @@ function create_donut(data) {
     //data.forEach(function(d) {console.log(d); console.log(d.yoga)});
 
     var number_donuts = data.length;
-    var number_of_segments = 4;
 
     //var radius = 74;
-    var radius = 40;
-    var padding = 10;
+    var radius = 40;  // this should be altered so we only need to change the one number to affect inner & outer...
 
     console.log('object keys: ', Object.keys(data[0]));
     var total_record_length = 4;
@@ -113,7 +111,6 @@ function create_donut(data) {
 
 
     console.log('finished svg building.  starting arc/path building');
-
 
     // map 0 - 100 on to 0 - 2*Pi:
     var arcScale = d3.scale.linear().domain([0, 100]).range([0, 2*Math.PI]);
@@ -165,6 +162,7 @@ function create_donut(data) {
                         outer_arc_array.push(true);
                     }
                     else {
+                        //console.log('nothing to see here....');
                         outer_arc_array.push(false);
                     }
                 }
@@ -188,7 +186,7 @@ function create_donut(data) {
         .attr("d", inner_arc())
         .style("fill", function(d, i) {
             if (d) {
-                return color(i + 1);
+                return color(i + 1);  // why does this change on exit/update?
             }
             else {
                 return '#DDDADA';
@@ -203,23 +201,13 @@ function create_donut(data) {
         .attr("class", "arc_outer")
         .attr("d", outer_arc())
         .style("fill", function(d, i) {
-            //console.log('what is the i of this d?', i, d);
             if (d) {
                 return color(i + 1);
             }
             else {
-                return '#DDDADA';
+                return '#E9E2E2';
             }
-        })
-
-        //.style("fill", function (d, i) {
-        //  return color(function(d) {
-        //
-        //      return colour_array[mapping.indexOf(d[0])]
-        //  })
-
-        //})
-;
+        });
 
 
     // this should only happen once...
