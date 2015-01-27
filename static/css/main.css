@@ -49,3 +49,8 @@ svg {
 #wealth_col {
     color: #8a89a6;
 }
+
+.chart {
+    margin-left: 5px;
+    margin-right: 5px;
+}
