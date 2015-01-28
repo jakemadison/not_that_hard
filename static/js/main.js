@@ -6,6 +6,14 @@
 get_historical_data();
 
 
+
+//document.getElementById('close').onclick = function(){
+//        this.parentNode.parentNode
+//        .style.display = "none";
+//
+//        return false;
+//    };
+
 function get_historical_data(amount) {
 
     console.log('change month function active...');
