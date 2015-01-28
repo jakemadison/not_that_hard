@@ -7,12 +7,12 @@ get_historical_data();
 
 
 
-//document.getElementById('close').onclick = function(){
-//        this.parentNode.parentNode
-//        .style.display = "none";
-//
-//        return false;
-//    };
+document.getElementById('close').onclick = function(){
+        this.parentNode.parentNode.parentNode
+        .style.display = "none";
+
+        return false;
+    };
 
 function get_historical_data(amount) {
 
