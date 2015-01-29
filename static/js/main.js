@@ -3,7 +3,7 @@
  */
 
 
-get_historical_data();
+get_historical_data({'amount': null});
 
 
 
@@ -14,18 +14,43 @@ document.getElementById('close').onclick = function(){
         return false;
     };
 
-function get_historical_data(amount) {
+function get_historical_data(options) {
 
     console.log('change month function active...');
 
-    var current = $('#month_name').text();
+    if ($('#has_prev_btn').hasClass('disabled') && options.amount < 0) {
+        return
+    }
+    if ($('#has_next_btn').hasClass('disabled') && options.amount > 0) {
+        return
+    }
 
-    $.get('get_historical_data', {'amount': amount, 'current': current}, function (result) {
-        console.log('I received a result!!', result);
-        $('#month_name').text(result.month);
+    options.current = $('#month_name').text();
 
-        populate_page(result);
-        create_donut(result.data);
+    $.get('get_historical_data', options,
+
+        function (result) {
+            console.log('I received a result!!', result);
+            $('#month_name').text(result.month);
+
+            if (result.has_prev === 'false' || result.has_prev === false) {
+                $('#has_prev_btn').addClass('disabled')
+            }
+            else {
+                $('#has_prev_btn').removeClass('disabled')
+            }
+
+            if (result.has_next === 'false' || result.has_next === false) {
+                $('#has_next_btn').addClass('disabled')
+            }
+            else {
+                $('#has_next_btn').removeClass('disabled')
+            }
+
+
+
+            populate_page(result);
+            create_donut(result.data);
 
     });
 

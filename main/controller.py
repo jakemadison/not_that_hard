@@ -10,11 +10,11 @@ import monthdelta
 from django.db.models import Q
 
 
-def construct_data_array_new_again(current_val=None, amount=None, has_next=None, has_prev=None):
+def construct_data_array_new_again(current_val=None, amount=None, has_prev=None, has_next=None):
 
     # should be in the form: array = [{day: date, wealth: [1, 2], health}]
 
-    if current_val is None or amount is None:
+    if current_val == 'month':
         new_date = datetime.now()
         month = str(new_date.month)
         year = str(new_date.year)
@@ -38,19 +38,14 @@ def construct_data_array_new_again(current_val=None, amount=None, has_next=None,
     historical_data = models.Day.objects.all().order_by('date').filter(date__year=year, date__month=month)
 
     print('now checking for existence of has_prev/next')
-
     if has_prev is None:
         has_prev = models.Day.objects.filter(Q(date__lt=new_date) | Q(date__lt=new_date)).exists()
-        # has_prev = None
 
     if has_next is None:
         has_next = models.Day.objects.filter(Q(date__gte=new_date+monthdelta.monthdelta(1)) |
                                              Q(date__gte=new_date+monthdelta.monthdelta(1))).exists()
 
-    # do a second query here somelpace to check for has_prev, has_next.
-
     print('now building historical array from data')
-
     parsed_datum = {'health': [None, None],
                     'wealth': [None, None],
                     'arts': [None, None],
