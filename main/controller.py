@@ -7,16 +7,20 @@ from datetime import datetime
 # django.setup()
 import models
 import monthdelta
+from django.db.models import Q
 
 
-def construct_data_array_new_again(current_val=None, amount=None):
+def construct_data_array_new_again(current_val=None, amount=None, has_next=None, has_prev=None):
 
     # should be in the form: array = [{day: date, wealth: [1, 2], health}]
 
     if current_val is None or amount is None:
-        month = str(datetime.now().month)
-        year = str(datetime.now().year)
-        month_name = datetime.now().strftime('%B')
+        new_date = datetime.now()
+        month = str(new_date.month)
+        year = str(new_date.year)
+        month_name = new_date.strftime('%B')
+        new_date = datetime.strptime(month + ' ' + year, '%m %Y')
+        print('new date: {0}'.format(new_date))
 
     else:
         new_date = datetime.strptime(current_val, '%B %Y') + monthdelta.monthdelta(int(amount))
@@ -26,10 +30,26 @@ def construct_data_array_new_again(current_val=None, amount=None):
         year = new_date.strftime('%Y')
         month_name = new_date.strftime('%B')
 
+        # if we're here, then we don't know about next or prev
+
     # now to actually get our data:
     parsed_data_array = []
 
     historical_data = models.Day.objects.all().order_by('date').filter(date__year=year, date__month=month)
+
+    print('now checking for existence of has_prev/next')
+
+    if has_prev is None:
+        has_prev = models.Day.objects.filter(Q(date__lt=new_date) | Q(date__lt=new_date)).exists()
+        # has_prev = None
+
+    if has_next is None:
+        has_next = models.Day.objects.filter(Q(date__gte=new_date+monthdelta.monthdelta(1)) |
+                                             Q(date__gte=new_date+monthdelta.monthdelta(1))).exists()
+
+    # do a second query here somelpace to check for has_prev, has_next.
+
+    print('now building historical array from data')
 
     parsed_datum = {'health': [None, None],
                     'wealth': [None, None],
@@ -61,7 +81,7 @@ def construct_data_array_new_again(current_val=None, amount=None):
                         'arts': [None, None],
                         'smarts': [None, None]}
 
-    return parsed_data_array, month_name + ' ' + year
+    return parsed_data_array, month_name + ' ' + year, has_next, has_prev
 
 
 if __name__ == "__main__":

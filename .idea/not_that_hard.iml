@@ -14,7 +14,7 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.idea/scopes" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 2.7.5 virtualenv at ~/.virtualenvs/nth_env" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 2.7.9 virtualenv at ~/Envs/nth_env" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="bootstrap" level="application" />
     <orderEntry type="library" name="jquery" level="application" />
