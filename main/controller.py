@@ -57,6 +57,7 @@ def construct_data_array_new_again(current_val=None, amount=None, has_prev=None,
         day_events = each_day.events.all()
 
         parsed_datum['day'] = datetime.strftime(each_day.date, '%b %d')
+        parsed_datum['notes'] = each_day.notes
 
         # print('adding events for day: {0}'.format(each_day))
 

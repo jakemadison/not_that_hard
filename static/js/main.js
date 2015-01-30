@@ -143,8 +143,9 @@ function create_donut(data) {
             .attr('transform', 'translate(' + radius + ',' + radius + ')')
         .on("click", function(d, i) {
             console.log('i have been clicked! with data point and i: ', d, i, d.day);
-            $('.modal').show();
+            $('.modal').modal('show');
             $('.modal-title').text(d.day);
+            $('.modal_notes').text(d.notes);
 
             var modal_chart = d3.select('.modal_chart').selectAll('.modal_pie').data(d).enter()
             .append('svg')
@@ -188,7 +189,7 @@ function create_donut(data) {
     var inner_arc = create_arc_new({'r': 25, 'l': total_record_length});
 
     function compute_arc_array(d, config) {
-        var ignore_vals = ['id', 'day'];
+        var ignore_vals = ['id', 'day', 'notes'];
             var arc_array = [];
             var outer_arc_array = [];
 
