@@ -87,3 +87,30 @@ svg {
     margin-bottom: 5px;
     cursor: pointer;
 }
+
+.pie {
+    cursor: pointer;
+    opacity: .8;
+    border: none;
+}
+
+.pie:hover {
+    opacity: 1;
+
+}
+
+.modal_content_table {
+    float: right;
+
+}
+
+.modal_path {
+ opacity: .6;
+    cursor: pointer;
+
+}
+
+.modal_path:hover {
+ opacity: 1;
+
+}

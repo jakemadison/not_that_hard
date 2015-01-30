@@ -65,8 +65,29 @@
         <h4 class="modal-title">Modal title</h4>
       </div>
       <div class="modal-body">
-        <p>One fine body…</p>
-          <div class="well well-sm modal_chart"></div>
+{#        <p>Click to edit events:</p>#}
+          <div class="well well-sm modal_chart">
+              <div class="modal_content_table">
+                  <table class="table table-striped table-hover">
+                      <thead>
+                    <tr>
+                      <th id="modal_cat_col">Category</th>
+                      <th id="modal_evt_col">Event</th>
+                    </tr>
+                  </thead>
+                    <tbody class="modal_table_body">
+                        <tr class="row_data">
+                            <td id="modal_cat_data"></td>
+                            <td id="modal_evt_data"></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+              </div>
+
+          </div>
+
           <div class="well well-sm"><p class="modal_notes"></p></div>
       </div>
       <div class="modal-footer">

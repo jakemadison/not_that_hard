@@ -47,8 +47,6 @@ function get_historical_data(options) {
                 $('#has_next_btn').removeClass('disabled')
             }
 
-
-
             populate_page(result);
             create_donut(result.data);
 
@@ -91,8 +89,6 @@ function populate_page(result) {
 }
 
 
-
-
 function create_donut(data) {
 
     console.log('create donut... ');
@@ -125,14 +121,101 @@ function create_donut(data) {
         .sort(null)
         .value(function (d) {return d;});
 
+
+    function build_modal(d, i) {
+            console.log('i have been clicked! with data point and i: ', d, i, d.day);
+            $('.modal').modal('show');
+            $('.modal-title').text(d.day);
+            $('.modal_notes').text(d.notes);
+
+        d3.select('.modal_chart').select('svg').remove();
+
+            var modal_chart = d3.select('.modal_chart')
+                .append('svg')
+                .attr("class", 'modal_pie')
+                .attr("width", radius * 4)
+                .attr("height", radius * 4)
+                    .append('g')
+                .attr('transform', 'translate(' + radius*2 + ',' + radius*2 + ')');
+
+            var modal_outer_arc = create_arc_new({'r': radius*2, 'r_minus': 26,
+                                                  'l': total_record_length, 'space_offset': 2});
+            var modal_inner_arc = create_arc_new({'r': 50, 'r_minus': 26,
+                                                  'l': total_record_length, 'space_offset': 2});
+
+
+            modal_chart.selectAll('.modal_arc')
+                        .data(compute_arc_array(d, {outer: false}))
+                        .enter().append("path").attr("d", modal_inner_arc())
+                .attr("class", "modal_path")
+                        .style("fill", function(d, i) {
+                            if (d) {
+                                return color(i + 1);  // why does this change on exit/update?
+                            }
+                            else {
+                                return '#DDDADA';
+                            }});
+
+
+            modal_chart.selectAll('.modal_arc')
+                        .data(compute_arc_array(d, {outer: true}))
+                        .enter().append("path").attr("d", modal_outer_arc())
+                .attr("class", "modal_path")
+                        .style("fill", function(d, i) {
+                            if (d) {
+                                return color(i + 1);  // why does this change on exit/update?
+                            }
+                            else {
+                                return '#DDDADA';
+                            }});
+
+
+
+        //
+        //    svg.selectAll('.arc_outer')
+        //.data(function(d) {return compute_arc_array(d, {outer: true})})
+        //.enter()
+        //.append("path")
+        //.attr("class", "arc_outer")
+        //.attr("d", outer_arc())
+        //.style("fill", function(d, i) {
+        //    if (d) {
+        //        return color(i + 1);
+        //    }
+        //    else {
+        //        return '#E9E2E2';
+        //    }
+        //});
+        //
+
+
+
+
+
+
+
+            //    selectAll('.modal_pie').data(d).enter()
+            //.append('svg')
+            //.attr('class', 'modal_pie')
+            //.attr('width', radius * 2)
+            //.attr('height', radius * 2)
+            //.append('g')
+            //.attr('transform', 'translate(' + radius + ',' + radius + ')')
+            //    .selectAll('.modal_arc')
+            //    .data(compute_arc_array(d, {outer: false}))
+            //    .enter().append("path").attr("d", inner_arc()).style("fill", color(i+1));
+
+            console.log('modal chart building done');
+
+        // this should probably destroy chart data on modal dismiss...
+
+    }
+
     console.log('starting svg building.');
 
     var chart = d3.select('.chart');
-
     var pies = chart.selectAll('.pie').data(data);
-
     pies.exit().remove();
-
 
     var svg = pies.enter()
             .append('svg')
@@ -142,23 +225,7 @@ function create_donut(data) {
             .append('g')
             .attr('transform', 'translate(' + radius + ',' + radius + ')')
         .on("click", function(d, i) {
-            console.log('i have been clicked! with data point and i: ', d, i, d.day);
-            $('.modal').modal('show');
-            $('.modal-title').text(d.day);
-            $('.modal_notes').text(d.notes);
-
-            var modal_chart = d3.select('.modal_chart').selectAll('.modal_pie').data(d).enter()
-            .append('svg')
-            .attr('class', 'pie')
-            .attr('width', radius * 2)
-            .attr('height', radius * 2)
-            .append('g')
-            .attr('transform', 'translate(' + radius + ',' + radius + ')')
-                .selectAll('.arc')
-                .data(compute_arc_array(d, {outer: false}))
-                .enter().append("path").attr("d", inner_arc()).style("fill", color(i+1));
-
-            console.log('modal chart building done');
+            build_modal(d, i);
         });
 
 
@@ -170,23 +237,23 @@ function create_donut(data) {
     function create_arc_new(config) {
 
             return function myArc() {
-                  var arc_obj = d3.svg.arc().innerRadius(config.r - 13)
+                  var arc_obj = d3.svg.arc().innerRadius(config.r - config.r_minus)
                     .outerRadius(config.r)
                     .startAngle(function(d, i) {
                         //console.log('start angle for i: ', i, 'on data point d: ', d);
 
-                        return arcScale((i)*(100/config.l));
+                        return arcScale((config.space_offset/2) + ((i)*(100/config.l)));
                     })
                     .endAngle(function(d, i) {
-                        return arcScale(25 + ((i)*(100/config.l)));
+                        return arcScale((25 - (config.space_offset/2) ) + ((i)*(100/config.l)));
                     });
 
                     return arc_obj;
             }
         }
 
-    var outer_arc = create_arc_new({'r': radius, 'l': total_record_length});
-    var inner_arc = create_arc_new({'r': 25, 'l': total_record_length});
+    var outer_arc = create_arc_new({'r': radius, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
+    var inner_arc = create_arc_new({'r': 25, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
 
     function compute_arc_array(d, config) {
         var ignore_vals = ['id', 'day', 'notes'];
