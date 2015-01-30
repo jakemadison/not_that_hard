@@ -140,7 +140,25 @@ function create_donut(data) {
             .attr('width', radius * 2)
             .attr('height', radius * 2)
             .append('g')
-            .attr('transform', 'translate(' + radius + ',' + radius + ')');
+            .attr('transform', 'translate(' + radius + ',' + radius + ')')
+        .on("click", function(d, i) {
+            console.log('i have been clicked! with data point and i: ', d, i, d.day);
+            $('.modal').show();
+            $('.modal-title').text(d.day);
+
+            var modal_chart = d3.select('.modal_chart').selectAll('.modal_pie').data(d).enter()
+            .append('svg')
+            .attr('class', 'pie')
+            .attr('width', radius * 2)
+            .attr('height', radius * 2)
+            .append('g')
+            .attr('transform', 'translate(' + radius + ',' + radius + ')')
+                .selectAll('.arc')
+                .data(compute_arc_array(d, {outer: false}))
+                .enter().append("path").attr("d", inner_arc()).style("fill", color(i+1));
+
+            console.log('modal chart building done');
+        });
 
 
     console.log('finished svg building.  starting arc/path building');
