@@ -4,9 +4,14 @@ from django.shortcuts import render_to_response
 import json
 from django.http import HttpResponse
 import controller
+from django.views.decorators.http import require_POST
+from django.core.context_processors import csrf
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
+@ensure_csrf_cookie
 def index(request):
     print('entered index view rendering')
     context = RequestContext(request)
@@ -40,5 +45,27 @@ def get_historical_data(request):
                                     'has_next': has_next,
                                     'has_prev': has_prev}),
                         content_type="application/json")
+
+
+@require_POST
+@csrf_exempt  # temp hack, because csrf junk is BORING
+def update_stuff(request):
+    print('updating stuff')
+
+    c = {}
+    c.update(csrf(request))
+
+    new_notes = request.POST.get('new_notes', None)
+    day = request.POST.get('day', None)
+    date = request.POST.get('date', None)
+    if new_notes is not None and day is not None and date is not None:
+        year = date.split(' ')[-1]
+        print('i received the following notes: {n}, {d}, {dt}'.format(n=new_notes, d=day, dt=date))
+        controller.update_day_notes(day, year, new_notes)
+
+    else:
+        print('apparently I got nothing...')
+
+    return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")
 
 

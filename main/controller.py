@@ -96,6 +96,20 @@ def update_day_table_to_current():
         models.Day(date=most_recent_day).save()
 
 
+def update_day_notes(day, year, notes):
+
+    parse_date = datetime.strptime(day+' '+year, '%b %d %Y')
+    existing_record = models.Day.objects.filter(date=parse_date)[0]
+
+    if existing_record is None:
+        return
+
+    existing_record.notes = notes
+    existing_record.save()
+
+
+
+
 if __name__ == "__main__":
     x = None
     print(x)

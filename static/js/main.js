@@ -7,12 +7,68 @@ get_historical_data({'amount': null});
 
 
 
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
 document.getElementById('close').onclick = function(){
         this.parentNode.parentNode.parentNode
         .style.display = "none";
 
         return false;
     };
+
+
+$('.modal').on('hidden.bs.modal', function() {
+    console.log('hiding of modal is happening...');
+    $('#modal_textArea').hide();
+    $('.modal_notes').show();
+    $('#click_to_edit').show();
+
+});
+
+
+var active_date;
+var active_day;
+
+$('#save_changes_btn').on('click', function () {
+
+       $('.modal').modal('hide');
+        var new_text = $('#modal_textArea').val();
+        var old_text = $('.modal_notes').text();
+
+        if (old_text === new_text) {
+            console.log('no changes detected');
+            return
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        $.post('/update_stuff', {'new_notes': new_text, 'date':active_date, 'day': active_day}, function(result) {
+
+            console.log('finished updating stuff');
+
+        })
+
+});
+
+
+
 
 function get_historical_data(options) {
 
@@ -32,6 +88,7 @@ function get_historical_data(options) {
         function (result) {
             console.log('I received a result!!', result);
             $('#month_name').text(result.month);
+            active_date = result.month;
 
             if (result.has_prev === 'false' || result.has_prev === false) {
                 $('#has_prev_btn').addClass('disabled')
@@ -123,10 +180,21 @@ function create_donut(data) {
 
 
     function build_modal(d, i) {
+
             console.log('i have been clicked! with data point and i: ', d, i, d.day);
             $('.modal').modal('show');
             $('.modal-title').text(d.day);
-            $('.modal_notes').text(d.notes);
+            active_day = d.day;
+
+            var modal_notes_sel = $('.modal_notes');
+            modal_notes_sel.text(d.notes);
+            $('#modal_textArea').val(d.notes);
+
+            modal_notes_sel.on('click', function() {
+               modal_notes_sel.hide();
+                $('#modal_textArea').show();
+                $('#click_to_edit').hide();
+            });
 
         d3.select('.modal_chart').select('svg').remove();
 
