@@ -111,4 +111,17 @@ minor (1/2), major (1 full), 3 minor (3 eq segments filling major, diff colour),
 - auto-add current day in DB (or just build from max(day) vs sysdate?)
 
 
+======
+Needed still:
+- on init page load, update days table if needed (after that, we're pretty single-pagey)
+- A way to edit/add events in the modal
+- clean up the table view
+- transitions!  also, definitely need some tweaking to the way our exit/update d3 works
+- some way to fit in "must do dailies" eg, french, that fits with the current model/presentation
+- more generalization, less hardcoding of stuff
+- pills showing number of events per thing?
+- the ability to click a particular category and show the month view of that?
+
+
+
 

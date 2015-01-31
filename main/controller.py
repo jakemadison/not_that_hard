@@ -1,10 +1,5 @@
 from __future__ import print_function
-# import os
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "not_that_hard.settings")
-from django.forms.models import model_to_dict
-from datetime import datetime
-# import django
-# django.setup()
+from datetime import datetime, timedelta
 import models
 import monthdelta
 from django.db.models import Q
@@ -20,11 +15,11 @@ def construct_data_array_new_again(current_val=None, amount=None, has_prev=None,
         year = str(new_date.year)
         month_name = new_date.strftime('%B')
         new_date = datetime.strptime(month + ' ' + year, '%m %Y')
-        print('new date: {0}'.format(new_date))
+        # print('new date: {0}'.format(new_date))
 
     else:
         new_date = datetime.strptime(current_val, '%B %Y') + monthdelta.monthdelta(int(amount))
-        print('current date: {0}'.format(new_date))
+        # print('current date: {0}'.format(new_date))
 
         month = new_date.strftime('%m')
         year = new_date.strftime('%Y')
@@ -37,7 +32,7 @@ def construct_data_array_new_again(current_val=None, amount=None, has_prev=None,
 
     historical_data = models.Day.objects.all().order_by('date').filter(date__year=year, date__month=month)
 
-    print('now checking for existence of has_prev/next')
+    # print('now checking for existence of has_prev/next')
     if has_prev is None:
         has_prev = models.Day.objects.filter(Q(date__lt=new_date) | Q(date__lt=new_date)).exists()
 
@@ -45,7 +40,7 @@ def construct_data_array_new_again(current_val=None, amount=None, has_prev=None,
         has_next = models.Day.objects.filter(Q(date__gte=new_date+monthdelta.monthdelta(1)) |
                                              Q(date__gte=new_date+monthdelta.monthdelta(1))).exists()
 
-    print('now building historical array from data')
+    # print('now building historical array from data')
     parsed_datum = {'health': [None, None],
                     'wealth': [None, None],
                     'arts': [None, None],
@@ -78,6 +73,22 @@ def construct_data_array_new_again(current_val=None, amount=None, has_prev=None,
                         'smarts': [None, None]}
 
     return parsed_data_array, month_name + ' ' + year, has_next, has_prev
+
+
+def update_day_table_to_current():
+    print('updating day table to current')
+
+    current_day = datetime.now().date()
+    most_recent_day = models.Day.objects.all().order_by('-date')[0].date
+
+    if most_recent_day >= current_day:
+        print('nothing to do.. most recent is either same or more than current day')
+        return
+
+    while most_recent_day != current_day:
+        print('i need to do some work! cur: {c}, mrd: {m}'.format(c=current_day, m=most_recent_day))
+        most_recent_day += timedelta(days=1)
+        models.Day(date=most_recent_day).save()
 
 
 if __name__ == "__main__":
