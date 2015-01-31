@@ -81,6 +81,11 @@ def update_day_table_to_current():
     current_day = datetime.now().date()
     most_recent_day = models.Day.objects.all().order_by('-date')[0].date
 
+    if most_recent_day is None:
+        print('no data found at all... creating a day for today and exiting')
+        models.Day(date=current_day).save()
+        return
+
     if most_recent_day >= current_day:
         print('nothing to do.. most recent is either same or more than current day')
         return
