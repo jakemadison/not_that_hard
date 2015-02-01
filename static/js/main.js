@@ -39,6 +39,7 @@ $('.modal').on('hidden.bs.modal', function() {
     $('#modal_textArea').hide();
     $('.modal_notes').show();
     $('#click_to_edit').show();
+    $('#save_changes_btn').addClass('disabled');
 
 });
 
@@ -48,14 +49,24 @@ var active_day;
 
 $('#save_changes_btn').on('click', function () {
 
-       $('.modal').modal('hide');
+       //$('.modal').modal('hide');
         var new_text = $('#modal_textArea').val();
         var old_text = $('.modal_notes').text();
+
+            $('#modal_textArea').hide();
+            $('.modal_notes').show();
+            $('#click_to_edit').show();
+
+        $('#save_changes_btn').addClass('disabled');
 
         if (old_text === new_text) {
             console.log('no changes detected');
             return
         }
+
+        $('.modal_notes').text(new_text);
+
+
 
         var csrftoken = getCookie('csrftoken');
 
@@ -63,7 +74,10 @@ $('#save_changes_btn').on('click', function () {
 
             console.log('finished updating stuff');
 
+
         })
+
+
 
 });
 
@@ -194,6 +208,7 @@ function create_donut(data) {
                modal_notes_sel.hide();
                 $('#modal_textArea').show();
                 $('#click_to_edit').hide();
+                $('#save_changes_btn').removeClass('disabled');
             });
 
         d3.select('.modal_chart').select('svg').remove();

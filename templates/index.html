@@ -88,17 +88,40 @@
 
           </div>
 
+              <div class="day_nav">
+        <nav>
+          <ul class="pagination pagination-sm">
+            <li id="has_prev_day_btn">
+              <a href="#" aria-label="Previous"
+                 onclick="get_historical_data({'amount': -1, 'has_next': true});">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li id="has_next_day_btn">
+              <a href="#" aria-label="Next" onclick="get_historical_data({'amount': 1, 'has_prev': true});">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        </div>
+
           <p>Notes</p>
           <div class="well well-sm">
               <textarea class="form-control" rows="3" id="modal_textArea"
                         style="margin: 0px -2.84375px 0px 0px; width: 528px; height: 131px; display: none;"></textarea>
-              <p class="modal_notes"></p>
+              <span class="modal_notes"></span>
               <span class="help-block" id="click_to_edit">Click to edit</span>
           </div>
       </div>
+
+
+
+
+
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="save_changes_btn">Save changes</button>
+        <button type="button" class="btn btn-primary disabled" id="save_changes_btn">Save changes</button>
       </div>
     </div>
   </div>

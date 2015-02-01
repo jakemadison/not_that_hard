@@ -114,3 +114,12 @@ svg {
  opacity: 1;
 
 }
+
+.day_nav {
+    margin-top: -20px;
+    float: right;
+}
+
+.modal_notes {
+    cursor: default;
+}
