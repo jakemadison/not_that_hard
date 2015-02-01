@@ -211,10 +211,12 @@ function create_donut(data) {
             active_day = d.day;
 
             var modal_notes_sel = $('.modal_notes');
+            var modal_notes_well_sel = $('.modal_note_well');
+
             modal_notes_sel.text(d.notes);
             $('#modal_textArea').val(d.notes);
 
-            modal_notes_sel.on('click', function() {
+            modal_notes_well_sel.on('click', function() {
                modal_notes_sel.hide();
                 $('#modal_textArea').show();
                 $('#click_to_edit').hide();
@@ -261,42 +263,6 @@ function create_donut(data) {
                             else {
                                 return '#DDDADA';
                             }});
-
-
-
-        //
-        //    svg.selectAll('.arc_outer')
-        //.data(function(d) {return compute_arc_array(d, {outer: true})})
-        //.enter()
-        //.append("path")
-        //.attr("class", "arc_outer")
-        //.attr("d", outer_arc())
-        //.style("fill", function(d, i) {
-        //    if (d) {
-        //        return color(i + 1);
-        //    }
-        //    else {
-        //        return '#E9E2E2';
-        //    }
-        //});
-        //
-
-
-
-
-
-
-
-            //    selectAll('.modal_pie').data(d).enter()
-            //.append('svg')
-            //.attr('class', 'modal_pie')
-            //.attr('width', radius * 2)
-            //.attr('height', radius * 2)
-            //.append('g')
-            //.attr('transform', 'translate(' + radius + ',' + radius + ')')
-            //    .selectAll('.modal_arc')
-            //    .data(compute_arc_array(d, {outer: false}))
-            //    .enter().append("path").attr("d", inner_arc()).style("fill", color(i+1));
 
             console.log('modal chart building done');
 

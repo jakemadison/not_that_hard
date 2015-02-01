@@ -54,11 +54,10 @@ def update_stuff(request):
     c = {}
     c.update(csrf(request))
 
-    operation_result = None
-
     new_notes = request.POST.get('new_notes', None)
     day = request.POST.get('day', None)
     date = request.POST.get('date', None)
+
     if new_notes is not None and day is not None and date is not None:
         year = date.split(' ')[-1]
         print('i received the following notes: {n}, {d}, {dt}'.format(n=new_notes, d=day, dt=date))
