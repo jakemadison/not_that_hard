@@ -8,7 +8,6 @@ get_historical_data({'amount': null});
 
 
 // Helper stuff:
-
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -307,7 +306,6 @@ function create_donut() {
             if ($('#has_prev_day_btn').hasClass('disabled')) {
                 return
             }
-
             offset = -1;
 
         }
