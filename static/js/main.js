@@ -47,7 +47,6 @@ $('.modal').on('hidden.bs.modal', function() {
 var active_date;
 var active_day;
 var data;
-var day_offset = 0;
 
 $('#save_changes_btn').on('click', function () {
 
@@ -99,11 +98,6 @@ $('#save_changes_btn').on('click', function () {
 
 });
 
-
-function day_pager(value) {
-    // get current day, then build modal with either the next day or the previous day, then update pager state?
-
-}
 
 
 // Main data-getter function:
@@ -302,6 +296,40 @@ function create_donut() {
         // this should probably destroy chart data on modal dismiss...
 
     }
+
+
+    $('.pager_control').on('click', function () {
+       console.log('day pager is active');
+
+        var offset;
+        if (this.parentNode.id == 'has_prev_day_btn') {
+
+            if ($('#has_prev_day_btn').hasClass('disabled')) {
+                return
+            }
+
+            offset = -1;
+
+        }
+        else if (this.parentNode.id == 'has_next_day_btn') {
+            if ($('#has_next_day_btn').hasClass('disabled')) {
+                return
+            }
+            offset = 1;
+
+        }
+        console.log('continuing pager...');
+
+        for (var j=0; j < data.length; j++) {
+            if (data[j].day === active_day) {
+                console.log('sending off to build modal now...');
+                build_modal(data[j+offset], j+offset);
+                return
+            }
+        }
+
+    });
+
 
     console.log('starting svg building.');
 
