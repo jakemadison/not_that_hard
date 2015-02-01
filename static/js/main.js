@@ -46,6 +46,7 @@ $('.modal').on('hidden.bs.modal', function() {
 
 var active_date;
 var active_day;
+var data;
 
 $('#save_changes_btn').on('click', function () {
 
@@ -80,6 +81,15 @@ $('#save_changes_btn').on('click', function () {
                 modal_notes_select.text(old_text);
                 $('#modal_error_message').text(result.message);
                 $('.modal_alert').show();
+            }
+
+            else {
+                for (var each_datum in data) {
+                    if (data[each_datum].day === active_day) {
+                        data[each_datum].notes = new_text;
+                    }
+                }
+
             }
 
 
@@ -128,8 +138,10 @@ function get_historical_data(options) {
                 $('#has_next_btn').removeClass('disabled')
             }
 
+            data = result.data;
+
             populate_page(result);
-            create_donut(result.data);
+            create_donut();
 
     });
 
@@ -170,7 +182,7 @@ function populate_page(result) {
 }
 
 
-function create_donut(data) {
+function create_donut() {
 
     console.log('create donut... ');
 
