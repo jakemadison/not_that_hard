@@ -3,14 +3,15 @@ from datetime import datetime, timedelta
 import models
 import monthdelta
 from django.db.models import Q
+import pytz
 
 
-def construct_data_array_new_again(current_val=None, amount=None, has_prev=None, has_next=None):
+def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=None):
 
     # should be in the form: array = [{day: date, wealth: [1, 2], health}]
 
     if current_val == 'month':
-        new_date = datetime.now()
+        new_date = datetime.now(pytz.timezone('US/Pacific'))
         month = str(new_date.month)
         year = str(new_date.year)
         month_name = new_date.strftime('%B')
@@ -106,8 +107,6 @@ def update_day_notes(day, year, notes):
 
     existing_record.notes = notes
     existing_record.save()
-
-
 
 
 if __name__ == "__main__":

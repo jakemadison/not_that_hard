@@ -66,8 +66,6 @@ $('#save_changes_btn').on('click', function () {
 
         $('.modal_notes').text(new_text);
 
-
-
         var csrftoken = getCookie('csrftoken');
 
         $.post('/update_stuff', {'new_notes': new_text, 'date':active_date, 'day': active_day}, function(result) {
@@ -297,6 +295,7 @@ function create_donut(data) {
     console.log('starting svg building.');
 
     var chart = d3.select('.chart');
+    chart.selectAll('.pie').remove();
     var pies = chart.selectAll('.pie').data(data);
     pies.exit().remove();
 

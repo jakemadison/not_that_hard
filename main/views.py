@@ -33,9 +33,8 @@ def get_historical_data(request):
     # print('i received current: {c}, amount: {a}, p: {p}, n: {n}'.format(c=current_val, a=amount,
     #                                                                     p=has_prev_received, n=has_next_received))
 
-    data_array, month, has_next, has_prev = controller.construct_data_array_new_again(current_val,
-                                                                                      amount, has_prev_received,
-                                                                                      has_next_received)
+    data_array, month, has_next, has_prev = controller.construct_data_array(current_val, amount,
+                                                                            has_prev_received, has_next_received)
 
     # print('i am sending month: {m}, p: {p}, n: {n}'.format(m=month, p=has_prev, n=has_next))
 
