@@ -7,8 +7,8 @@ get_historical_data({'amount': null});
 
 
 
+// Helper stuff:
 
-// using jQuery
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie != '') {
@@ -43,10 +43,11 @@ $('.modal').on('hidden.bs.modal', function() {
 
 });
 
-
+// Some Outer Scope Vars:
 var active_date;
 var active_day;
 var data;
+var day_offset = 0;
 
 $('#save_changes_btn').on('click', function () {
 
@@ -92,9 +93,6 @@ $('#save_changes_btn').on('click', function () {
 
             }
 
-
-
-
         })
 
 
@@ -102,8 +100,13 @@ $('#save_changes_btn').on('click', function () {
 });
 
 
+function day_pager(value) {
+    // get current day, then build modal with either the next day or the previous day, then update pager state?
+
+}
 
 
+// Main data-getter function:
 function get_historical_data(options) {
 
     console.log('change month function active...');
@@ -148,6 +151,7 @@ function get_historical_data(options) {
 }
 
 
+// Build our table:
 function populate_page(result) {
 
     function build_row(row_data) {
@@ -182,6 +186,7 @@ function populate_page(result) {
 }
 
 
+// Draw out our pies:
 function create_donut() {
 
     console.log('create donut... ');
@@ -217,7 +222,23 @@ function create_donut() {
 
     function build_modal(d, i) {
 
-            console.log('i have been clicked! with data point and i: ', d, i, d.day);
+            console.log('i have been clicked! with data point and i: ', d, i, d.day, data.length);
+
+            if (i === 0) {
+                $('#has_prev_day_btn').addClass('disabled')
+            }
+            else {
+                $('#has_prev_day_btn').removeClass('disabled')
+            }
+
+            if (i+1 === data.length){
+                $('#has_next_day_btn').addClass('disabled')
+            }
+            else {
+                $('#has_next_day_btn').removeClass('disabled')
+            }
+
+
             $('.modal').modal('show');
             $('.modal-title').text(d.day);
             active_day = d.day;
