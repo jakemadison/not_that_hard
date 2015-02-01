@@ -123,3 +123,9 @@ svg {
 .modal_notes {
     cursor: default;
 }
+
+.modal_alert {
+    margin-left: 15px;
+    margin-right: 15px;
+    display: none;
+}

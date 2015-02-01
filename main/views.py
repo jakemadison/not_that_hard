@@ -54,17 +54,20 @@ def update_stuff(request):
     c = {}
     c.update(csrf(request))
 
+    operation_result = None
+
     new_notes = request.POST.get('new_notes', None)
     day = request.POST.get('day', None)
     date = request.POST.get('date', None)
     if new_notes is not None and day is not None and date is not None:
         year = date.split(' ')[-1]
         print('i received the following notes: {n}, {d}, {dt}'.format(n=new_notes, d=day, dt=date))
-        controller.update_day_notes(day, year, new_notes)
+        operation_result = controller.update_day_notes(day, year, new_notes)
 
     else:
         print('apparently I got nothing...')
+        operation_result = 'Not Enough Required Data'
 
-    return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")
+    return HttpResponse(json.dumps({'message': operation_result}), content_type="application/json")
 
 

@@ -102,12 +102,19 @@ def update_day_notes(day, year, notes):
     parse_date = datetime.strptime(day+' '+year, '%b %d %Y')
     existing_record = models.Day.objects.filter(date=parse_date)[0]
 
-    if existing_record is None:
-        return
+    try:
+        if existing_record is None:
+            return
 
-    existing_record.notes = notes
-    existing_record.save()
+        existing_record.notes = notes
+        existing_record.save()
 
+    except Exception, e:
+        print('there was an error saving notes to the DB: {e}'.format(e=e))
+        return 'A Database Failure'
+
+    else:
+        return 'success'
 
 if __name__ == "__main__":
     x = None

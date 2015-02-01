@@ -50,11 +50,14 @@ var active_day;
 $('#save_changes_btn').on('click', function () {
 
        //$('.modal').modal('hide');
-        var new_text = $('#modal_textArea').val();
-        var old_text = $('.modal_notes').text();
+        var modal_text_select = $('#modal_textArea');
+        var modal_notes_select = $('.modal_notes');
 
-            $('#modal_textArea').hide();
-            $('.modal_notes').show();
+        var new_text = modal_text_select.val();
+        var old_text = modal_notes_select.text();
+
+            modal_text_select.hide();
+            modal_notes_select.show();
             $('#click_to_edit').show();
 
         $('#save_changes_btn').addClass('disabled');
@@ -64,13 +67,22 @@ $('#save_changes_btn').on('click', function () {
             return
         }
 
-        $('.modal_notes').text(new_text);
+        modal_notes_select.text(new_text);
 
         var csrftoken = getCookie('csrftoken');
 
         $.post('/update_stuff', {'new_notes': new_text, 'date':active_date, 'day': active_day}, function(result) {
 
-            console.log('finished updating stuff');
+            console.log('finished updating stuff result:', result.message);
+
+            if (result.message !== 'success') {
+               console.log('failure!!');
+                modal_notes_select.text(old_text);
+                $('#modal_error_message').text(result.message);
+                $('.modal_alert').show();
+            }
+
+
 
 
         })
