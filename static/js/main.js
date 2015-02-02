@@ -40,6 +40,7 @@ $('.modal').on('hidden.bs.modal', function() {
     $('#click_to_edit').show();
     $('#save_changes_btn').addClass('disabled');
 
+
 });
 
 // Some Outer Scope Vars:
@@ -297,7 +298,7 @@ function create_donut() {
     }
 
 
-    $('.pager_control').on('click', function () {
+    $('.pager_control').unbind('click').on('click', function () {
        console.log('day pager is active');
 
         var offset;
@@ -320,7 +321,7 @@ function create_donut() {
 
         for (var j=0; j < data.length; j++) {
             if (data[j].day === active_day) {
-                console.log('sending off to build modal now...');
+                console.log('sending off to build modal now...', data.length, j, offset);
                 build_modal(data[j+offset], j+offset);
                 return
             }
