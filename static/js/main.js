@@ -151,24 +151,30 @@ function populate_page(result) {
     function build_row(row_data) {
         //console.log('building a new row...');
 
-        var notes = row_data.notes || '-';
+        //var notes = row_data.notes || '-';
         var day = row_data.day;
-        var health = row_data.health || '-';
-        var wealth = row_data.wealth || '-';
-        var arts = row_data.arts || '-';
-        var smarts = row_data.smarts || '-';
 
-        var row = '<tr class="row_data" title='+notes+'> <td>'+day+'</td><td>'+
+        var health = row_data.health[0] || '-';
+        var wealth = row_data.wealth[0] || '-';
+        var arts = row_data.arts[0] || '-';
+        var smarts = row_data.smarts[0] || '-';
+
+        health = (row_data.health[1] ? health + ' <b>+</b> ' + row_data.health[1] : health);
+        wealth = (row_data.wealth[1] ? wealth + ' <b>+</b> ' + row_data.wealth[1] : wealth);
+        arts = (row_data.arts[1] ? arts + ' <b>+</b> ' + row_data.arts[1] : arts);
+        smarts = (row_data.smarts[1] ? smarts + ' <b>+</b> ' + row_data.smarts[1] : smarts);
+
+        return '<tr class="row_data"> <td>'+day+'</td><td>'+
             health+'</td><td>'+ wealth+'</td><td>'+arts+'</td><td>'+smarts+'</td></tr>';
 
-        return row
+
     }
 
     $('.row_data').remove();
 
     var test_table = $('.test_body');
     for (var i=0; i<result.data.length; i++) {
-        //console.log(result.data[i]);
+        console.log('building row: ', result.data[i]);
 
         var this_row = build_row(result.data[i]);
 
