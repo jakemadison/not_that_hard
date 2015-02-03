@@ -295,7 +295,10 @@ function create_donut() {
                             }
                             else {
                                 return '#DDDADA';
-                            }});
+                            }})
+                .on('click', function () {
+                    $('.modal_entry').show();
+                });
 
             console.log('modal chart building done');
 
