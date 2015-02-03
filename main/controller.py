@@ -52,7 +52,7 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
         # get associated events:
         day_events = each_day.events.all()
 
-        parsed_datum['day'] = datetime.strftime(each_day.date, '%b %d')
+        parsed_datum['day'] = datetime.strftime(each_day.date, '%A %b %d')
         parsed_datum['notes'] = each_day.notes
 
         # print('adding events for day: {0}'.format(each_day))
@@ -99,7 +99,7 @@ def update_day_table_to_current():
 
 def update_day_notes(day, year, notes):
 
-    parse_date = datetime.strptime(day+' '+year, '%b %d %Y')
+    parse_date = datetime.strptime(day+' '+year, '%A %b %d %Y')
     existing_record = models.Day.objects.filter(date=parse_date)[0]
 
     try:

@@ -18,6 +18,7 @@ def index(request):
 
     controller.update_day_table_to_current()
 
+    print('finished all prep.  Rendering Template now')
     return render_to_response('index.html', context)
 
 
@@ -38,6 +39,7 @@ def get_historical_data(request):
 
     # print('i am sending month: {m}, p: {p}, n: {n}'.format(m=month, p=has_prev, n=has_next))
 
+    print('finished all calcs.  sending to frontend now')
     return HttpResponse(json.dumps({'message': 'success',
                                     'data': data_array,
                                     'month': month,
@@ -67,6 +69,7 @@ def update_stuff(request):
         print('apparently I got nothing...')
         operation_result = 'Not Enough Required Data'
 
+    print('finished all calculations.  sending result message to front end')
     return HttpResponse(json.dumps({'message': operation_result}), content_type="application/json")
 
 

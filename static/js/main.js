@@ -152,7 +152,9 @@ function populate_page(result) {
         //console.log('building a new row...');
 
         //var notes = row_data.notes || '-';
-        var day = row_data.day;
+
+        var day_array = row_data.day.split(" ");
+        var day = day_array[1] + ' ' + day_array[2];
 
         var health = row_data.health[0] || '-';
         var wealth = row_data.wealth[0] || '-';
