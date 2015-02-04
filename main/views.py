@@ -73,6 +73,9 @@ def update_stuff(request):
     return HttpResponse(json.dumps({'message': operation_result}), content_type="application/json")
 
 
+#
+# These could probably be the same view on backend and function on front end,
+# and view could deal with event vs notes... later.
 @require_POST
 @csrf_exempt  # temp hack, because csrf junk is BORING
 def update_event(request):
@@ -82,6 +85,14 @@ def update_event(request):
     value = request.POST.get('value', None)
     event_text = request.POST.get('event_text', None)
     arc_pos = request.POST.get('arc_pos', None)
+    day = request.POST.get('day', None)
+    date = request.POST.get('date', None)
 
-    print('i received a bunch of vals!! {0}, {1}, {2}, {3}'.format(position, value, event_text, arc_pos))
+    print('i received a bunch of vals!! {0}, {1}, {2}, {3}, {4}, {5}'.format(position,
+                                                                             value, event_text,
+                                                                             arc_pos, day, date))
+
+    year = date.split(' ')[-1]
+    controller.update_events(position, value, event_text, arc_pos, day, year)
+
     return HttpResponse(json.dumps({'message': 'success!!!'}), content_type="application/json")

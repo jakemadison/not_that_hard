@@ -108,7 +108,7 @@ function send_event_from_modal(position, value, arc_pos) {
     $('.modal_entry').hide();
 
     $.post('/update_event', {'position': position, 'value': value, 'event_text': event_text,
-                             'arc_pos': arc_pos},
+                             'arc_pos': arc_pos, 'date':active_date, 'day': active_day},
 
         function(result) {
             console.log('i received a result from the server!!!', result);

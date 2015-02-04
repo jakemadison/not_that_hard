@@ -35,7 +35,8 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
 
     # print('now checking for existence of has_prev/next')
     if has_prev is None:
-        has_prev = models.Day.objects.filter(Q(date__lt=new_date) | Q(date__lt=new_date)).exists()
+        has_prev = models.Day.objects.filter(Q(date__lt=new_date) | Q(date__lt=new_date)).exists()  # review this..
+        # why is it doing less than date or less than date???? there must have been a reason....?
 
     if has_next is None:
         has_next = models.Day.objects.filter(Q(date__gte=new_date+monthdelta.monthdelta(1)) |
@@ -115,6 +116,13 @@ def update_day_notes(day, year, notes):
 
     else:
         return 'success'
+
+
+def update_events(position, value, event_text, arc_pos, day, year):
+
+    return 'success!'
+
+
 
 if __name__ == "__main__":
     x = None
