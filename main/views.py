@@ -73,3 +73,15 @@ def update_stuff(request):
     return HttpResponse(json.dumps({'message': operation_result}), content_type="application/json")
 
 
+@require_POST
+@csrf_exempt  # temp hack, because csrf junk is BORING
+def update_event(request):
+    print('updating event')
+
+    position = request.POST.get('position', None)
+    value = request.POST.get('value', None)
+    event_text = request.POST.get('event_text', None)
+    arc_pos = request.POST.get('arc_pos', None)
+
+    print('i received a bunch of vals!! {0}, {1}, {2}, {3}'.format(position, value, event_text, arc_pos))
+    return HttpResponse(json.dumps({'message': 'success!!!'}), content_type="application/json")

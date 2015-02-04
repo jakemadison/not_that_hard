@@ -11,4 +11,5 @@ urlpatterns = patterns('',
     url(r'^$', include('main.urls')),
     url(r'^get_historical_data$', views.get_historical_data, name='get_historical_data'),
     url(r'^update_stuff$', views.update_stuff, name='update_stuff'),
+    url(r'^update_event$', views.update_event, name='update_event'),
 )

@@ -110,6 +110,13 @@ svg {
 
 }
 
+
+.outer_modal_path {
+ opacity: .6;
+    cursor: pointer;
+
+}
+
 .modal_path:hover {
  opacity: 1;
 

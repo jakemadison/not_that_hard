@@ -99,6 +99,25 @@ $('#save_changes_btn').on('click', function () {
 });
 
 
+function send_event_from_modal(position, value, arc_pos) {
+    var event_text_sel = $('.event_text');
+    var event_text = event_text_sel.val();
+
+    console.log('outer btn has', event_text);
+    event_text_sel.val('');
+    $('.modal_entry').hide();
+
+    $.post('/update_event', {'position': position, 'value': value, 'event_text': event_text,
+                             'arc_pos': arc_pos},
+
+        function(result) {
+            console.log('i received a result from the server!!!', result);
+
+    })
+
+
+}
+
 
 // Main data-getter function:
 function get_historical_data(options) {
@@ -176,7 +195,7 @@ function populate_page(result) {
 
     var test_table = $('.test_body');
     for (var i=0; i<result.data.length; i++) {
-        console.log('building row: ', result.data[i]);
+        //console.log('building row: ', result.data[i]);
 
         var this_row = build_row(result.data[i]);
 
@@ -211,7 +230,7 @@ function create_donut() {
         //.domain(colour_array)
           .domain(d3.keys(data[0]).filter(function(key) {
               var ignore_vals = ['id', 'date'];
-              console.log('anything???', d3.keys(data[0]));
+              //console.log('anything???', d3.keys(data[0]));
 
               return ignore_vals.indexOf(key) === -1}))
         .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
@@ -284,13 +303,24 @@ function create_donut() {
                             }
                             else {
                                 return '#DDDADA';
-                            }});
+                            }})
+                .on('click', function (d, i) {
+                    $('.modal_entry').show();
+                    $('.event_btn').unbind().on('click', function() {
+                        send_event_from_modal(i, d, 'inner');
+                    })
+
+                });
 
 
             modal_chart.selectAll('.modal_arc')
                         .data(compute_arc_array(d, {outer: true}))
                         .enter().append("path").attr("d", modal_outer_arc())
-                .attr("class", "modal_path")
+                .attr("class", function(d, i) {
+                    console.log('outer modal path is dealing with: ', d, i);
+                    console.log('check for inner?');
+                    return "modal_path";
+                })
                         .style("fill", function(d, i) {
                             if (d) {
                                 return color(i + 1);  // why does this change on exit/update?
@@ -298,15 +328,19 @@ function create_donut() {
                             else {
                                 return '#DDDADA';
                             }})
-                .on('click', function () {
+                .on('click', function (d, i) {
                     $('.modal_entry').show();
+                    $('.event_btn').unbind().on('click', function() {
+                        send_event_from_modal(i, d, 'outer');
+                    })
+
                 });
 
             console.log('modal chart building done');
 
         // this should probably destroy chart data on modal dismiss...
 
-    }
+    }  // End of Build Modal
 
 
     $('.pager_control').unbind('click').on('click', function () {
