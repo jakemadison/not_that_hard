@@ -120,6 +120,18 @@ def update_day_notes(day, year, notes):
 
 def update_events(position, value, event_text, arc_pos, day, year):
 
+    category_array = ['arts', 'smarts', 'wealth', 'health']
+    print('i believe that {0} is category: {1}'.format(event_text, category_array[int(position)]))
+
+    date = datetime.strptime(day + ' ' + year, '%A %b %d %Y')
+    print(date)
+
+    day_record = models.Day.objects.filter(date=date).first()
+    event_record = models.Event(category=category_array[int(position)], name=event_text, day_link=day_record)
+    event_record.save()
+
+    print(event_record)
+
     return 'success!'
 
 
