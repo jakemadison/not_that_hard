@@ -40,6 +40,7 @@ $('.modal').on('hidden.bs.modal', function() {
     $('#click_to_edit').show();
     $('#save_changes_btn').addClass('disabled');
 
+    $('.event_text').val('');
     $('.modal_entry').hide();
 
 
@@ -95,8 +96,6 @@ $('#save_changes_btn').on('click', function () {
             }
 
         })
-
-
 
 });
 
@@ -374,6 +373,7 @@ function create_donut() {
         }
         console.log('continuing pager...');
 
+        $('.event_text').val('');
         $('.modal_entry').hide();
 
         for (var j=0; j < data.length; j++) {
