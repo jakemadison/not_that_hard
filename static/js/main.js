@@ -40,6 +40,8 @@ $('.modal').on('hidden.bs.modal', function() {
     $('#click_to_edit').show();
     $('#save_changes_btn').addClass('disabled');
 
+    $('.modal_entry').hide();
+
 
 });
 
@@ -103,9 +105,17 @@ function send_event_from_modal(position, value, arc_pos) {
     var event_text_sel = $('.event_text');
     var event_text = event_text_sel.val();
 
+    var modal_entry_sel = $('.modal_entry');
+
+    if (event_text.trim() === '') {
+        console.log('nothing to send... ');
+        modal_entry_sel.hide();
+        return;
+    }
+
     console.log('outer btn has', event_text);
     event_text_sel.val('');
-    $('.modal_entry').hide();
+    modal_entry_sel.hide();
 
     $.post('/update_event', {'position': position, 'value': value, 'event_text': event_text,
                              'arc_pos': arc_pos, 'date':active_date, 'day': active_day},
@@ -363,6 +373,8 @@ function create_donut() {
 
         }
         console.log('continuing pager...');
+
+        $('.modal_entry').hide();
 
         for (var j=0; j < data.length; j++) {
             if (data[j].day === active_day) {
