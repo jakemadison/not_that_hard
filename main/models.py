@@ -27,7 +27,6 @@ class Event(models.Model):
 
     category = models.CharField(max_length=30, choices=category_choices)
     name = models.CharField(max_length=30)
-    major_event = models.BooleanField(default=False)
 
     def __unicode__(self):
         return 'event instance id: {0}, cat: {1}, name: {2}'.format(self.id, self.category, self.name)

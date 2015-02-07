@@ -9,7 +9,7 @@ class DayAdmin(admin.ModelAdmin):
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('day_link', 'category', 'name', 'major_event')
+    list_display = ('day_link', 'category', 'name')
 
 
 admin.site.register(Day, DayAdmin)
