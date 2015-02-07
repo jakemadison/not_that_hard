@@ -194,7 +194,7 @@ function populate_page(result) {
         arts = (row_data.arts[1] ? arts + ' <b>+</b> ' + row_data.arts[1] : arts);
         smarts = (row_data.smarts[1] ? smarts + ' <b>+</b> ' + row_data.smarts[1] : smarts);
 
-        return '<tr class="row_data"> <td>'+day+'</td><td>'+
+        return '<tr class="row_data"> <td>'+day+'</td><td class="health_row">'+
             health+'</td><td>'+ wealth+'</td><td>'+arts+'</td><td>'+smarts+'</td></tr>';
 
 

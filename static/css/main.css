@@ -64,7 +64,9 @@ svg {
 }
 
 #health_col {
-    color: #98abc5;
+    /*color: #98abc5;*/
+
+    color: #7b6888;
 }
 
 #wealth_col {
@@ -149,4 +151,24 @@ svg {
     padding: 3px 4px;
     opacity: .45;
     margin-bottom: 1px;
+}
+
+.health_row:hover {
+    color: #7b6888;
+    opacity: .5;
+}
+
+
+.wealth_row:hover {
+    background-color: #8a89a6;
+}
+
+
+.arts_row:hover {
+    background-color: #ff8c00;
+}
+
+.smarts_row:hover {
+    background-color: #98abc5;
+
 }
