@@ -194,7 +194,7 @@ function populate_page(result) {
         arts = (row_data.arts[1] ? arts + ' <b>+</b> ' + row_data.arts[1] : arts);
         smarts = (row_data.smarts[1] ? smarts + ' <b>+</b> ' + row_data.smarts[1] : smarts);
 
-        return '<tr class="row_data"> <td>'+day+'</td><td class="health_row">'+
+        return '<tr class="row_data"> <td>'+day+':</td><td class="health_row">'+
             health+'</td><td>'+ wealth+'</td><td>'+arts+'</td><td>'+smarts+'</td></tr>';
 
 
@@ -315,7 +315,9 @@ function create_donut() {
                 .attr("class", "modal_path")
                         .style("fill", function(d, i) {
                             if (d) {
-                                return color(i + 1);  // why does this change on exit/update?
+                                //return color(i + 1);  // why does this change on exit/update?
+                                return colour_array[i];
+
                             }
                             else {
                                 return '#DDDADA';
@@ -339,7 +341,8 @@ function create_donut() {
                 })
                         .style("fill", function(d, i) {
                             if (d) {
-                                return color(i + 1);  // why does this change on exit/update?
+                                //return color(i + 1);  // why does this change on exit/update?
+                                return colour_array[i];
                             }
                             else {
                                 return '#DDDADA';

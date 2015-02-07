@@ -149,7 +149,7 @@ svg {
 .badge {
     background-color: #e3e3e3;
     padding: 3px 4px;
-    opacity: .45;
+    /*opacity: .45;*/
     margin-bottom: 1px;
 }
 
