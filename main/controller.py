@@ -10,6 +10,8 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
 
     # should be in the form: array = [{day: date, wealth: [1, 2], health}]
 
+    category_counts = {'health': 0, 'wealth': 0, 'arts': 0, 'smarts': 0}
+
     if current_val == 'month':
         new_date = datetime.now(pytz.timezone('US/Pacific'))
         month = str(new_date.month)
@@ -62,9 +64,11 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
 
             if parsed_datum[str(each_event.category)][0] is None:
                 parsed_datum[str(each_event.category)][0] = str(each_event.name)
+                category_counts[str(each_event.category)] += 1
 
             else:
                 parsed_datum[str(each_event.category)][1] = [str(each_event.name)]
+                category_counts[str(each_event.category)] += 1
 
         parsed_data_array.append(parsed_datum)
         parsed_datum = {'health': [None, None],
@@ -72,7 +76,7 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
                         'arts': [None, None],
                         'smarts': [None, None]}
 
-    return parsed_data_array, month_name + ' ' + year, has_next, has_prev
+    return parsed_data_array, month_name + ' ' + year, has_next, has_prev, category_counts
 
 
 def update_day_table_to_current():

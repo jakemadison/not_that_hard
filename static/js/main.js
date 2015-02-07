@@ -213,6 +213,13 @@ function populate_page(result) {
 
     }
 
+    $('#health_badge').text(result.category_counts.health);
+    $('#wealth_badge').text(result.category_counts.wealth);
+    $('#arts_badge').text(result.category_counts.arts);
+    $('#smarts_badge').text(result.category_counts.smarts);
+
+
+
 }
 
 
