@@ -360,6 +360,10 @@ function create_donut() {
                     .append('g')
                 .attr('transform', 'translate(' + radius*2 + ',' + radius*2 + ')');
 
+            modal_chart.append('g')
+                .attr("class", "labels");
+
+
             var modal_outer_arc = create_arc_new({'r': radius*2, 'r_minus': 26,
                                                   'l': total_record_length, 'space_offset': 2});
             var modal_inner_arc = create_arc_new({'r': 50, 'r_minus': 26,
@@ -379,14 +383,30 @@ function create_donut() {
                             else {
                                 return '#DDDADA';
                             }})
-                .on('click', function (d, i) {
+
+                .on("mouseover", function(d, i) {
+                    var category = category_array[i];
+                    var current_data = get_active_day_data();
+
+                    $('.category_title').text(category);
+
+                    if (current_data[category][0]) {
+                        $('.event_title').text(': '+current_data[category][0]);
+                    }
+                })
+                .on("mouseout", function(d, i) {
+                    $('.event_title').text('');
+                    $('.category_title').text('');
+                })
+                .on('click', function (d, i, j) {
                     $('.modal_entry').show();
 
                     if (d) {
                         console.log('i can see a d!', i);
+                        console.log('this is parent?', j);
                         var category = category_array[i];
                         var current_data = get_active_day_data();
-                        console.log(current_data[category][0]);
+                        //console.log(current_data[category][0]);
                         $('.event_text').val(current_data[category][0]);
 
                     }
@@ -404,11 +424,12 @@ function create_donut() {
 
 
             modal_chart.selectAll('.modal_arc')
+                .attr("class", 'modal_arc_outer')
                         .data(compute_arc_array(d, {outer: true}))
                         .enter().append("path").attr("d", modal_outer_arc())
                 .attr("class", function(d, i) {
-                    console.log('outer modal path is dealing with: ', d, i);
-                    console.log('check for inner?');
+                    //console.log('outer modal path is dealing with: ', d, i);
+                    //console.log('check for inner?');
                     return "modal_path";
                 })
                         .style("fill", function(d, i) {
@@ -419,14 +440,31 @@ function create_donut() {
                             else {
                                 return '#DDDADA';
                             }})
-                .on('click', function (d, i) {
+
+                .on("mouseover", function(d, i) {
+                    var category = category_array[i];
+                    var current_data = get_active_day_data();
+
+                    $('.category_title').text(category);
+
+                    if (current_data[category][1]) {
+                        $('.event_title').text(': '+current_data[category][1]);
+                    }
+                })
+                .on("mouseout", function(d, i) {
+                    $('.category_title').text('');
+                    $('.event_title').text('');
+                })
+
+                .on('click', function (d, i, j) {
                     $('.modal_entry').show();
 
                     if (d) {
                         console.log('i can see a d!', i);
+                        console.log('this is j: ', j);
                         var category = category_array[i];
                         var current_data = get_active_day_data();
-                        console.log(current_data[category][1]);
+                        //console.log(current_data[category][1]);
                         $('.event_text').val(current_data[category][1]);
 
 
@@ -444,6 +482,108 @@ function create_donut() {
                 });
 
             console.log('modal chart building done');
+
+
+
+        var key = function(d) {
+            var ignore_values = ['day', 'id', 'notes'];
+            if (ignore_values.indexOf(d) === -1) {
+                return 'something!';
+            }
+        };
+
+        //    Time to build labels...
+
+        // let's start with category labels:
+
+
+        // Computes the angle of an arc, converting from radians to degrees.
+        function angle(d) {
+             var a = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
+            return a > 90 ? a - 180 : a;
+            }
+
+            // Add a magnitude value to the larger arcs, translated to the arc centroid and rotated.
+        //modal_chart.append("g").filter(function(d) {
+        //    console.log('i am seeing: ', d);
+        //    return d.endAngle - d.startAngle > .2; })
+        //
+        //    .append("svg:text")
+        //      .attr("dy", ".35em")
+        //      .attr("text-anchor", "middle")
+        //      .attr("transform", function(d) { //set the label's origin to the center of the arc
+        //        //we have to make sure to set these before calling arc.centroid
+        //        d.outerRadius = radius; // Set Outer Coordinate
+        //        d.innerRadius = radius/2; // Set Inner Coordinate
+        //        return "translate(" + modal_outer_arc().centroid(d) + ")rotate(" + angle(d) + ")";
+        //      })
+        //      .style("fill", "White")
+        //      .style("font", "bold 12px Arial")
+        //      .text(function(d) { return 'blah'; });
+
+
+
+
+
+
+
+
+
+        var text = d3.select(".labels").selectAll("text")
+            //.data(pie(get_active_day_data()), key)
+		                //.data(pie(data), key);
+                        .data(function (d, i) {
+                            console.log('wtf....', d, i);
+                            return pie(['1','2','3','4']);
+                            //return get_active_day_data();
+            });
+
+        console.log(text);
+
+        text.enter()
+            .append("text")
+            .attr("dy", ".35em")
+            .style("opacity", 1)
+            .text(function(d) {
+                console.log('is this getting hit?');
+                return '';
+            })
+            .each(function(d) {
+                this._current = d;
+            });
+
+        console.log(text);
+
+
+        function midAngle(d){
+	    	return d.startAngle + (d.endAngle - d.startAngle)/2;
+	    }
+
+        text.transition().duration(500)
+		.attrTween("transform", function(d) {
+			var interpolate = d3.interpolate(this._current, d);
+			var _this = this;
+			return function(t) {
+				var d2 = interpolate(t);
+				_this._current = d2;
+				var pos = modal_outer_arc().centroid(d2);
+				pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+				return "translate("+ pos +")";
+			};
+		})
+		.styleTween("text-anchor", function(d){
+			var interpolate = d3.interpolate(this._current, d);
+			return function(t) {
+				var d2 = interpolate(t);
+				return midAngle(d2) < Math.PI ? "start":"end";
+			};
+		});
+
+        text = svg.select(".labels").selectAll("text")
+		    .data(pie(['1', '2', '3', '4']), key);
+
+
+        console.log('modal chart label building is done');
 
         // this should probably destroy chart data on modal dismiss...
 
