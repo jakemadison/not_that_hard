@@ -55,22 +55,21 @@ svg {
 
 
 
-#smarts_col {
+.smarts_col {
     color: #d0743c;
 }
 
-#arts_col {
+.arts_col {
     color: #ff8c00;
 }
 
-#health_col {
+.health_col {
     /*color: #98abc5;*/
     color: #8a89a6;
     /*color: #7b6888;*/
 }
 
-#wealth_col {
-
+.wealth_col {
     color: #7b6888;
 }
 
@@ -150,7 +149,7 @@ svg {
 .badge {
     background-color: #e3e3e3;
     padding: 3px 4px;
-    /*opacity: .45;*/
+    opacity: .6;
     margin-bottom: 1px;
 }
 
