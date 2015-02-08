@@ -79,10 +79,12 @@ def update_stuff(request):
 # These could probably be the same view on backend and function on front end,
 # and view could deal with event vs notes... later.
 @require_POST
+
 @csrf_exempt  # temp hack, because csrf junk is BORING
 def update_event(request):
     print('updating event')
 
+    # if we just want to test response...
     # return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")
 
     category = request.POST.get('category', None)
