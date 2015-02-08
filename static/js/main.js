@@ -297,7 +297,7 @@ function create_donut() {
     console.log('object keys: ', Object.keys(data[0]));
     var total_record_length = 4;
 
-    var colour_array = ["#AA8888", "#88BB88", "#8888CC", "#AA88CC"];
+    var colour_array = ["#ff8c00", "#d0743c", "#7b6888", "#98abc5"];
 
     var color = d3.scale.ordinal()
         //.domain(colour_array)
@@ -632,6 +632,17 @@ function create_donut() {
     var pies = chart.selectAll('.pie').data(data);
     pies.exit().remove();
 
+    //var test_thing = chart.selectAll('.tests').append('g')
+    //    .data(["#98ABC5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"])
+    //    .enter()
+    //    .append('svg')
+    //    .attr('class', 'tests')
+    //    .attr('height', 20)
+    //    .attr('width', 20)
+    //    .attr('fill', function(d) {
+    //        return d;
+    //    });
+
     var svg = pies.enter()
             .append('svg')
             .attr('class', 'pie')
@@ -720,7 +731,8 @@ function create_donut() {
         .attr("d", inner_arc())
         .style("fill", function(d, i) {
             if (d) {
-                return color(i + 1);  // why does this change on exit/update?
+                //return color(i + 1);  // why does this change on exit/update?
+                return colour_array[i];
             }
             else {
                 return '#DDDADA';
@@ -736,7 +748,8 @@ function create_donut() {
         .attr("d", outer_arc())
         .style("fill", function(d, i) {
             if (d) {
-                return color(i + 1);
+                //return color(i + 1);
+                return colour_array[i];
             }
             else {
                 return '#E9E2E2';

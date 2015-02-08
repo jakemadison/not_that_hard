@@ -65,12 +65,13 @@ svg {
 
 #health_col {
     /*color: #98abc5;*/
-
-    color: #7b6888;
+    color: #8a89a6;
+    /*color: #7b6888;*/
 }
 
 #wealth_col {
-    color: #8a89a6;
+
+    color: #7b6888;
 }
 
 .chart {
