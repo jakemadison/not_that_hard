@@ -76,6 +76,7 @@ def update_stuff(request):
 
 
 #
+#
 # These could probably be the same view on backend and function on front end,
 # and view could deal with event vs notes... later.
 @require_POST
