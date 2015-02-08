@@ -101,6 +101,11 @@ $('#save_changes_btn').on('click', function () {
 
 
 function send_event_from_modal(position, value, arc_pos) {
+
+    var category_array = ['arts', 'smarts', 'wealth', 'health'];
+
+    var category = category_array[position];
+
     var event_text_sel = $('.event_text');
     var event_text = event_text_sel.val();
 
@@ -116,10 +121,50 @@ function send_event_from_modal(position, value, arc_pos) {
     event_text_sel.val('');
     modal_entry_sel.hide();
 
-    $.post('/update_event', {'position': position, 'value': value, 'event_text': event_text,
+    $.post('/update_event', {'category': category, 'value': value, 'event_text': event_text,
                              'arc_pos': arc_pos, 'date':active_date, 'day': active_day},
 
         function(result) {
+
+
+            if (result.message !== 'success') {
+               console.log('failure!!');
+                $('#modal_error_message').text(result.message);
+                $('.modal_alert').show();
+            }
+
+            else {
+                for (var each_datum in data) {
+                    if (data[each_datum].day === active_day) {
+                        console.log('found the event day that I need to update');
+                        console.log(data[each_datum]);
+
+
+
+                        // crap.. so after adding to the array, it also needs to:
+                        // redraw the modal, update the main view, and update the table.. ugh.
+                        if (data[each_datum][category][0]===null) {
+                            console.log('yep, its null');
+                            data[each_datum][category][0] = event_text;
+                        }
+                        else if (data[each_datum][category][1]===null) {
+                            console.log('nope, second one is empty though');
+                            data[each_datum][category][1] = event_text;
+                        }
+                        else {
+                            console.log('nothing at all, apaparently... what is going on here? Buggin out!!');
+
+                        }
+
+
+                    }
+
+                }
+            }
+
+
+
+
             console.log('i received a result from the server!!!', result);
 
     })

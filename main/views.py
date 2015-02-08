@@ -83,18 +83,20 @@ def update_stuff(request):
 def update_event(request):
     print('updating event')
 
-    position = request.POST.get('position', None)
+    # return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")
+
+    category = request.POST.get('category', None)
     value = request.POST.get('value', None)
     event_text = request.POST.get('event_text', None)
     arc_pos = request.POST.get('arc_pos', None)
     day = request.POST.get('day', None)
     date = request.POST.get('date', None)
 
-    print('i received a bunch of vals!! {0}, {1}, {2}, {3}, {4}, {5}'.format(position,
+    print('i received a bunch of vals!! {0}, {1}, {2}, {3}, {4}, {5}'.format(category,
                                                                              value, event_text,
                                                                              arc_pos, day, date))
 
     year = date.split(' ')[-1]
-    controller.update_events(position, value, event_text, arc_pos, day, year)
+    controller.update_events(category, value, event_text, arc_pos, day, year)
 
-    return HttpResponse(json.dumps({'message': 'success!!!'}), content_type="application/json")
+    return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")
