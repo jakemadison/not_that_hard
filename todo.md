@@ -125,5 +125,7 @@ Needed still:
 
 - we should just refactor out "major event" as a thing.  It's useless and unnecessarily complex.
 --> there's no reason someone can't fill two blocks with the same activity, and doesn't require that junk.
+.....
+
 
 
