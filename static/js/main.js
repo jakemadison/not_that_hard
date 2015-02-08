@@ -33,6 +33,8 @@ document.getElementById('close').onclick = function(){
     };
 
 
+
+
 $('.modal').on('hidden.bs.modal', function() {
     console.log('hiding of modal is happening...');
     $('#modal_textArea').hide();
@@ -50,6 +52,16 @@ $('.modal').on('hidden.bs.modal', function() {
 var active_date;
 var active_day;
 var data;
+var category_array = ['arts', 'smarts', 'wealth', 'health'];
+
+function get_active_day_data() {
+    for (var x=0; x < data.length; x++) {
+        if (data[x].day === active_day) {
+           return data[x];
+        }
+    }
+}
+
 
 $('#save_changes_btn').on('click', function () {
 
@@ -102,7 +114,7 @@ $('#save_changes_btn').on('click', function () {
 
 function send_event_from_modal(position, value, arc_pos) {
 
-    var category_array = ['arts', 'smarts', 'wealth', 'health'];
+
 
     var category = category_array[position];
 
@@ -369,6 +381,21 @@ function create_donut() {
                             }})
                 .on('click', function (d, i) {
                     $('.modal_entry').show();
+
+                    if (d) {
+                        console.log('i can see a d!', i);
+                        var category = category_array[i];
+                        var current_data = get_active_day_data();
+                        console.log(current_data[category][0]);
+                        $('.event_text').val(current_data[category][0]);
+
+                    }
+                    else {
+                        $('.event_text').val('');
+                    }
+
+                    $('.event_text').focus();
+
                     $('.event_btn').unbind().on('click', function() {
                         send_event_from_modal(i, d, 'inner');
                     })
@@ -394,6 +421,22 @@ function create_donut() {
                             }})
                 .on('click', function (d, i) {
                     $('.modal_entry').show();
+
+                    if (d) {
+                        console.log('i can see a d!', i);
+                        var category = category_array[i];
+                        var current_data = get_active_day_data();
+                        console.log(current_data[category][1]);
+                        $('.event_text').val(current_data[category][1]);
+
+
+                    }
+                    else {
+                        $('.event_text').val('');
+                    }
+
+                    $('.event_text').focus();
+
                     $('.event_btn').unbind().on('click', function() {
                         send_event_from_modal(i, d, 'outer');
                     })

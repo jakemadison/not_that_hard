@@ -84,8 +84,8 @@ def update_stuff(request):
 def update_event(request):
     print('updating event')
 
-    # if we just want to test response...
-    # return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")
+    # if we just want to test response:
+    return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")
 
     category = request.POST.get('category', None)
     value = request.POST.get('value', None)
