@@ -178,7 +178,9 @@ div.tooltip {
     pointer-events: none;
 }
 
-
+.category_label {
+    opacity: .7;
+}
 
 
 .polyline{

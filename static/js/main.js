@@ -369,10 +369,10 @@ function create_donut() {
             var modal_chart = d3.select('.modal_chart')
                 .append('svg')
                 .attr("class", 'modal_pie')
-                .attr("width", radius * 4)
+                .attr("width", radius * 8)
                 .attr("height", radius * 4)
                     .append('g')
-                .attr('transform', 'translate(' + radius*2 + ',' + radius*2 + ')');
+                .attr('transform', 'translate(' + radius*4 + ',' + radius*2 + ')');
 
             modal_chart.append('g')
                 .attr("class", "labels");
@@ -405,7 +405,7 @@ function create_donut() {
                     $('.category_title').text(category);
 
                     if (current_data[category][0]) {
-                        //$('.event_title').text(': '+current_data[category][0]);
+                        $('.event_title').text(': '+current_data[category][0]);
 
 
                     div.transition()
@@ -459,10 +459,12 @@ function create_donut() {
                 });
 
 
-            modal_chart.selectAll('.modal_arc')
+            var outer_arc_group = modal_chart.selectAll('.modal_arc')
                 .attr("class", 'modal_arc_outer')
                         .data(compute_arc_array(d, {outer: true}))
-                        .enter().append("path").attr("d", modal_outer_arc())
+                        .enter().append('g').attr('class', 'outer_arc group');
+
+                outer_arc_group.append("path").attr("d", modal_outer_arc())
                 .attr("class", function(d, i) {
                     //console.log('outer modal path is dealing with: ', d, i);
                     //console.log('check for inner?');
@@ -484,7 +486,7 @@ function create_donut() {
                     $('.category_title').text(category);
 
                     if (current_data[category][1]) {
-                        //$('.event_title').text(': '+current_data[category][1]);
+                        $('.event_title').text(': '+current_data[category][1]);
 
                         div.transition()
                             .duration(300)
@@ -492,9 +494,10 @@ function create_donut() {
                         div	.html(current_data[category][1] + "<br/>")
                             .style("left", (d3.event.pageX) + "px")
                             .style("top", (d3.event.pageY - 28) + "px");
-
-
                     }
+
+
+
                 })
                 .on("mouseout", function(d, i) {
                     $('.category_title').text('');
@@ -534,6 +537,52 @@ function create_donut() {
                         send_event_from_modal(i, d, 'outer', is_update, old_text);
                     })
 
+                });
+
+            outer_arc_group.append('svg:text')
+                .attr("dy", ".35em")
+                .attr("text-anchor", "middle")
+                .attr('class','category_label')
+                .style("fill", function(d, i) {
+
+                    var current_data = get_active_day_data();
+                    if (!current_data[category_array[i]][0] && !current_data[category_array[i]][1]) {
+                        return '#DDDADA';
+                    }
+                    else {
+                        return colour_array[i];
+                    }
+                })
+                .style("font", "bold 14px Helvetica")
+              .attr("transform", function(d, i) { //set the label's origin to the center of the arc
+                //we have to make sure to set these before calling arc.centroid
+                    console.log(d);
+                    var pos;
+
+                    //var category_array = ['arts', 'smarts', 'wealth', 'health'];
+
+                    switch (i) {
+                        case 0:
+                            pos = '(85, -75)';
+                            break;
+                        case 1:
+                            pos = '(85, 75)';
+                            break;
+                        case 2:
+                            pos = '(-85, 75)';
+                            break;
+                        case 3:
+                            pos = '(-85, -75)';
+                            break;
+                    }
+
+                return "translate"+pos;
+              })
+
+
+
+                .text(function (d, i) {
+                    return category_array[i];
                 });
 
             console.log('modal chart building done');
