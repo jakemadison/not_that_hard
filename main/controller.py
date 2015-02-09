@@ -67,7 +67,7 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
                 category_counts[str(each_event.category)] += 1
 
             else:
-                parsed_datum[str(each_event.category)][1] = [str(each_event.name)]
+                parsed_datum[str(each_event.category)][1] = str(each_event.name)
                 category_counts[str(each_event.category)] += 1
 
         parsed_data_array.append(parsed_datum)
