@@ -476,7 +476,7 @@ function create_donut() {
                         div.transition()
                             .duration(300)
                             .style("opacity", .9);
-                        div	.html(current_data[category][0] + "<br/>")
+                        div	.html(current_data[category][1] + "<br/>")
                             .style("left", (d3.event.pageX) + "px")
                             .style("top", (d3.event.pageY - 28) + "px");
 
