@@ -117,7 +117,7 @@ $('#save_changes_btn').on('click', function () {
 });
 
 
-function send_event_from_modal(position, value, arc_pos) {
+function send_event_from_modal(position, value, arc_pos, is_update, old_text) {
 
 
 
@@ -139,7 +139,8 @@ function send_event_from_modal(position, value, arc_pos) {
     modal_entry_sel.hide();
 
     $.post('/update_event', {'category': category, 'value': value, 'event_text': event_text,
-                             'arc_pos': arc_pos, 'date':active_date, 'day': active_day},
+                             'arc_pos': arc_pos, 'date':active_date, 'day': active_day, 'is_update': is_update,
+                             'old_text': old_text},
 
         function(result) {
 
@@ -429,6 +430,9 @@ function create_donut() {
                 .on('click', function (d, i, j) {
                     $('.modal_entry').show();
 
+                    var is_update;
+                    var old_text;
+
                     if (d) {
                         console.log('i can see a d!', i);
                         console.log('this is parent?', j);
@@ -437,16 +441,19 @@ function create_donut() {
                         //console.log(current_data[category][0]);
                         //$('.event_text').val(current_data[category][0]);
                         $('.event_text').attr('placeholder', current_data[category][0]);
+                        is_update = true;
+                        old_text = current_data[category][0];
                     }
                     else {
                         $('.event_text').val('');
                         $('.event_text').attr('placeholder', '');
+                        is_update = false;
                     }
 
                     $('.event_text').focus();
 
                     $('.event_btn').unbind().on('click', function() {
-                        send_event_from_modal(i, d, 'inner');
+                        send_event_from_modal(i, d, 'inner', is_update, old_text);
                     })
 
                 });
@@ -501,6 +508,9 @@ function create_donut() {
                 .on('click', function (d, i, j) {
                     $('.modal_entry').show();
 
+                    var is_update;
+                    var old_text;
+
                     if (d) {
                         console.log('i can see a d!', i);
                         console.log('this is j: ', j);
@@ -509,16 +519,19 @@ function create_donut() {
                         //console.log(current_data[category][1]);
                         //$('.event_text').val(current_data[category][1]);
                         $('.event_text').attr('placeholder', current_data[category][1]);
+                        is_update = true;
+                        old_text = current_data[category][1]
                     }
                     else {
                         $('.event_text').val('');
                         $('.event_text').attr('placeholder', '');
+                        is_update = false;
                     }
 
                     $('.event_text').focus();
 
                     $('.event_btn').unbind().on('click', function() {
-                        send_event_from_modal(i, d, 'outer');
+                        send_event_from_modal(i, d, 'outer', is_update, old_text);
                     })
 
                 });
