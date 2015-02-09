@@ -357,7 +357,7 @@ function create_donut() {
                 $('#save_changes_btn').removeClass('disabled');
             });
 
-        d3.select('.modal_chart').select('svg').remove();
+        d3.select('.modal_chart').select('svg').remove();  //<------ remove chart cut in.
 
             // Define 'div' for tooltips
                 var div = d3.select("body")
@@ -384,9 +384,10 @@ function create_donut() {
                                                   'l': total_record_length, 'space_offset': 2});
 
 
-            modal_chart.selectAll('.modal_arc')
-                        .data(compute_arc_array(d, {outer: false}))
-                        .enter().append("path").attr("d", modal_inner_arc())
+            var inner_modal_arcs = modal_chart.selectAll('.modal_arc')
+                        .data(compute_arc_array(d, {outer: false}));
+
+            inner_modal_arcs.enter().append("path").attr("d", modal_inner_arc())
                 .attr("class", "modal_path")
                         .style("fill", function(d, i) {
                             if (d) {
@@ -657,16 +658,31 @@ function create_donut() {
                     return category_array[i];
                 });
 
+
+
+            console.log('inner arcs: ', inner_modal_arcs);
+
+
+            inner_modal_arcs.exit()
+                .style('fill', function(d, i){
+                   console.log('the exit function was triggered: ', d, i);
+                    return 'black';
+                })
+                .remove();
+
+
+
+
             console.log('modal chart building done');
 
 
 
-        var key = function(d) {
-            var ignore_values = ['day', 'id', 'notes'];
-            if (ignore_values.indexOf(d) === -1) {
-                return 'something!';
-            }
-        };
+        //var key = function(d) {
+        //    var ignore_values = ['day', 'id', 'notes'];
+        //    if (ignore_values.indexOf(d) === -1) {
+        //        return 'something!';
+        //    }
+        //};
 
         //    Time to build labels...
 
@@ -674,10 +690,10 @@ function create_donut() {
 
 
         // Computes the angle of an arc, converting from radians to degrees.
-        function angle(d) {
-             var a = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
-            return a > 90 ? a - 180 : a;
-            }
+        //function angle(d) {
+        //     var a = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
+        //    return a > 90 ? a - 180 : a;
+        //    }
 
             // Add a magnitude value to the larger arcs, translated to the arc centroid and rotated.
         //modal_chart.append("g").filter(function(d) {
