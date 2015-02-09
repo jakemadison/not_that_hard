@@ -428,6 +428,31 @@ function create_donut() {
 
                 })
                 .on('click', function (d, i, j) {
+
+                    function update_button() {
+                        var current_text = $('.event_text').val();
+                        //console.log('d', d, 'event text', current_text);
+
+                        if (d && current_text) {
+                            $('.event_btn').removeClass('disabled');
+                            $('.event_btn').text('update');
+                        }
+                        else if (d && !current_text) {
+                            $('.event_btn').removeClass('disabled');
+                            $('.event_btn').text('remove');
+                        }
+                        else if (!d && current_text) {
+                            $('.event_btn').removeClass('disabled');
+                            $('.event_btn').text('submit');
+                        }
+                        else if (!d && !current_text) {
+                            $('.event_btn').addClass('disabled');
+                            $('.event_btn').text('submit');
+                        }
+                    }
+
+
+
                     $('.modal_entry').show();
 
                     var is_update;
@@ -443,18 +468,25 @@ function create_donut() {
                         $('.event_text').attr('placeholder', current_data[category][0]);
                         is_update = true;
                         old_text = current_data[category][0];
+                        $('.delete_event_btn').show();
                     }
                     else {
                         $('.event_text').val('');
                         $('.event_text').attr('placeholder', '');
                         is_update = false;
+                        $('.delete_event_btn').hide();
                     }
 
                     $('.event_text').focus();
+                    update_button();
 
                     $('.event_btn').unbind().on('click', function() {
                         send_event_from_modal(i, d, 'inner', is_update, old_text);
-                    })
+                    });
+
+                    $('.event_text').unbind().on('input', function() {
+                            update_button();
+                    });
 
                 });
 
@@ -509,6 +541,29 @@ function create_donut() {
                 })
 
                 .on('click', function (d, i, j) {
+
+                    function update_button() {
+                        var current_text = $('.event_text').val();
+                        //console.log('d', d, 'event text', current_text);
+
+                        if (d && current_text) {
+                            $('.event_btn').removeClass('disabled');
+                            $('.event_btn').text('update');
+                        }
+                        else if (d && !current_text) {
+                            $('.event_btn').removeClass('disabled');
+                            $('.event_btn').text('remove');
+                        }
+                        else if (!d && current_text) {
+                            $('.event_btn').removeClass('disabled');
+                            $('.event_btn').text('submit');
+                        }
+                        else if (!d && !current_text) {
+                            $('.event_btn').addClass('disabled');
+                            $('.event_btn').text('submit');
+                        }
+                    }
+
                     $('.modal_entry').show();
 
                     var is_update;
@@ -524,18 +579,25 @@ function create_donut() {
                         $('.event_text').attr('placeholder', current_data[category][1]);
                         is_update = true;
                         old_text = current_data[category][1]
+                        $('.delete_event_btn').show();
                     }
                     else {
                         $('.event_text').val('');
                         $('.event_text').attr('placeholder', '');
                         is_update = false;
+                        $('.delete_event_btn').hide();
                     }
 
+                    update_button();
                     $('.event_text').focus();
 
                     $('.event_btn').unbind().on('click', function() {
                         send_event_from_modal(i, d, 'outer', is_update, old_text);
-                    })
+                    });
+
+                    $('.event_text').unbind().on('input', function() {
+                            update_button();
+                    });
 
                 });
 
