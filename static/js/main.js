@@ -252,7 +252,8 @@ function populate_page(result) {
         smarts = (row_data.smarts[1] ? smarts + ' <b>+</b> ' + row_data.smarts[1] : smarts);
 
         return '<tr class="row_data"> <td>'+day+':</td><td class="health_row">'+
-            health+'</td><td>'+ wealth+'</td><td>'+arts+'</td><td>'+smarts+'</td></tr>';
+            health+'</td><td class="wealth_row">'+ wealth+'</td><td class="arts_row">'+arts+
+            '</td><td class="smarts_row">'+smarts+'</td></tr>';
 
 
     }
@@ -352,6 +353,13 @@ function create_donut() {
 
         d3.select('.modal_chart').select('svg').remove();
 
+            // Define 'div' for tooltips
+                var div = d3.select("body")
+                .append("div") // declare the tooltip div
+                .attr("class", "tooltip") // apply the 'tooltip' class
+                .style("opacity", 0); // set the opacity to nil
+
+
             var modal_chart = d3.select('.modal_chart')
                 .append('svg')
                 .attr("class", 'modal_pie')
@@ -391,12 +399,27 @@ function create_donut() {
                     $('.category_title').text(category);
 
                     if (current_data[category][0]) {
-                        $('.event_title').text(': '+current_data[category][0]);
+                        //$('.event_title').text(': '+current_data[category][0]);
+
+
+                    div.transition()
+                        .duration(300)
+                        .style("opacity", .9);
+                    div	.html(current_data[category][0] + "<br/>")
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px");
                     }
+
+
                 })
                 .on("mouseout", function(d, i) {
                     $('.event_title').text('');
                     $('.category_title').text('');
+
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+
                 })
                 .on('click', function (d, i, j) {
                     $('.modal_entry').show();
@@ -448,12 +471,25 @@ function create_donut() {
                     $('.category_title').text(category);
 
                     if (current_data[category][1]) {
-                        $('.event_title').text(': '+current_data[category][1]);
+                        //$('.event_title').text(': '+current_data[category][1]);
+
+                        div.transition()
+                            .duration(300)
+                            .style("opacity", .9);
+                        div	.html(current_data[category][0] + "<br/>")
+                            .style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY - 28) + "px");
+
+
                     }
                 })
                 .on("mouseout", function(d, i) {
                     $('.category_title').text('');
                     $('.event_title').text('');
+
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 0);
                 })
 
                 .on('click', function (d, i, j) {

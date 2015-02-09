@@ -1,10 +1,6 @@
-svg {
-    margin: 2px;
-}
+svg {  margin: 2px;  }
 
-.arc {
-  stroke: #fff;
-}
+.arc {  stroke: #fff;  }
 
 .description_text {
     max-width: 900px;
@@ -18,9 +14,7 @@ svg {
     text-align: left;
 }
 
-.quote {
-    margin-left: 10px;
-}
+.quote {  margin-left: 10px;  }
 
 .month_nav {
     margin-left: 5px;
@@ -54,24 +48,33 @@ svg {
 /*}*/
 
 
+/*TABLE BUILDING PREFERENCES: */
 
-.smarts_col {
-    color: #d0743c;
+.smarts_col {  color: #d0743c;  }
+
+.arts_col {  color: #ff8c00;  }
+
+.health_col {  color: #8a89a6;  }
+
+.wealth_col {  color: #7b6888;  }
+
+.health_row:hover {  color: #8a89a6;  }
+
+.wealth_row:hover {  color: #7b6888;  }
+
+.arts_row:hover {  color: #ff8c00;  }
+
+.smarts_row:hover {  color: #d0743c;  }
+
+.row_data {cursor: default;}
+
+.badge {
+    background-color: #e3e3e3;
+    padding: 3px 4px;
+    opacity: .6;
+    margin-bottom: 1px;
 }
 
-.arts_col {
-    color: #ff8c00;
-}
-
-.health_col {
-    /*color: #98abc5;*/
-    color: #8a89a6;
-    /*color: #7b6888;*/
-}
-
-.wealth_col {
-    color: #7b6888;
-}
 
 .chart {
     margin-left: 5px;
@@ -96,42 +99,31 @@ svg {
     border: none;
 }
 
-.pie:hover {
-    opacity: 1;
+.pie:hover {  opacity: 1;  }
 
-}
 
-.modal_content_table {
-    float: right;
+/*MODAL PREFERENCES: */
 
-}
+.modal_content_table {  float: right;  }
 
 .modal_path {
- opacity: .6;
+    opacity: .6;
     cursor: pointer;
-
 }
-
 
 .outer_modal_path {
- opacity: .6;
+    opacity: .6;
     cursor: pointer;
-
 }
 
-.modal_path:hover {
- opacity: 1;
-
-}
+.modal_path:hover {  opacity: 1;  }
 
 .day_nav {
     margin-top: -20px;
     float: right;
 }
 
-.modal_notes {
-    cursor: default;
-}
+.modal_notes {  cursor: default;  }
 
 .modal_alert {
     margin-left: 15px;
@@ -146,32 +138,20 @@ svg {
     display: none;
 }
 
-.badge {
-    background-color: #e3e3e3;
-    padding: 3px 4px;
-    opacity: .6;
-    margin-bottom: 1px;
-}
-
-.health_row:hover {
-    color: #7b6888;
-    opacity: .5;
-}
-
-
-.wealth_row:hover {
-    background-color: #8a89a6;
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 90px;
+    /*height: 28px;*/
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
 }
 
 
-.arts_row:hover {
-    background-color: #ff8c00;
-}
-
-.smarts_row:hover {
-    background-color: #98abc5;
-
-}
 
 
 .polyline{
