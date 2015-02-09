@@ -117,9 +117,9 @@ $('#save_changes_btn').on('click', function () {
 });
 
 
-function send_event_from_modal(position, value, arc_pos, is_update, old_text) {
+function send_event_from_modal(position, value, arc_pos, is_update, old_text, remove_event) {
 
-
+    console.log('send event from modal received: ', remove_event);
 
     var category = category_array[position];
 
@@ -128,7 +128,7 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text) {
 
     var modal_entry_sel = $('.modal_entry');
 
-    if (event_text.trim() === '') {
+    if (event_text.trim() === '' && !remove_event) {
         console.log('nothing to send... ');
         modal_entry_sel.hide();
         return;
@@ -140,7 +140,7 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text) {
 
     $.post('/update_event', {'category': category, 'value': value, 'event_text': event_text,
                              'arc_pos': arc_pos, 'date':active_date, 'day': active_day, 'is_update': is_update,
-                             'old_text': old_text},
+                             'old_text': old_text, 'remove_event': remove_event},
 
         function(result) {
 
@@ -436,18 +436,22 @@ function create_donut() {
                         if (d && current_text) {
                             $('.event_btn').removeClass('disabled');
                             $('.event_btn').text('update');
+                            return false;
                         }
                         else if (d && !current_text) {
                             $('.event_btn').removeClass('disabled');
                             $('.event_btn').text('remove');
+                            return true;
                         }
                         else if (!d && current_text) {
                             $('.event_btn').removeClass('disabled');
                             $('.event_btn').text('submit');
+                            return false;
                         }
                         else if (!d && !current_text) {
                             $('.event_btn').addClass('disabled');
                             $('.event_btn').text('submit');
+                            return false;
                         }
                     }
 
@@ -457,6 +461,7 @@ function create_donut() {
 
                     var is_update;
                     var old_text;
+                    var delete_event = false;
 
                     if (d) {
                         console.log('i can see a d!', i);
@@ -478,14 +483,14 @@ function create_donut() {
                     }
 
                     $('.event_text').focus();
-                    update_button();
+                    delete_event = update_button();
 
                     $('.event_btn').unbind().on('click', function() {
-                        send_event_from_modal(i, d, 'inner', is_update, old_text);
+                        send_event_from_modal(i, d, 'inner', is_update, old_text, delete_event);
                     });
 
                     $('.event_text').unbind().on('input', function() {
-                            update_button();
+                            delete_event = update_button();
                     });
 
                 });
@@ -549,18 +554,22 @@ function create_donut() {
                         if (d && current_text) {
                             $('.event_btn').removeClass('disabled');
                             $('.event_btn').text('update');
+                            return false;
                         }
                         else if (d && !current_text) {
                             $('.event_btn').removeClass('disabled');
                             $('.event_btn').text('remove');
+                            return true;
                         }
                         else if (!d && current_text) {
                             $('.event_btn').removeClass('disabled');
                             $('.event_btn').text('submit');
+                            return false;
                         }
                         else if (!d && !current_text) {
                             $('.event_btn').addClass('disabled');
                             $('.event_btn').text('submit');
+                            return false;
                         }
                     }
 
@@ -568,6 +577,7 @@ function create_donut() {
 
                     var is_update;
                     var old_text;
+                    var remove_event = false;
 
                     if (d) {
                         console.log('i can see a d!', i);
@@ -588,15 +598,15 @@ function create_donut() {
                         $('.delete_event_btn').hide();
                     }
 
-                    update_button();
+                    remove_event = update_button();
                     $('.event_text').focus();
 
                     $('.event_btn').unbind().on('click', function() {
-                        send_event_from_modal(i, d, 'outer', is_update, old_text);
+                        send_event_from_modal(i, d, 'outer', is_update, old_text, remove_event);
                     });
 
                     $('.event_text').unbind().on('input', function() {
-                            update_button();
+                            remove_event = update_button();
                     });
 
                 });
@@ -688,65 +698,58 @@ function create_donut() {
         //      .text(function(d) { return 'blah'; });
 
 
-
-
-
-
-
-
-
-        var text = d3.select(".labels").selectAll("text")
-            //.data(pie(get_active_day_data()), key)
-		                //.data(pie(data), key);
-                        .data(function (d, i) {
-                            console.log('wtf....', d, i);
-                            return pie(['1','2','3','4']);
-                            //return get_active_day_data();
-            });
-
-        console.log(text);
-
-        text.enter()
-            .append("text")
-            .attr("dy", ".35em")
-            .style("opacity", 1)
-            .text(function(d) {
-                console.log('is this getting hit?');
-                return '';
-            })
-            .each(function(d) {
-                this._current = d;
-            });
-
-        console.log(text);
-
-
-        function midAngle(d){
-	    	return d.startAngle + (d.endAngle - d.startAngle)/2;
-	    }
-
-        text.transition().duration(500)
-		.attrTween("transform", function(d) {
-			var interpolate = d3.interpolate(this._current, d);
-			var _this = this;
-			return function(t) {
-				var d2 = interpolate(t);
-				_this._current = d2;
-				var pos = modal_outer_arc().centroid(d2);
-				pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
-				return "translate("+ pos +")";
-			};
-		})
-		.styleTween("text-anchor", function(d){
-			var interpolate = d3.interpolate(this._current, d);
-			return function(t) {
-				var d2 = interpolate(t);
-				return midAngle(d2) < Math.PI ? "start":"end";
-			};
-		});
-
-        text = svg.select(".labels").selectAll("text")
-		    .data(pie(['1', '2', '3', '4']), key);
+        //var text = d3.select(".labels").selectAll("text")
+        //    //.data(pie(get_active_day_data()), key)
+		 //               //.data(pie(data), key);
+        //                .data(function (d, i) {
+        //                    console.log('wtf....', d, i);
+        //                    return pie(['1','2','3','4']);
+        //                    //return get_active_day_data();
+        //    });
+        //
+        //console.log(text);
+        //
+        //text.enter()
+        //    .append("text")
+        //    .attr("dy", ".35em")
+        //    .style("opacity", 1)
+        //    .text(function(d) {
+        //        console.log('is this getting hit?');
+        //        return '';
+        //    })
+        //    .each(function(d) {
+        //        this._current = d;
+        //    });
+        //
+        //console.log(text);
+        //
+        //
+        //function midAngle(d){
+	    	//return d.startAngle + (d.endAngle - d.startAngle)/2;
+        //}
+        //
+        //text.transition().duration(500)
+        //.attrTween("transform", function(d) {
+			//var interpolate = d3.interpolate(this._current, d);
+			//var _this = this;
+			//return function(t) {
+			//	var d2 = interpolate(t);
+			//	_this._current = d2;
+			//	var pos = modal_outer_arc().centroid(d2);
+			//	pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
+			//	return "translate("+ pos +")";
+			//};
+        //})
+        //.styleTween("text-anchor", function(d){
+			//var interpolate = d3.interpolate(this._current, d);
+			//return function(t) {
+			//	var d2 = interpolate(t);
+			//	return midAngle(d2) < Math.PI ? "start":"end";
+			//};
+        //});
+        //
+        //text = svg.select(".labels").selectAll("text")
+		 //   .data(pie(['1', '2', '3', '4']), key);
 
 
         console.log('modal chart label building is done');
