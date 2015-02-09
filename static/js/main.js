@@ -32,7 +32,12 @@ document.getElementById('close').onclick = function(){
         return false;
     };
 
+document.getElementById('event_close').onclick = function(){
+        this.parentNode.parentNode
+        .style.display = "none";
 
+        return false;
+    };
 
 
 $('.modal').on('hidden.bs.modal', function() {
@@ -430,11 +435,12 @@ function create_donut() {
                         var category = category_array[i];
                         var current_data = get_active_day_data();
                         //console.log(current_data[category][0]);
-                        $('.event_text').val(current_data[category][0]);
-
+                        //$('.event_text').val(current_data[category][0]);
+                        $('.event_text').attr('placeholder', current_data[category][0]);
                     }
                     else {
                         $('.event_text').val('');
+                        $('.event_text').attr('placeholder', '');
                     }
 
                     $('.event_text').focus();
@@ -501,12 +507,12 @@ function create_donut() {
                         var category = category_array[i];
                         var current_data = get_active_day_data();
                         //console.log(current_data[category][1]);
-                        $('.event_text').val(current_data[category][1]);
-
-
+                        //$('.event_text').val(current_data[category][1]);
+                        $('.event_text').attr('placeholder', current_data[category][1]);
                     }
                     else {
                         $('.event_text').val('');
+                        $('.event_text').attr('placeholder', '');
                     }
 
                     $('.event_text').focus();

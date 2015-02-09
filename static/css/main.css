@@ -125,6 +125,26 @@ svg {  margin: 2px;  }
 
 .modal_notes {  cursor: default;  }
 
+#click_to_edit {text-align: center;}
+
+
+/*.event_text {*/
+    /*margin-left: 50px;*/
+/*}*/
+
+#event_close {
+    float:right;
+    display:inline-block;
+    padding:2px 5px;
+    /*background:#ccc;*/
+    margin-top: -10px;
+    margin-right: -5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+
 .modal_alert {
     margin-left: 15px;
     margin-right: 15px;
@@ -132,10 +152,17 @@ svg {  margin: 2px;  }
 }
 
 .modal_entry {
-    /*float: right;*/
     max-width: 180px;
     margin-top: 20px;
     display: none;
+}
+
+.modal_chart {
+    text-align: center;
+}
+
+.modal_chart.svg {
+    display: inline-block;
 }
 
 div.tooltip {
