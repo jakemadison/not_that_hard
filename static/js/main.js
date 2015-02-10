@@ -589,7 +589,7 @@ function create_donut() {
                         //$('.event_text').val(current_data[category][1]);
                         $('.event_text').attr('placeholder', current_data[category][1]);
                         is_update = true;
-                        old_text = current_data[category][1]
+                        old_text = current_data[category][1];
                         $('.delete_event_btn').show();
                     }
                     else {
@@ -767,15 +767,7 @@ function create_donut() {
         //text = svg.select(".labels").selectAll("text")
 		 //   .data(pie(['1', '2', '3', '4']), key);
 
-
-        console.log('modal chart label building is done');
-
-        // this should probably destroy chart data on modal dismiss...
-
-    }  // End of Build Modal
-
-
-    $('.pager_control').unbind('click').on('click', function () {
+        $('.pager_control').unbind('click').on('click', function () {
        console.log('day pager is active');
 
         var offset;
@@ -803,11 +795,22 @@ function create_donut() {
             if (data[j].day === active_day) {
                 console.log('sending off to build modal now...', data.length, j, offset);
                 build_modal(data[j+offset], j+offset);
+                //inner_modal_arcs.data(compute_arc_array(data[j+offset], {'outer': false}));
                 return
             }
         }
 
     });
+
+
+        console.log('modal chart label building is done');
+
+        // this should probably destroy chart data on modal dismiss...
+
+    }  // End of Build Modal
+
+
+
 
 
     console.log('starting svg building.');
