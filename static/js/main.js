@@ -698,28 +698,19 @@ function create_donut() {
 
 
 
-
-
-
-
-
     console.log('starting svg building.');
 
     var chart = d3.select('.chart');
-    chart.selectAll('.pie').remove();
+    //chart.selectAll('.pie').remove();
     var pies = chart.selectAll('.pie').data(data);
-    pies.exit().remove();
 
-    //var test_thing = chart.selectAll('.tests').append('g')
-    //    .data(["#98ABC5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"])
-    //    .enter()
-    //    .append('svg')
-    //    .attr('class', 'tests')
-    //    .attr('height', 20)
-    //    .attr('width', 20)
-    //    .attr('fill', function(d) {
-    //        return d;
-    //    });
+
+    pies.exit().transition()
+        .duration(1000)
+        .style("fill-opacity", 0)
+        .remove();
+
+
 
     var svg = pies.enter()
             .append('svg')
@@ -733,34 +724,57 @@ function create_donut() {
         });
 
 
+
+
     console.log('finished svg building.  starting arc/path building');
-
-    // map 0 - 100 on to 0 - 2*Pi:
-
-
-
 
     var outer_arc = create_arc_new({'r': radius, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
     var inner_arc = create_arc_new({'r': 25, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
 
+    var svg_arcs = svg.selectAll('.arc').data(function(d) {return compute_arc_array(d, {outer: false})});
 
-
-
-    svg.selectAll('.arc')
-        .data(function(d) {return compute_arc_array(d, {outer: false})})
+    svg_arcs
         .enter()
         .append("path")
         .attr("class", "arc")
         .attr("d", inner_arc())
         .style("fill", function(d, i) {
             if (d) {
-                //return color(i + 1);  // why does this change on exit/update?
                 return colour_array[i];
             }
             else {
                 return '#DDDADA';
             }
         });
+
+    //
+    //svg_arcs.transition()
+    //    .duration(1000).style("fill", function(d, i) {
+    //        if (d) {
+    //            return colour_array[i];
+    //        }
+    //        else {
+    //            return '#DDDADA';
+    //        }
+    //    }).remove();
+
+
+    //    .data(function(d) {return compute_arc_array(d, {outer: false})})
+    //    .enter()
+    //    .append("path")
+    //    .attr("class", "arc")
+    //    .attr("d", inner_arc())
+    //    .style("fill", function(d, i) {
+    //        if (d) {
+    //            //return color(i + 1);  // why does this change on exit/update?
+    //            return colour_array[i];
+    //        }
+    //        else {
+    //            return '#DDDADA';
+    //        }
+    //    });
+
+
 
 
     svg.selectAll('.arc_outer')
