@@ -58,6 +58,10 @@ var active_date;
 var active_day;
 var data;
 var category_array = ['arts', 'smarts', 'wealth', 'health'];
+var total_record_length = 4;
+var colour_array = ["#ff8c00", "#d0743c", "#7b6888", "#98abc5"];
+var radius = 40;  // this should be altered so we only need to change the one number to affect inner & outer...
+
 
 function get_active_day_data() {
     for (var x=0; x < data.length; x++) {
@@ -180,9 +184,6 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
                 }
             }
 
-
-
-
             console.log('i received a result from the server!!!', result);
 
     })
@@ -287,52 +288,80 @@ function populate_page(result) {
 }
 
 
-// Draw out our pies:
-function create_donut() {
+var arcScale = d3.scale.linear().domain([0, 100]).range([0, 2*Math.PI]);
 
-    console.log('create donut... ');
+function create_arc_new(config) {
 
-    console.log('data ->', data);
+        return function myArc() {
+              var arc_obj = d3.svg.arc().innerRadius(config.r - config.r_minus)
+                .outerRadius(config.r)
+                .startAngle(function(d, i) {
+                    //console.log('start angle for i: ', i, 'on data point d: ', d);
+                    return arcScale((config.space_offset/2) + ((i)*(100/config.l)));
+                })
+                .endAngle(function(d, i) {
+                    return arcScale((25 - (config.space_offset/2) ) + ((i)*(100/config.l)));
+                });
 
-    //data.forEach(function(d) {console.log(d); console.log(d.yoga)});
+                return arc_obj;
+        }
+    }
 
-    var number_donuts = data.length;
+function compute_arc_array(d, config) {
+            var ignore_vals = ['id', 'day', 'notes'];
+            var arc_array = [];
+            var outer_arc_array = [];
 
-    //var radius = 74;
-    var radius = 40;  // this should be altered so we only need to change the one number to affect inner & outer...
+        //console.log('this is d for arc array: ', d);
 
-    console.log('object keys: ', Object.keys(data[0]));
-    var total_record_length = 4;
+            for (var prop in d) {
+                //console.log('checking prop ', prop, 'in d ', d);
+                if (!d.hasOwnProperty(prop)){
+                    continue;
+                }
 
-    var colour_array = ["#ff8c00", "#d0743c", "#7b6888", "#98abc5"];
+                if (ignore_vals.indexOf(prop) === -1 ){
 
-    var color = d3.scale.ordinal()
-        //.domain(colour_array)
-          .domain(d3.keys(data[0]).filter(function(key) {
-              var ignore_vals = ['id', 'date'];
-              //console.log('anything???', d3.keys(data[0]));
+                    //console.log('index of d: ', d);
+                    if (d[prop][0]) {
+                        arc_array.push(true);
+                    }
+                    else {
+                        arc_array.push(false)
+                    }
+                    if (d[prop][1]) {
+                        outer_arc_array.push(true);
+                    }
+                    else {
+                        //console.log('nothing to see here....');
+                        outer_arc_array.push(false);
+                    }
+                }
+            }
 
-              return ignore_vals.indexOf(key) === -1}))
-        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+            if (config.outer) {
+                return outer_arc_array;
+            }
+        else {
+                return arc_array;
+            }
 
+    }
 
-    var pie = d3.layout.pie()
-        .sort(null)
-        .value(function (d) {return d;});
+function build_modal(modal_data, modal_data_position) {
 
+            console.log('i have been clicked! with data point and i: ', modal_data, modal_data_position, modal_data.day,
+                data.length);
 
-    function build_modal(d, i) {
-
-            console.log('i have been clicked! with data point and i: ', d, i, d.day, data.length);
-
-            if (i === 0) {
+            //Update pager buttons:
+            if (modal_data_position === 0) {
                 $('#has_prev_day_btn').addClass('disabled')
             }
             else {
                 $('#has_prev_day_btn').removeClass('disabled')
             }
 
-            if (i+1 === data.length){
+            if (modal_data_position+1 === data.length){
                 $('#has_next_day_btn').addClass('disabled')
             }
             else {
@@ -341,14 +370,14 @@ function create_donut() {
 
 
             $('.modal').modal('show');
-            $('.modal-title').text(d.day);
-            active_day = d.day;
+            $('.modal-title').text(modal_data.day);
+            active_day = modal_data.day;
 
             var modal_notes_sel = $('.modal_notes');
             var modal_notes_well_sel = $('.modal_note_well');
 
-            modal_notes_sel.text(d.notes);
-            $('#modal_textArea').val(d.notes);
+            modal_notes_sel.text(modal_data.notes);
+            $('#modal_textArea').val(modal_data.notes);
 
             modal_notes_well_sel.on('click', function() {
                modal_notes_sel.hide();
@@ -357,7 +386,9 @@ function create_donut() {
                 $('#save_changes_btn').removeClass('disabled');
             });
 
+
         d3.select('.modal_chart').select('svg').remove();  //<------ remove chart cut in.
+
 
             // Define 'div' for tooltips
                 var div = d3.select("body")
@@ -366,6 +397,7 @@ function create_donut() {
                 .style("opacity", 0); // set the opacity to nil
 
 
+            // start defining our chart area:
             var modal_chart = d3.select('.modal_chart')
                 .append('svg')
                 .attr("class", 'modal_pie')
@@ -377,242 +409,150 @@ function create_donut() {
             modal_chart.append('g')
                 .attr("class", "labels");
 
+            function build_arcs(arc_obj, arc_position) {
+                            arc_obj.attr("class", "modal_path")
+                                    .style("fill", function(d, i) {
+                                        if (d) {
+                                            //return color(i + 1);  // why does this change on exit/update?
+                                            return colour_array[i];
 
-            var modal_outer_arc = create_arc_new({'r': radius*2, 'r_minus': 26,
-                                                  'l': total_record_length, 'space_offset': 2});
+                                        }
+                                        else {
+                                            return '#DDDADA';
+                                        }})
+
+                            .on("mouseover", function(d, i) {
+                                var category = category_array[i];
+                                var current_data = get_active_day_data();
+
+                                $('.category_title').text(category);
+
+                                if (current_data[category][arc_position]) {
+                                    $('.event_title').text(': '+current_data[category][arc_position]);
+
+
+                                div.transition()
+                                    .duration(300)
+                                    .style("opacity", .9);
+                                div	.html(current_data[category][arc_position] + "<br/>")
+                                    .style("left", (d3.event.pageX) + "px")
+                                    .style("top", (d3.event.pageY - 28) + "px");
+                                }
+
+
+                            })
+                            .on("mouseout", function(d, i) {
+                                $('.event_title').text('');
+                                $('.category_title').text('');
+
+                                div.transition()
+                                    .duration(500)
+                                    .style("opacity", 0);
+
+                            })
+                            .on('click', function (d, i, j) {
+
+                                function update_button() {
+                                    var current_text = $('.event_text').val();
+                                    //console.log('d', d, 'event text', current_text);
+
+                                    if (d && current_text) {
+                                        $('.event_btn').removeClass('disabled');
+                                        $('.event_btn').text('update');
+                                        return false;
+                                    }
+                                    else if (d && !current_text) {
+                                        $('.event_btn').removeClass('disabled');
+                                        $('.event_btn').text('remove');
+                                        return true;
+                                    }
+                                    else if (!d && current_text) {
+                                        $('.event_btn').removeClass('disabled');
+                                        $('.event_btn').text('submit');
+                                        return false;
+                                    }
+                                    else if (!d && !current_text) {
+                                        $('.event_btn').addClass('disabled');
+                                        $('.event_btn').text('submit');
+                                        return false;
+                                    }
+                                }
+
+
+
+                                $('.modal_entry').show();
+
+                                var is_update;
+                                var old_text;
+                                var delete_event = false;
+
+                                if (d) {
+                                    console.log('i can see a d!', i);
+                                    console.log('this is parent?', j);
+                                    var category = category_array[i];
+                                    var current_data = get_active_day_data();
+                                    //console.log(current_data[category][0]);
+                                    //$('.event_text').val(current_data[category][0]);
+                                    $('.event_text').attr('placeholder', current_data[category][arc_position]);
+                                    is_update = true;
+                                    old_text = current_data[category][arc_position];
+                                    $('.delete_event_btn').show();
+                                }
+                                else {
+                                    $('.event_text').val('');
+                                    $('.event_text').attr('placeholder', '');
+                                    is_update = false;
+                                    $('.delete_event_btn').hide();
+                                }
+
+                                $('.event_text').focus();
+                                delete_event = update_button();
+
+                                $('.event_btn').unbind().on('click', function() {
+                                    send_event_from_modal(i, d, 'inner', is_update, old_text, delete_event);
+                                });
+
+                                $('.event_text').unbind().on('input', function() {
+                                        delete_event = update_button();
+                                });
+
+                            });
+
+
+
+                        }
+
+
+            // Start Building our inner arcs:
             var modal_inner_arc = create_arc_new({'r': 50, 'r_minus': 26,
                                                   'l': total_record_length, 'space_offset': 2});
 
-
             var inner_modal_arcs = modal_chart.selectAll('.modal_arc')
-                        .data(compute_arc_array(d, {outer: false}));
+                        .data(compute_arc_array(modal_data, {outer: false}));
 
-            inner_modal_arcs.enter().append("path").attr("d", modal_inner_arc())
-                .attr("class", "modal_path")
-                        .style("fill", function(d, i) {
-                            if (d) {
-                                //return color(i + 1);  // why does this change on exit/update?
-                                return colour_array[i];
-
-                            }
-                            else {
-                                return '#DDDADA';
-                            }})
-
-                .on("mouseover", function(d, i) {
-                    var category = category_array[i];
-                    var current_data = get_active_day_data();
-
-                    $('.category_title').text(category);
-
-                    if (current_data[category][0]) {
-                        $('.event_title').text(': '+current_data[category][0]);
+            inner_modal_arcs.enter().append("path").attr("d", modal_inner_arc());
+            build_arcs(inner_modal_arcs, 0);
 
 
-                    div.transition()
-                        .duration(300)
-                        .style("opacity", .9);
-                    div	.html(current_data[category][0] + "<br/>")
-                        .style("left", (d3.event.pageX) + "px")
-                        .style("top", (d3.event.pageY - 28) + "px");
-                    }
-
-
-                })
-                .on("mouseout", function(d, i) {
-                    $('.event_title').text('');
-                    $('.category_title').text('');
-
-                    div.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-
-                })
-                .on('click', function (d, i, j) {
-
-                    function update_button() {
-                        var current_text = $('.event_text').val();
-                        //console.log('d', d, 'event text', current_text);
-
-                        if (d && current_text) {
-                            $('.event_btn').removeClass('disabled');
-                            $('.event_btn').text('update');
-                            return false;
-                        }
-                        else if (d && !current_text) {
-                            $('.event_btn').removeClass('disabled');
-                            $('.event_btn').text('remove');
-                            return true;
-                        }
-                        else if (!d && current_text) {
-                            $('.event_btn').removeClass('disabled');
-                            $('.event_btn').text('submit');
-                            return false;
-                        }
-                        else if (!d && !current_text) {
-                            $('.event_btn').addClass('disabled');
-                            $('.event_btn').text('submit');
-                            return false;
-                        }
-                    }
-
-
-
-                    $('.modal_entry').show();
-
-                    var is_update;
-                    var old_text;
-                    var delete_event = false;
-
-                    if (d) {
-                        console.log('i can see a d!', i);
-                        console.log('this is parent?', j);
-                        var category = category_array[i];
-                        var current_data = get_active_day_data();
-                        //console.log(current_data[category][0]);
-                        //$('.event_text').val(current_data[category][0]);
-                        $('.event_text').attr('placeholder', current_data[category][0]);
-                        is_update = true;
-                        old_text = current_data[category][0];
-                        $('.delete_event_btn').show();
-                    }
-                    else {
-                        $('.event_text').val('');
-                        $('.event_text').attr('placeholder', '');
-                        is_update = false;
-                        $('.delete_event_btn').hide();
-                    }
-
-                    $('.event_text').focus();
-                    delete_event = update_button();
-
-                    $('.event_btn').unbind().on('click', function() {
-                        send_event_from_modal(i, d, 'inner', is_update, old_text, delete_event);
-                    });
-
-                    $('.event_text').unbind().on('input', function() {
-                            delete_event = update_button();
-                    });
-
-                });
-
+            // Start building our outer arcs:
+            var modal_outer_arc = create_arc_new({'r': radius*2, 'r_minus': 26,
+                                                  'l': total_record_length, 'space_offset': 2});
 
             var outer_arc_group = modal_chart.selectAll('.modal_arc')
                 .attr("class", 'modal_arc_outer')
-                        .data(compute_arc_array(d, {outer: true}))
+                        .data(compute_arc_array(modal_data, {outer: true}))
                         .enter().append('g').attr('class', 'outer_arc group');
 
-                outer_arc_group.append("path").attr("d", modal_outer_arc())
-                .attr("class", function(d, i) {
-                    //console.log('outer modal path is dealing with: ', d, i);
-                    //console.log('check for inner?');
-                    return "modal_path";
-                })
-                        .style("fill", function(d, i) {
-                            if (d) {
-                                //return color(i + 1);  // why does this change on exit/update?
-                                return colour_array[i];
-                            }
-                            else {
-                                return '#DDDADA';
-                            }})
+            outer_arc_group.append("path").attr("d", modal_outer_arc());
 
-                .on("mouseover", function(d, i) {
-                    var category = category_array[i];
-                    var current_data = get_active_day_data();
-
-                    $('.category_title').text(category);
-
-                    if (current_data[category][1]) {
-                        $('.event_title').text(': '+current_data[category][1]);
-
-                        div.transition()
-                            .duration(300)
-                            .style("opacity", .9);
-                        div	.html(current_data[category][1] + "<br/>")
-                            .style("left", (d3.event.pageX) + "px")
-                            .style("top", (d3.event.pageY - 28) + "px");
-                    }
+            build_arcs(outer_arc_group, 1);
 
 
 
-                })
-                .on("mouseout", function(d, i) {
-                    $('.category_title').text('');
-                    $('.event_title').text('');
+            // Build our category labels attached to arc group:
+            function build_category_labels(arc_group) {
 
-                    div.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                })
-
-                .on('click', function (d, i, j) {
-
-                    function update_button() {
-                        var current_text = $('.event_text').val();
-                        //console.log('d', d, 'event text', current_text);
-
-                        if (d && current_text) {
-                            $('.event_btn').removeClass('disabled');
-                            $('.event_btn').text('update');
-                            return false;
-                        }
-                        else if (d && !current_text) {
-                            $('.event_btn').removeClass('disabled');
-                            $('.event_btn').text('remove');
-                            return true;
-                        }
-                        else if (!d && current_text) {
-                            $('.event_btn').removeClass('disabled');
-                            $('.event_btn').text('submit');
-                            return false;
-                        }
-                        else if (!d && !current_text) {
-                            $('.event_btn').addClass('disabled');
-                            $('.event_btn').text('submit');
-                            return false;
-                        }
-                    }
-
-                    $('.modal_entry').show();
-
-                    var is_update;
-                    var old_text;
-                    var remove_event = false;
-
-                    if (d) {
-                        console.log('i can see a d!', i);
-                        console.log('this is j: ', j);
-                        var category = category_array[i];
-                        var current_data = get_active_day_data();
-                        //console.log(current_data[category][1]);
-                        //$('.event_text').val(current_data[category][1]);
-                        $('.event_text').attr('placeholder', current_data[category][1]);
-                        is_update = true;
-                        old_text = current_data[category][1];
-                        $('.delete_event_btn').show();
-                    }
-                    else {
-                        $('.event_text').val('');
-                        $('.event_text').attr('placeholder', '');
-                        is_update = false;
-                        $('.delete_event_btn').hide();
-                    }
-
-                    remove_event = update_button();
-                    $('.event_text').focus();
-
-                    $('.event_btn').unbind().on('click', function() {
-                        send_event_from_modal(i, d, 'outer', is_update, old_text, remove_event);
-                    });
-
-                    $('.event_text').unbind().on('input', function() {
-                            remove_event = update_button();
-                    });
-
-                });
-
-            outer_arc_group.append('svg:text')
+                arc_group.append('svg:text')
                 .attr("dy", ".35em")
                 .attr("text-anchor", "middle")
                 .attr('class','category_label')
@@ -657,10 +597,10 @@ function create_donut() {
                 .text(function (d, i) {
                     return category_array[i];
                 });
+            }
 
+            build_category_labels(outer_arc_group);
 
-
-            console.log('inner arcs: ', inner_modal_arcs);
 
 
             inner_modal_arcs.exit()
@@ -677,128 +617,39 @@ function create_donut() {
 
 
 
-        //var key = function(d) {
-        //    var ignore_values = ['day', 'id', 'notes'];
-        //    if (ignore_values.indexOf(d) === -1) {
-        //        return 'something!';
-        //    }
-        //};
-
-        //    Time to build labels...
-
-        // let's start with category labels:
-
-
-        // Computes the angle of an arc, converting from radians to degrees.
-        //function angle(d) {
-        //     var a = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
-        //    return a > 90 ? a - 180 : a;
-        //    }
-
-            // Add a magnitude value to the larger arcs, translated to the arc centroid and rotated.
-        //modal_chart.append("g").filter(function(d) {
-        //    console.log('i am seeing: ', d);
-        //    return d.endAngle - d.startAngle > .2; })
-        //
-        //    .append("svg:text")
-        //      .attr("dy", ".35em")
-        //      .attr("text-anchor", "middle")
-        //      .attr("transform", function(d) { //set the label's origin to the center of the arc
-        //        //we have to make sure to set these before calling arc.centroid
-        //        d.outerRadius = radius; // Set Outer Coordinate
-        //        d.innerRadius = radius/2; // Set Inner Coordinate
-        //        return "translate(" + modal_outer_arc().centroid(d) + ")rotate(" + angle(d) + ")";
-        //      })
-        //      .style("fill", "White")
-        //      .style("font", "bold 12px Arial")
-        //      .text(function(d) { return 'blah'; });
-
-
-        //var text = d3.select(".labels").selectAll("text")
-        //    //.data(pie(get_active_day_data()), key)
-		 //               //.data(pie(data), key);
-        //                .data(function (d, i) {
-        //                    console.log('wtf....', d, i);
-        //                    return pie(['1','2','3','4']);
-        //                    //return get_active_day_data();
-        //    });
-        //
-        //console.log(text);
-        //
-        //text.enter()
-        //    .append("text")
-        //    .attr("dy", ".35em")
-        //    .style("opacity", 1)
-        //    .text(function(d) {
-        //        console.log('is this getting hit?');
-        //        return '';
-        //    })
-        //    .each(function(d) {
-        //        this._current = d;
-        //    });
-        //
-        //console.log(text);
-        //
-        //
-        //function midAngle(d){
-	    	//return d.startAngle + (d.endAngle - d.startAngle)/2;
-        //}
-        //
-        //text.transition().duration(500)
-        //.attrTween("transform", function(d) {
-			//var interpolate = d3.interpolate(this._current, d);
-			//var _this = this;
-			//return function(t) {
-			//	var d2 = interpolate(t);
-			//	_this._current = d2;
-			//	var pos = modal_outer_arc().centroid(d2);
-			//	pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
-			//	return "translate("+ pos +")";
-			//};
-        //})
-        //.styleTween("text-anchor", function(d){
-			//var interpolate = d3.interpolate(this._current, d);
-			//return function(t) {
-			//	var d2 = interpolate(t);
-			//	return midAngle(d2) < Math.PI ? "start":"end";
-			//};
-        //});
-        //
-        //text = svg.select(".labels").selectAll("text")
-		 //   .data(pie(['1', '2', '3', '4']), key);
 
         $('.pager_control').unbind('click').on('click', function () {
-       console.log('day pager is active');
+           console.log('day pager is active');
 
-        var offset;
-        if (this.parentNode.id == 'has_prev_day_btn') {
+            var offset;
+            if (this.parentNode.id == 'has_prev_day_btn') {
 
-            if ($('#has_prev_day_btn').hasClass('disabled')) {
-                return
+                if ($('#has_prev_day_btn').hasClass('disabled')) {
+                    return
+                }
+                offset = -1;
+
             }
-            offset = -1;
+            else if (this.parentNode.id == 'has_next_day_btn') {
+                if ($('#has_next_day_btn').hasClass('disabled')) {
+                    return
+                }
+                offset = 1;
 
-        }
-        else if (this.parentNode.id == 'has_next_day_btn') {
-            if ($('#has_next_day_btn').hasClass('disabled')) {
-                return
             }
-            offset = 1;
+            console.log('continuing pager...');
 
-        }
-        console.log('continuing pager...');
+            $('.event_text').val('');
+            $('.modal_entry').hide();
 
-        $('.event_text').val('');
-        $('.modal_entry').hide();
-
-        for (var j=0; j < data.length; j++) {
-            if (data[j].day === active_day) {
-                console.log('sending off to build modal now...', data.length, j, offset);
-                build_modal(data[j+offset], j+offset);
-                //inner_modal_arcs.data(compute_arc_array(data[j+offset], {'outer': false}));
-                return
+            for (var j=0; j < data.length; j++) {
+                if (data[j].day === active_day) {
+                    console.log('sending off to build modal now...', data.length, j, offset);
+                    build_modal(data[j+offset], j+offset);
+                    //inner_modal_arcs.data(compute_arc_array(data[j+offset], {'outer': false}));
+                    return
+                }
             }
-        }
 
     });
 
@@ -808,6 +659,45 @@ function create_donut() {
         // this should probably destroy chart data on modal dismiss...
 
     }  // End of Build Modal
+
+
+
+
+
+
+// Draw out our pies:
+function create_donut() {
+
+    console.log('create donut... ');
+
+    console.log('data ->', data);
+
+    //data.forEach(function(d) {console.log(d); console.log(d.yoga)});
+
+    var number_donuts = data.length;
+
+    //var radius = 74;
+
+
+    console.log('object keys: ', Object.keys(data[0]));
+
+
+    var color = d3.scale.ordinal()
+        //.domain(colour_array)
+          .domain(d3.keys(data[0]).filter(function(key) {
+              var ignore_vals = ['id', 'date'];
+              //console.log('anything???', d3.keys(data[0]));
+
+              return ignore_vals.indexOf(key) === -1}))
+        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+
+    var pie = d3.layout.pie()
+        .sort(null)
+        .value(function (d) {return d;});
+
+
+
 
 
 
@@ -846,69 +736,14 @@ function create_donut() {
     console.log('finished svg building.  starting arc/path building');
 
     // map 0 - 100 on to 0 - 2*Pi:
-    var arcScale = d3.scale.linear().domain([0, 100]).range([0, 2*Math.PI]);
 
-    function create_arc_new(config) {
 
-            return function myArc() {
-                  var arc_obj = d3.svg.arc().innerRadius(config.r - config.r_minus)
-                    .outerRadius(config.r)
-                    .startAngle(function(d, i) {
-                        //console.log('start angle for i: ', i, 'on data point d: ', d);
 
-                        return arcScale((config.space_offset/2) + ((i)*(100/config.l)));
-                    })
-                    .endAngle(function(d, i) {
-                        return arcScale((25 - (config.space_offset/2) ) + ((i)*(100/config.l)));
-                    });
-
-                    return arc_obj;
-            }
-        }
 
     var outer_arc = create_arc_new({'r': radius, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
     var inner_arc = create_arc_new({'r': 25, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
 
-    function compute_arc_array(d, config) {
-        var ignore_vals = ['id', 'day', 'notes'];
-            var arc_array = [];
-            var outer_arc_array = [];
 
-        //console.log('this is d for arc array: ', d);
-
-            for (var prop in d) {
-                //console.log('checking prop ', prop, 'in d ', d);
-                if (!d.hasOwnProperty(prop)){
-                    continue;
-                }
-
-                if (ignore_vals.indexOf(prop) === -1 ){
-
-                    //console.log('index of d: ', d);
-                    if (d[prop][0]) {
-                        arc_array.push(true);
-                    }
-                    else {
-                        arc_array.push(false)
-                    }
-                    if (d[prop][1]) {
-                        outer_arc_array.push(true);
-                    }
-                    else {
-                        //console.log('nothing to see here....');
-                        outer_arc_array.push(false);
-                    }
-                }
-            }
-
-            if (config.outer) {
-                return outer_arc_array;
-            }
-        else {
-                return arc_array;
-            }
-
-    }
 
 
     svg.selectAll('.arc')
