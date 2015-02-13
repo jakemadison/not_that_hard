@@ -726,6 +726,8 @@ function create_donut() {
 
 
 
+
+
     console.log('finished svg building.  starting arc/path building');
 
     var outer_arc = create_arc_new({'r': radius, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
@@ -735,8 +737,10 @@ function create_donut() {
 
     svg_inner_arcs
         .enter()
-        .append("path")
-        .attr("class", "arc")
+        .append("path");
+
+
+    svg_inner_arcs.attr("class", "arc")
         .attr("d", inner_arc())
         .style("fill", function(d, i) {
             if (d) {
@@ -745,7 +749,12 @@ function create_donut() {
             else {
                 return '#DDDADA';
             }
-        });
+        }).style('fill-opacity', 0)
+        .transition().duration(1000).style('fill-opacity', 1);
+
+    svg_inner_arcs.exit().remove();
+
+
 
     //
     //svg_arcs.transition()
@@ -777,7 +786,7 @@ function create_donut() {
 
 
 
-    svg.selectAll('.arc_outer')
+    var svg_outer_arcs = svg.selectAll('.arc_outer')
         .data(function(d) {return compute_arc_array(d, {outer: true})})
         .enter()
         .append("path")
@@ -791,11 +800,17 @@ function create_donut() {
             else {
                 return '#E9E2E2';
             }
-        });
+        }).style('fill-opacity', 0).transition().duration(2000).style('fill-opacity', 1);
+
+
+
+    // svg at this point is our D3 groups:
+    console.log('svg ->', svg);
+
 
 
     // this should only happen once...
-    svg.append("text")
+    svg.append("text").transition().duration(2500)
         .attr("dy", ".35em")
         .attr("class", "legend")
         .attr("fill", "rgb(128,128,128)")
@@ -809,6 +824,11 @@ function create_donut() {
                 return 'test';
             }
         });
+
+
+
+    //console.log('text labels: ', text_labels);
+    //d3.selectAll('.legend').exit().transition().duration(2000).remove();
 
 
 
