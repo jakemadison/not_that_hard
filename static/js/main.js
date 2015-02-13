@@ -731,9 +731,9 @@ function create_donut() {
     var outer_arc = create_arc_new({'r': radius, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
     var inner_arc = create_arc_new({'r': 25, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
 
-    var svg_arcs = svg.selectAll('.arc').data(function(d) {return compute_arc_array(d, {outer: false})});
+    var svg_inner_arcs = svg.selectAll('.arc').data(function(d) {return compute_arc_array(d, {outer: false})});
 
-    svg_arcs
+    svg_inner_arcs
         .enter()
         .append("path")
         .attr("class", "arc")
@@ -800,7 +800,17 @@ function create_donut() {
         .attr("class", "legend")
         .attr("fill", "rgb(128,128,128)")
         .style("text-anchor", "middle")
-        .text(function(d) {return d.day.split(' ')[2];});
+        .text(function(d, i, j) {
+            console.log('text function has this d: ', d, j);
+            if (d.day) {
+                return d.day.split(' ')[2];
+            }
+            else {
+                return 'test';
+            }
+        });
+
+
 
     console.log('donut done.');
 }
