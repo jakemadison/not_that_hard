@@ -741,7 +741,9 @@ function create_donut() {
 
 
     svg_inner_arcs.attr("class", "arc")
-        .attr("d", inner_arc())
+        .attr("d", inner_arc());
+
+    svg_inner_arcs
         .style("fill", function(d, i) {
             if (d) {
                 return colour_array[i];
@@ -750,7 +752,7 @@ function create_donut() {
                 return '#DDDADA';
             }
         }).style('fill-opacity', 0)
-        .transition().duration(1000).style('fill-opacity', 1);
+        .style('fill-opacity', 1);
 
     svg_inner_arcs.exit().remove();
 
@@ -783,12 +785,27 @@ function create_donut() {
     //        }
     //    });
 
+    svg_inner_arcs.transition()
+        .attr("d", inner_arc())
+        .style("fill", function(d, i) {
+
+            console.log('inner arcs say this! : ', d);
+            if (d) {
+                console.log('is there no D?');
+                return colour_array[i];
+            }
+            else {
+                return '#DDDADA';
+            }
+        });
 
 
 
     var svg_outer_arcs = svg.selectAll('.arc_outer')
-        .data(function(d) {return compute_arc_array(d, {outer: true})})
-        .enter()
+        .data(function(d) {return compute_arc_array(d, {outer: true})});
+
+
+    svg_outer_arcs.enter()
         .append("path")
         .attr("class", "arc_outer")
         .attr("d", outer_arc())
@@ -800,7 +817,21 @@ function create_donut() {
             else {
                 return '#E9E2E2';
             }
-        }).style('fill-opacity', 0).transition().duration(2000).style('fill-opacity', 1);
+        });
+
+
+    d3.selectAll('.path').data(data).append("path")
+        .attr("class", "arc_outer")
+        .attr("d", outer_arc())
+        .style("fill", function(d, i) {
+            if (d) {
+                //return color(i + 1);
+                return colour_array[i];
+            }
+            else {
+                return '#E9E2E2';
+            }
+        });
 
 
 
