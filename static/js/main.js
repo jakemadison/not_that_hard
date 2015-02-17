@@ -660,43 +660,26 @@ function build_modal(modal_data, modal_data_position) {
 
     }  // End of Build Modal
 
-
-
-
-
-
 // Draw out our pies:
 function create_donut() {
 
     console.log('create donut... ');
-
     console.log('data ->', data);
-
-    //data.forEach(function(d) {console.log(d); console.log(d.yoga)});
-
-    var number_donuts = data.length;
-
-    //var radius = 74;
-
-
     console.log('object keys: ', Object.keys(data[0]));
 
 
-    var color = d3.scale.ordinal()
-        //.domain(colour_array)
-          .domain(d3.keys(data[0]).filter(function(key) {
-              var ignore_vals = ['id', 'date'];
-              //console.log('anything???', d3.keys(data[0]));
-
-              return ignore_vals.indexOf(key) === -1}))
-        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
+    //var color = d3.scale.ordinal()
+    //    //.domain(colour_array)
+    //      .domain(d3.keys(data[0]).filter(function(key) {
+    //          var ignore_vals = ['id', 'date'];
+    //          //console.log('anything???', d3.keys(data[0]));
+    //
+    //          return ignore_vals.indexOf(key) === -1}))
+    //    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
     var pie = d3.layout.pie()
         .sort(null)
         .value(function (d) {return d;});
-
-
 
     console.log('starting svg building.');
 
@@ -705,9 +688,10 @@ function create_donut() {
     var pies = chart.selectAll('.pie').data(data);
 
 
-    pies.exit().transition()
-        .duration(1000)
-        .style("fill-opacity", 0)
+    pies.exit()
+        //.transition()
+        //.duration(1000)
+        //.style("fill-opacity", 0)
         .remove();
 
 
@@ -722,10 +706,6 @@ function create_donut() {
         .on("click", function(d, i) {
             build_modal(d, i);
         });
-
-
-
-
 
 
     console.log('finished svg building.  starting arc/path building');
@@ -751,44 +731,16 @@ function create_donut() {
             else {
                 return '#DDDADA';
             }
-        }).style('fill-opacity', 0)
+        })
         .style('fill-opacity', 1);
 
     svg_inner_arcs.exit().remove();
 
 
 
-    //
-    //svg_arcs.transition()
-    //    .duration(1000).style("fill", function(d, i) {
-    //        if (d) {
-    //            return colour_array[i];
-    //        }
-    //        else {
-    //            return '#DDDADA';
-    //        }
-    //    }).remove();
-
-
-    //    .data(function(d) {return compute_arc_array(d, {outer: false})})
-    //    .enter()
-    //    .append("path")
-    //    .attr("class", "arc")
-    //    .attr("d", inner_arc())
-    //    .style("fill", function(d, i) {
-    //        if (d) {
-    //            //return color(i + 1);  // why does this change on exit/update?
-    //            return colour_array[i];
-    //        }
-    //        else {
-    //            return '#DDDADA';
-    //        }
-    //    });
-
     svg_inner_arcs.transition()
         .attr("d", inner_arc())
         .style("fill", function(d, i) {
-
             console.log('inner arcs say this! : ', d);
             if (d) {
                 console.log('is there no D?');
