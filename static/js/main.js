@@ -227,6 +227,7 @@ function get_historical_data(options) {
                 $('#has_next_btn').removeClass('disabled')
             }
 
+            data = null;
             data = result.data;
 
             populate_page(result);
@@ -685,21 +686,25 @@ function create_donut() {
 
     var chart = d3.select('.chart');
     //chart.selectAll('.pie').remove();
-    var pies = chart.selectAll('.pie').data(data);
+
+    // each datum on pies_data is a full day, including notes, etc.
+    var pies_data = chart.selectAll('.pie').data(data);
 
 
-    pies.exit()
-        //.transition()
-        //.duration(1000)
-        //.style("fill-opacity", 0)
-        .remove();
+    // on new full day datum being added to our join, do this for each datum:
+    var pies_data_enter = pies_data.enter();
 
-
-
-    var svg = pies.enter()
-            .append('svg')
+    // this returns the g element on each group that was created by the enter:
+    var pies_group = pies_data_enter.append('svg')
             .attr('class', 'pie')
-            .attr('width', radius * 2)
+        .attr('id', function (d) {
+            console.log('adding id: ', d.day);
+            return d.day;
+        })
+            .attr('width', function(d) {
+                    console.log('this is pies_data enter datum: ', d);
+                     return radius * 2
+        })
             .attr('height', radius * 2)
             .append('g')
             .attr('transform', 'translate(' + radius + ',' + radius + ')')
@@ -707,23 +712,33 @@ function create_donut() {
             build_modal(d, i);
         });
 
+    console.log('pies enter is: ', pies_data_enter);
+    console.log('pies group though is: ', pies_group);
 
-    console.log('finished svg building.  starting arc/path building');
+    // this specifies what to do on each removal of a full day
+    pies_data.exit()
+        .transition()
+        .duration(function(d, i) {
+            return i*50;
+        })
+        .style("fill-opacity", 0)
+    .remove();
+
+    console.log('finished pie building.  starting arc/path building');
+
 
     var outer_arc = create_arc_new({'r': radius, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
     var inner_arc = create_arc_new({'r': 25, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
 
-    var svg_inner_arcs = svg.selectAll('.arc').data(function(d) {return compute_arc_array(d, {outer: false})});
+    // this binds our arc elements to a new set of data.  That data is taken by each day, and is an array
+    // of true/false values based on whether there is an event there or not
+    var svg_inner_arcs_data = pies_group.selectAll('.arc').data(function(d) {return compute_arc_array(d, {outer: false})});
 
-    svg_inner_arcs
-        .enter()
-        .append("path");
+    // define the "enter" selection for what to do on new data entering
+    var svg_inner_arc_enter = svg_inner_arcs_data.enter();
 
-
-    svg_inner_arcs.attr("class", "arc")
-        .attr("d", inner_arc());
-
-    svg_inner_arcs
+    svg_inner_arc_enter.append("path").attr("class", "arc")
+        .attr("d", inner_arc())
         .style("fill", function(d, i) {
             if (d) {
                 return colour_array[i];
@@ -734,26 +749,18 @@ function create_donut() {
         })
         .style('fill-opacity', 1);
 
-    svg_inner_arcs.exit().remove();
+
+    svg_inner_arcs_data.exit().remove();
+
+    function inner_arc_update(new_data) {
+    //    this function should recalculate our true/false data array and rebind that, plus transition whatever we want.
+        svg_inner_arcs_data.data(function(d) {return compute_arc_array(d, {outer: false})});
+    }
 
 
 
-    svg_inner_arcs.transition()
-        .attr("d", inner_arc())
-        .style("fill", function(d, i) {
-            console.log('inner arcs say this! : ', d);
-            if (d) {
-                console.log('is there no D?');
-                return colour_array[i];
-            }
-            else {
-                return '#DDDADA';
-            }
-        });
 
-
-
-    var svg_outer_arcs = svg.selectAll('.arc_outer')
+    var svg_outer_arcs = pies_group.selectAll('.arc_outer')
         .data(function(d) {return compute_arc_array(d, {outer: true})});
 
 
@@ -772,28 +779,27 @@ function create_donut() {
         });
 
 
-    d3.selectAll('.path').data(data).append("path")
-        .attr("class", "arc_outer")
-        .attr("d", outer_arc())
-        .style("fill", function(d, i) {
-            if (d) {
-                //return color(i + 1);
-                return colour_array[i];
-            }
-            else {
-                return '#E9E2E2';
-            }
-        });
+    //d3.selectAll('.path').data(data).append("path")
+    //    .attr("class", "arc_outer")
+    //    .attr("d", outer_arc())
+    //    .style("fill", function(d, i) {
+    //        if (d) {
+    //            //return color(i + 1);
+    //            return colour_array[i];
+    //        }
+    //        else {
+    //            return '#E9E2E2';
+    //        }
+    //    });
 
 
 
     // svg at this point is our D3 groups:
-    console.log('svg ->', svg);
-
+    console.log('svg ->', pies_group);
 
 
     // this should only happen once...
-    svg.append("text").transition().duration(2500)
+    pies_group.append("text")
         .attr("dy", ".35em")
         .attr("class", "legend")
         .attr("fill", "rgb(128,128,128)")
