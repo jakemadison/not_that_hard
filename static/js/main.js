@@ -227,7 +227,6 @@ function get_historical_data(options) {
                 $('#has_next_btn').removeClass('disabled')
             }
 
-            data = null;
             data = result.data;
 
             populate_page(result);
@@ -687,8 +686,11 @@ function create_donut() {
     var chart = d3.select('.chart');
     //chart.selectAll('.pie').remove();
 
+    // data binding is done by index, but we need to specify keys instead:
+    var keyFn = function(d) {return d.day;};
+
     // each datum on pies_data is a full day, including notes, etc.
-    var pies_data = chart.selectAll('.pie').data(data);
+    var pies_data = chart.selectAll('.pie').data(data, keyFn);
 
 
     // on new full day datum being added to our join, do this for each datum:
