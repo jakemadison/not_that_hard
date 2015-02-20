@@ -641,7 +641,7 @@ function build_modal(modal_data, modal_data_position) {
                     console.log('sending off to build modal now...', data.length, j, offset);
                     //build_modal(data[j+offset], j+offset);  //works.
                     var oac = outer_arcs.data(compute_arc_array(data[j+offset], {'outer': true}));
-                    console.log('outer arcs: ', oac);
+                    console.log('outer arcs: ', oac); //this is giving the selection just an array...
 
 
 
