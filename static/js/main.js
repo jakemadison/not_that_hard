@@ -640,7 +640,10 @@ function build_modal(modal_data, modal_data_position) {
                 if (data[j].day === active_day) {
                     console.log('sending off to build modal now...', data.length, j, offset);
                     //build_modal(data[j+offset], j+offset);  //works.
-                    var oac = outer_arcs.data(compute_arc_array(data[j+offset], {'outer': true}));
+                    var oac = outer_arcs.data(compute_arc_array(data[j+offset], {'outer': true})).append('g').attr('class', 'outer_arc group');
+            outer_arc_group.append("path").attr("d", modal_outer_arc());
+
+            build_arcs(outer_arc_group, 1);
                     console.log('outer arcs: ', oac); //this is giving the selection just an array...
 
 
@@ -666,16 +669,6 @@ function create_donut() {
     console.log('data ->', data);
     console.log('object keys: ', Object.keys(data[0]));
 
-
-    //var color = d3.scale.ordinal()
-    //    //.domain(colour_array)
-    //      .domain(d3.keys(data[0]).filter(function(key) {
-    //          var ignore_vals = ['id', 'date'];
-    //          //console.log('anything???', d3.keys(data[0]));
-    //
-    //          return ignore_vals.indexOf(key) === -1}))
-    //    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
     var pie = d3.layout.pie()
         .sort(null)
         .value(function (d) {return d;});
@@ -696,7 +689,7 @@ function create_donut() {
     var pies_data_enter = pies_data.enter();
 
     // this returns the g element on each group that was created by the enter:
-    var pies_group = pies_data_enter.append('svg')
+    var pies_pre_group = pies_data_enter.append('svg')
             .attr('class', 'pie')
         .attr('id', function (d) {
             console.log('adding id: ', d.day);
@@ -706,8 +699,11 @@ function create_donut() {
                     console.log('this is pies_data enter datum: ', d);
                      return radius * 2
         })
-            .attr('height', radius * 2)
-            .append('g')
+            .attr('height', radius * 2).style('fill-opacity', 0);
+
+    pies_pre_group.transition().duration(function(d, i) { return i*50+500}).style('fill-opacity', 1);
+
+    var pies_group = pies_pre_group.append('g')
             .attr('transform', 'translate(' + radius + ',' + radius + ')')
         .on("click", function(d, i) {
             build_modal(d, i);
