@@ -387,7 +387,7 @@ function build_modal(modal_data, modal_data_position) {
             });
 
 
-        d3.select('.modal_chart').select('svg').remove();  //<------ remove chart cut in.
+        //d3.select('.modal_chart').select('svg').remove();  //<------ remove chart cut in.
 
 
             // Define 'div' for tooltips
@@ -538,21 +538,31 @@ function build_modal(modal_data, modal_data_position) {
             var modal_outer_arc = create_arc_new({'r': radius*2, 'r_minus': 26,
                                                   'l': total_record_length, 'space_offset': 2});
 
-            var outer_arc_group = modal_chart.selectAll('.modal_arc')
-                .attr("class", 'modal_arc_outer')
-                        .data(compute_arc_array(modal_data, {outer: true}))
-                        .enter().append('g').attr('class', 'outer_arc group');
+            var outer_arcs = modal_chart.selectAll('.modal_arc').attr("class", 'modal_arc_outer');
+            var outer_arc_group_data = outer_arcs.data(compute_arc_array(modal_data, {outer: true}));
 
+            console.log('outer_arc_group_data', outer_arc_group_data);
+
+            var outer_arc_group_enter = outer_arc_group_data.enter();
+            var outer_arc_group = outer_arc_group_enter.append('g').attr('class', 'outer_arc group');
             outer_arc_group.append("path").attr("d", modal_outer_arc());
 
             build_arcs(outer_arc_group, 1);
 
+            var outer_arc_group_exit = outer_arc_group_data.exit();
+            outer_arc_group_exit.transition().duration(500).style("fill-opacity", 0).remove();
+
+
 
 
             // Build our category labels attached to arc group:
+            build_category_labels(outer_arc_group);
+
             function build_category_labels(arc_group) {
 
-                arc_group.append('svg:text')
+                var label_group = arc_group.append('g');
+
+                label_group.append('svg:text')
                 .attr("dy", ".35em")
                 .attr("text-anchor", "middle")
                 .attr('class','category_label')
@@ -591,26 +601,10 @@ function build_modal(modal_data, modal_data_position) {
 
                 return "translate"+pos;
               })
-
-
-
                 .text(function (d, i) {
                     return category_array[i];
                 });
             }
-
-            build_category_labels(outer_arc_group);
-
-
-
-            inner_modal_arcs.exit()
-                .style('fill', function(d, i){
-                   console.log('the exit function was triggered: ', d, i);
-                    return 'black';
-                })
-                .remove();
-
-
 
 
             console.log('modal chart building done');
@@ -645,7 +639,13 @@ function build_modal(modal_data, modal_data_position) {
             for (var j=0; j < data.length; j++) {
                 if (data[j].day === active_day) {
                     console.log('sending off to build modal now...', data.length, j, offset);
-                    build_modal(data[j+offset], j+offset);
+                    //build_modal(data[j+offset], j+offset);  //works.
+                    var oac = outer_arcs.data(compute_arc_array(data[j+offset], {'outer': true}));
+                    console.log('outer arcs: ', oac);
+
+
+
+                    //modal_data = data[j+offset];
                     //inner_modal_arcs.data(compute_arc_array(data[j+offset], {'outer': false}));
                     return
                 }
@@ -653,8 +653,7 @@ function build_modal(modal_data, modal_data_position) {
 
     });
 
-
-        console.log('modal chart label building is done');
+        console.log('modal chart labeling is done');
 
         // this should probably destroy chart data on modal dismiss...
 
@@ -721,13 +720,13 @@ function create_donut() {
     pies_data.exit()
         .transition()
         .duration(function(d, i) {
+            console.log('removing pie: ', d);
             return i*50;
         })
         .style("fill-opacity", 0)
     .remove();
 
     console.log('finished pie building.  starting arc/path building');
-
 
     var outer_arc = create_arc_new({'r': radius, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
     var inner_arc = create_arc_new({'r': 25, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
@@ -748,19 +747,9 @@ function create_donut() {
             else {
                 return '#DDDADA';
             }
-        })
-        .style('fill-opacity', 1);
+        });
 
-
-    svg_inner_arcs_data.exit().remove();
-
-    function inner_arc_update(new_data) {
-    //    this function should recalculate our true/false data array and rebind that, plus transition whatever we want.
-        svg_inner_arcs_data.data(function(d) {return compute_arc_array(d, {outer: false})});
-    }
-
-
-
+    //svg_inner_arcs_data.exit().transition().duration(100).remove();
 
     var svg_outer_arcs = pies_group.selectAll('.arc_outer')
         .data(function(d) {return compute_arc_array(d, {outer: true})});
@@ -779,21 +768,6 @@ function create_donut() {
                 return '#E9E2E2';
             }
         });
-
-
-    //d3.selectAll('.path').data(data).append("path")
-    //    .attr("class", "arc_outer")
-    //    .attr("d", outer_arc())
-    //    .style("fill", function(d, i) {
-    //        if (d) {
-    //            //return color(i + 1);
-    //            return colour_array[i];
-    //        }
-    //        else {
-    //            return '#E9E2E2';
-    //        }
-    //    });
-
 
 
     // svg at this point is our D3 groups:
@@ -817,11 +791,8 @@ function create_donut() {
         });
 
 
-
     //console.log('text labels: ', text_labels);
     //d3.selectAll('.legend').exit().transition().duration(2000).remove();
-
-
 
     console.log('donut done.');
 }
