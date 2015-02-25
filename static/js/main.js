@@ -456,24 +456,26 @@ function build_modal(modal_data, modal_data_position) {
                                     var current_text = $('.event_text').val();
                                     //console.log('d', d, 'event text', current_text);
 
+                                    var event_btn_sel = $('.event_btn');
+
                                     if (d && current_text) {
-                                        $('.event_btn').removeClass('disabled');
-                                        $('.event_btn').text('update');
+                                        event_btn_sel.removeClass('disabled');
+                                        event_btn_sel.text('update');
                                         return false;
                                     }
                                     else if (d && !current_text) {
-                                        $('.event_btn').removeClass('disabled');
-                                        $('.event_btn').text('remove');
+                                        event_btn_sel.removeClass('disabled');
+                                        event_btn_sel.text('remove');
                                         return true;
                                     }
                                     else if (!d && current_text) {
-                                        $('.event_btn').removeClass('disabled');
-                                        $('.event_btn').text('submit');
+                                        event_btn_sel.removeClass('disabled');
+                                        event_btn_sel.text('submit');
                                         return false;
                                     }
                                     else if (!d && !current_text) {
-                                        $('.event_btn').addClass('disabled');
-                                        $('.event_btn').text('submit');
+                                        event_btn_sel.addClass('disabled');
+                                        event_btn_sel.text('submit');
                                         return false;
                                     }
                                 }
@@ -485,6 +487,7 @@ function build_modal(modal_data, modal_data_position) {
                                 var is_update;
                                 var old_text;
                                 var delete_event = false;
+                                var event_text_sel = $('.event_text');
 
                                 if (d) {
                                     console.log('i can see a d!', i);
@@ -493,26 +496,26 @@ function build_modal(modal_data, modal_data_position) {
                                     var current_data = get_active_day_data();
                                     //console.log(current_data[category][0]);
                                     //$('.event_text').val(current_data[category][0]);
-                                    $('.event_text').attr('placeholder', current_data[category][arc_position]);
+                                    event_text_sel.attr('placeholder', current_data[category][arc_position]);
                                     is_update = true;
                                     old_text = current_data[category][arc_position];
                                     $('.delete_event_btn').show();
                                 }
                                 else {
-                                    $('.event_text').val('');
-                                    $('.event_text').attr('placeholder', '');
+                                    event_text_sel.val('');
+                                    event_text_sel.attr('placeholder', '');
                                     is_update = false;
                                     $('.delete_event_btn').hide();
                                 }
 
-                                $('.event_text').focus();
+                                event_text_sel.focus();
                                 delete_event = update_button();
 
                                 $('.event_btn').unbind().on('click', function() {
                                     send_event_from_modal(i, d, 'inner', is_update, old_text, delete_event);
                                 });
 
-                                $('.event_text').unbind().on('input', function() {
+                                event_text_sel.unbind().on('input', function() {
                                         delete_event = update_button();
                                 });
 
@@ -645,8 +648,6 @@ function build_modal(modal_data, modal_data_position) {
 
             build_arcs(outer_arc_group, 1);
                     console.log('outer arcs: ', oac); //this is giving the selection just an array...
-
-
 
                     //modal_data = data[j+offset];
                     //inner_modal_arcs.data(compute_arc_array(data[j+offset], {'outer': false}));
