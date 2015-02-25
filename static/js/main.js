@@ -2,7 +2,7 @@
  * Created by jmadison on 1/2/15.
  */
 
-
+// on init, grab our historical data:
 get_historical_data({'amount': null});
 
 
@@ -25,6 +25,7 @@ function getCookie(name) {
 }
 
 
+// closes the info box:
 document.getElementById('close').onclick = function(){
         this.parentNode.parentNode.parentNode
         .style.display = "none";
@@ -32,6 +33,8 @@ document.getElementById('close').onclick = function(){
         return false;
     };
 
+
+// closes the event input box in the modal:
 document.getElementById('event_close').onclick = function(){
         this.parentNode.parentNode
         .style.display = "none";
@@ -40,6 +43,7 @@ document.getElementById('event_close').onclick = function(){
     };
 
 
+// some cleanup to do when a modal gets dismissed:
 $('.modal').on('hidden.bs.modal', function() {
     console.log('hiding of modal is happening...');
     $('#modal_textArea').hide();
@@ -53,6 +57,7 @@ $('.modal').on('hidden.bs.modal', function() {
 
 });
 
+
 // Some Outer Scope Vars:
 var active_date;
 var active_day;
@@ -63,6 +68,7 @@ var colour_array = ["#ff8c00", "#d0743c", "#7b6888", "#98abc5"];
 var radius = 40;  // this should be altered so we only need to change the one number to affect inner & outer...
 
 
+// using "active day" find & return the full range of data for that day:
 function get_active_day_data() {
     for (var x=0; x < data.length; x++) {
         if (data[x].day === active_day) {
@@ -72,6 +78,7 @@ function get_active_day_data() {
 }
 
 
+// for saving changes to a day's notes, post the new value (if new) to server:
 $('#save_changes_btn').on('click', function () {
 
        //$('.modal').modal('hide');
@@ -121,6 +128,7 @@ $('#save_changes_btn').on('click', function () {
 });
 
 
+// send a new event, or updated/deleted event to the server:
 function send_event_from_modal(position, value, arc_pos, is_update, old_text, remove_event) {
 
     console.log('send event from modal received: ', remove_event);
@@ -175,7 +183,6 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
                         }
                         else {
                             console.log('nothing at all, apaparently... what is going on here? Buggin out!!');
-
                         }
 
 
@@ -185,6 +192,8 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
             }
 
             console.log('i received a result from the server!!!', result);
+
+    //        TODO: add some error stuff here if server freaks out
 
     })
 
@@ -197,6 +206,7 @@ function get_historical_data(options) {
 
     console.log('change month function active...');
 
+    // don't actually get data if there is no data for those days:
     if ($('#has_prev_btn').hasClass('disabled') && options.amount < 0) {
         return
     }
@@ -213,6 +223,7 @@ function get_historical_data(options) {
             $('#month_name').text(result.month);
             active_date = result.month;
 
+            // change the state of the forward/backward navigation of months:
             if (result.has_prev === 'false' || result.has_prev === false) {
                 $('#has_prev_btn').addClass('disabled')
             }
@@ -229,8 +240,8 @@ function get_historical_data(options) {
 
             data = result.data;
 
-            populate_page(result);
-            create_donut();
+            populate_page(result);  // actually builds out the table data
+            create_donut();  // creates our donuts based on new global data
 
     });
 
@@ -288,7 +299,9 @@ function populate_page(result) {
 }
 
 
+// maps our 0-100 values to pi based values that arcs can understand:
 var arcScale = d3.scale.linear().domain([0, 100]).range([0, 2*Math.PI]);
+
 
 function create_arc_new(config) {
 
@@ -793,29 +806,6 @@ function create_donut() {
 
     console.log('donut done.');
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
