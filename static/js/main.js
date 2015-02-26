@@ -193,8 +193,6 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
 
             console.log('i received a result from the server!!!', result);
 
-    //        TODO: add some error stuff here if server freaks out
-
     })
 
 

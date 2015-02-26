@@ -104,6 +104,7 @@ def update_event(request):
 
     year = date.split(' ')[-1]
 
-    controller.update_events(category, value, event_text, arc_pos, day, year, is_update, old_text, remove_event)
+    result_message = controller.update_events(category, value, event_text, arc_pos, day, year,
+                                              is_update, old_text, remove_event)
 
-    return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")
+    return HttpResponse(json.dumps({'message': result_message}), content_type="application/json")

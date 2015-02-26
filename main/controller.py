@@ -128,29 +128,38 @@ def update_events(category, value, event_text, arc_pos, day, year, is_update, ol
     date = datetime.strptime(day + ' ' + year, '%A %b %d %Y')
     print(date)
 
-    day_record = models.Day.objects.filter(date=date).first()
+    event_record = None
 
-    if delete_event == 'true':
-        print('i am attempting to delete an event')
-        event_record = models.Event.objects.filter(day_link=day_record, category=category, name=old_text).first()
+    try:
 
-        print('deleting: {0}'.format(event_record))
-        event_record.delete()
-        return 'success!'
+        day_record = models.Day.objects.filter(date=date).first()
 
-    if is_update == 'true':
-        event_record = models.Event.objects.filter(day_link=day_record, category=category, name=old_text).first()
-        event_record.name = event_text
+        if delete_event == 'true':
+            print('i am attempting to delete an event')
+            event_record = models.Event.objects.filter(day_link=day_record, category=category, name=old_text).first()
 
-    else:
-        event_record = models.Event(category=category, name=event_text, day_link=day_record)
+            print('deleting: {0}'.format(event_record))
+            event_record.delete()
+            return 'success'
 
-    event_record.save()
+        if is_update == 'true':
+            event_record = models.Event.objects.filter(day_link=day_record, category=category, name=old_text).first()
+            event_record.name = event_text
 
-    print(event_record)
+        else:
+            event_record = models.Event(category=category, name=event_text, day_link=day_record)
 
-    return 'success!'
+        event_record.save()
 
+        print(event_record)
+
+    except Exception, err:  # there must be a finer-tuned exception class to catch here.
+        print('zomg... super huge exception: {e}'.format(e=err))
+        if event_record:
+            event_record.rollback()
+        return 'there was a db error!'
+
+    return 'success'
 
 
 if __name__ == "__main__":
