@@ -570,15 +570,16 @@ function build_modal(modal_data, modal_data_position) {
 
             var outer_arc_data = compute_arc_array(modal_data, {outer: true});
 
-            var outer_arc_group_data = outer_arcs.data(outer_arc_data);
+            var outer_arc_group_data = outer_arcs.data(outer_arc_data);  //the data that we are binding is to outer arcs, and from arc_array
 
             console.log('outer_arc_group_data', outer_arc_group_data);
 
             var outer_arc_group_enter = outer_arc_group_data.enter();
+
             var outer_arc_group = outer_arc_group_enter.append('g');
             var outer_arc_paths = outer_arc_group.append("path").attr("d", modal_outer_arc());
 
-            build_arcs(outer_arc_paths, 1);  // here we're passing in a group object, and overriding it's class
+            build_arcs(outer_arc_paths, 1);  // here we're passing in paths now.
 
             var outer_arc_group_exit = outer_arc_group_data.exit();
             outer_arc_group_exit.transition().duration(500).style("fill-opacity", 0).remove();
@@ -603,6 +604,9 @@ function build_modal(modal_data, modal_data_position) {
                 outer_arc_data = compute_arc_array(new_data, {outer: true});
                 console.log('new outer array: ', outer_arc_data);
                 outer_arc_group.forEach(function(d, i) {console.log(d);});
+                outer_arc_paths.data(outer_arc_data);
+                outer_arc_paths.forEach(function(d, i) {console.log(d);});
+                build_arcs(outer_arc_paths, 1);
 
 
                 var recomputed_inner_data = compute_arc_array(new_data, {outer: false});
