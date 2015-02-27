@@ -385,10 +385,7 @@ function build_modal(modal_data, modal_data_position) {
             update_pager_buttons(modal_data_position);
 
 
-
-
             $('.modal').modal('show');
-
 
 
         // modal init stuff:
@@ -435,6 +432,10 @@ function build_modal(modal_data, modal_data_position) {
 
 
             function build_arcs(arc_obj, arc_position) {
+
+                            // This function takes in an inner/outer arc group object and adds all the window dressing
+                            // That is, mouseover junk, fill, category labels, etc.
+
                             arc_obj.attr("class", "modal_path")
                                     .style("fill", function(d, i) {
                                         if (d) {
@@ -506,7 +507,6 @@ function build_modal(modal_data, modal_data_position) {
                                 }
 
 
-
                                 $('.modal_entry').show();
 
                                 var is_update;
@@ -559,7 +559,7 @@ function build_modal(modal_data, modal_data_position) {
                         .data(compute_arc_array(modal_data, {outer: false}));
 
             inner_modal_arcs.enter().append("path").attr("d", modal_inner_arc());
-            build_arcs(inner_modal_arcs, 0);
+            build_arcs(inner_modal_arcs, 0);  // here we're passing in path elements, and adding modal_path class
 
 
             // Start building our outer arcs:
@@ -567,15 +567,18 @@ function build_modal(modal_data, modal_data_position) {
                                                   'l': total_record_length, 'space_offset': 2});
 
             var outer_arcs = modal_chart.selectAll('.modal_arc').attr("class", 'modal_arc_outer');
-            var outer_arc_group_data = outer_arcs.data(compute_arc_array(modal_data, {outer: true}));
+
+            var outer_arc_data = compute_arc_array(modal_data, {outer: true});
+
+            var outer_arc_group_data = outer_arcs.data(outer_arc_data);
 
             console.log('outer_arc_group_data', outer_arc_group_data);
 
             var outer_arc_group_enter = outer_arc_group_data.enter();
-            var outer_arc_group = outer_arc_group_enter.append('g').attr('class', 'outer_arc_group');
-            outer_arc_group.append("path").attr("d", modal_outer_arc());
+            var outer_arc_group = outer_arc_group_enter.append('g');
+            var outer_arc_paths = outer_arc_group.append("path").attr("d", modal_outer_arc());
 
-            build_arcs(outer_arc_group, 1);
+            build_arcs(outer_arc_paths, 1);  // here we're passing in a group object, and overriding it's class
 
             var outer_arc_group_exit = outer_arc_group_data.exit();
             outer_arc_group_exit.transition().duration(500).style("fill-opacity", 0).remove();
@@ -596,28 +599,33 @@ function build_modal(modal_data, modal_data_position) {
                     console.log('this is the value of d, i that I see: ', d, i);
                 });
 
-                var recomputed_outer_data = compute_arc_array(new_data, {outer: true});
+                console.log('old outer array: ', outer_arc_data);
+                outer_arc_data = compute_arc_array(new_data, {outer: true});
+                console.log('new outer array: ', outer_arc_data);
+                outer_arc_group.forEach(function(d, i) {console.log(d);});
+
+
                 var recomputed_inner_data = compute_arc_array(new_data, {outer: false});
 
-                outer_arc_maybe.transition().duration(500).style("fill", function(d, i) {
-                                        //console.log('whaaaaat?', d, i, re)
-                                        if (recomputed_outer_data[i]) {
-                                            //return color(i + 1);  // why does this change on exit/update?
-                                            return colour_array[i];
-                                        }
-                                        else {
-                                            return '#DDDADA';
-                                        }});
-
-                inner_arc_maybe.transition().duration(500).style("fill", function(d, i) {
-                                        //console.log('whaaaaat?', d, i, re)
-                                        if (recomputed_inner_data[i]) {
-                                            //return color(i + 1);  // why does this change on exit/update?
-                                            return colour_array[i];
-                                        }
-                                        else {
-                                            return '#DDDADA';
-                                        }});
+                //outer_arc_maybe.transition().duration(500).style("fill", function(d, i) {
+                //                        //console.log('whaaaaat?', d, i, re)
+                //                        if (recomputed_outer_data[i]) {
+                //                            //return color(i + 1);  // why does this change on exit/update?
+                //                            return colour_array[i];
+                //                        }
+                //                        else {
+                //                            return '#DDDADA';
+                //                        }});
+                //
+                //inner_arc_maybe.transition().duration(500).style("fill", function(d, i) {
+                //                        //console.log('whaaaaat?', d, i, re)
+                //                        if (recomputed_inner_data[i]) {
+                //                            //return color(i + 1);  // why does this change on exit/update?
+                //                            return colour_array[i];
+                //                        }
+                //                        else {
+                //                            return '#DDDADA';
+                //                        }});
 
 
 
