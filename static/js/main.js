@@ -364,16 +364,16 @@ function build_modal(modal_data, modal_data_position) {
             console.log('i have been clicked! with data point and i: ', modal_data, modal_data_position, modal_data.day,
                 data.length);
 
-            function update_pager_buttons() {
+            function update_pager_buttons(offset) {
                                     //Update pager buttons:
-                        if (modal_data_position === 0) {
+                        if (offset === 0) {
                             $('#has_prev_day_btn').addClass('disabled')
                         }
                         else {
                             $('#has_prev_day_btn').removeClass('disabled')
                         }
 
-                        if (modal_data_position+1 === data.length){
+                        if (offset+1 === data.length){
                             $('#has_next_day_btn').addClass('disabled')
                         }
                         else {
@@ -382,7 +382,7 @@ function build_modal(modal_data, modal_data_position) {
 
 
                     }
-            update_pager_buttons();
+            update_pager_buttons(modal_data_position);
 
 
 
@@ -584,26 +584,42 @@ function build_modal(modal_data, modal_data_position) {
 
             function update_arc_group(new_data, new_offset) {
 
-                console.log('modal_chart: ', modal_chart);
+                update_pager_buttons(new_offset);
+
                 var outer_arc_maybe = modal_chart.selectAll('g.modal_path');
-                console.log('arc_maybe: ', outer_arc_maybe);
+                console.log('outer arc_maybe: ', outer_arc_maybe);
+
+                var inner_arc_maybe = modal_chart.selectAll('path.modal_path');
+                console.log('inner arc_maybe: ', inner_arc_maybe);
 
                 outer_arc_maybe.forEach(function(d, i) {
                     console.log('this is the value of d, i that I see: ', d, i);
                 });
 
-                var recomputed_data = compute_arc_array(new_data, {outer: true});
+                var recomputed_outer_data = compute_arc_array(new_data, {outer: true});
+                var recomputed_inner_data = compute_arc_array(new_data, {outer: false});
 
-                console.log('this is new data: ', recomputed_data);
                 outer_arc_maybe.transition().duration(500).style("fill", function(d, i) {
                                         //console.log('whaaaaat?', d, i, re)
-                                        if (recomputed_data[i]) {
+                                        if (recomputed_outer_data[i]) {
                                             //return color(i + 1);  // why does this change on exit/update?
                                             return colour_array[i];
                                         }
                                         else {
                                             return '#DDDADA';
                                         }});
+
+                inner_arc_maybe.transition().duration(500).style("fill", function(d, i) {
+                                        //console.log('whaaaaat?', d, i, re)
+                                        if (recomputed_inner_data[i]) {
+                                            //return color(i + 1);  // why does this change on exit/update?
+                                            return colour_array[i];
+                                        }
+                                        else {
+                                            return '#DDDADA';
+                                        }});
+
+
 
 
             //    OK, so the plan is, get the updated true/false values for the new day.  from compute_arc_array.
