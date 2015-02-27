@@ -364,23 +364,35 @@ function build_modal(modal_data, modal_data_position) {
             console.log('i have been clicked! with data point and i: ', modal_data, modal_data_position, modal_data.day,
                 data.length);
 
-            //Update pager buttons:
-            if (modal_data_position === 0) {
-                $('#has_prev_day_btn').addClass('disabled')
-            }
-            else {
-                $('#has_prev_day_btn').removeClass('disabled')
-            }
+            function update_pager_buttons() {
+                                    //Update pager buttons:
+                        if (modal_data_position === 0) {
+                            $('#has_prev_day_btn').addClass('disabled')
+                        }
+                        else {
+                            $('#has_prev_day_btn').removeClass('disabled')
+                        }
 
-            if (modal_data_position+1 === data.length){
-                $('#has_next_day_btn').addClass('disabled')
-            }
-            else {
-                $('#has_next_day_btn').removeClass('disabled')
-            }
+                        if (modal_data_position+1 === data.length){
+                            $('#has_next_day_btn').addClass('disabled')
+                        }
+                        else {
+                            $('#has_next_day_btn').removeClass('disabled')
+                        }
+
+
+                    }
+            update_pager_buttons();
+
+
 
 
             $('.modal').modal('show');
+
+
+
+        // modal init stuff:
+
             $('.modal-title').text(modal_data.day);
             active_day = modal_data.day;
 
@@ -419,6 +431,8 @@ function build_modal(modal_data, modal_data_position) {
 
             modal_chart.append('g')
                 .attr("class", "labels");
+
+
 
             function build_arcs(arc_obj, arc_position) {
                             arc_obj.attr("class", "modal_path")
@@ -558,13 +572,49 @@ function build_modal(modal_data, modal_data_position) {
             console.log('outer_arc_group_data', outer_arc_group_data);
 
             var outer_arc_group_enter = outer_arc_group_data.enter();
-            var outer_arc_group = outer_arc_group_enter.append('g').attr('class', 'outer_arc group');
+            var outer_arc_group = outer_arc_group_enter.append('g').attr('class', 'outer_arc_group');
             outer_arc_group.append("path").attr("d", modal_outer_arc());
 
             build_arcs(outer_arc_group, 1);
 
             var outer_arc_group_exit = outer_arc_group_data.exit();
             outer_arc_group_exit.transition().duration(500).style("fill-opacity", 0).remove();
+
+         console.log('this is modal before data: ', modal_data);
+
+            function update_arc_group(new_data, new_offset) {
+
+                console.log('modal_chart: ', modal_chart);
+                var outer_arc_maybe = modal_chart.selectAll('g.modal_path');
+                console.log('arc_maybe: ', outer_arc_maybe);
+
+                outer_arc_maybe.forEach(function(d, i) {
+                    console.log('this is the value of d, i that I see: ', d, i);
+                });
+
+                var recomputed_data = compute_arc_array(new_data, {outer: true});
+
+                console.log('this is new data: ', recomputed_data);
+                outer_arc_maybe.transition().duration(500).style("fill", function(d, i) {
+                                        //console.log('whaaaaat?', d, i, re)
+                                        if (recomputed_data[i]) {
+                                            //return color(i + 1);  // why does this change on exit/update?
+                                            return colour_array[i];
+                                        }
+                                        else {
+                                            return '#DDDADA';
+                                        }});
+
+
+            //    OK, so the plan is, get the updated true/false values for the new day.  from compute_arc_array.
+            //    select all of the arc group, feed in a new path d and maybe transition or whatever.
+            //    I don't actually need to draw the arcs.. i just need to change their colour..
+
+
+
+            }
+
+
 
 
 
@@ -652,13 +702,15 @@ function build_modal(modal_data, modal_data_position) {
 
             for (var j=0; j < data.length; j++) {
                 if (data[j].day === active_day) {
-                    console.log('sending off to build modal now...', data.length, j, offset);
-                    //build_modal(data[j+offset], j+offset);  //works.
-                    var oac = outer_arcs.data(compute_arc_array(data[j+offset], {'outer': true})).append('g').attr('class', 'outer_arc group');
-            outer_arc_group.append("path").attr("d", modal_outer_arc());
+                    //console.log('sending off to build modal now...', data.length, j, offset);
+                    //build_modal(data[j+offset], j+offset);  //works
+                    update_arc_group(data[j+offset], j+offset);
 
-            build_arcs(outer_arc_group, 1);
-                    console.log('outer arcs: ', oac); //this is giving the selection just an array...
+                    //var oac = outer_arcs.data(compute_arc_array(data[j+offset], {'outer': true})).append('g').attr('class', 'outer_arc group');
+                    //outer_arc_group.append("path").attr("d", modal_outer_arc());
+
+                    //build_arcs(outer_arc_group, 1);
+                    //console.log('outer arcs: ', oac); //this is giving the selection just an array...
 
                     //modal_data = data[j+offset];
                     //inner_modal_arcs.data(compute_arc_array(data[j+offset], {'outer': false}));
@@ -704,11 +756,11 @@ function create_donut() {
     var pies_pre_group = pies_data_enter.append('svg')
             .attr('class', 'pie')
         .attr('id', function (d) {
-            console.log('adding id: ', d.day);
+            //console.log('adding id: ', d.day);
             return d.day;
         })
             .attr('width', function(d) {
-                    console.log('this is pies_data enter datum: ', d);
+                    //console.log('this is pies_data enter datum: ', d);
                      return radius * 2
         })
             .attr('height', radius * 2).style('fill-opacity', 0);
@@ -789,7 +841,7 @@ function create_donut() {
         .attr("fill", "rgb(128,128,128)")
         .style("text-anchor", "middle")
         .text(function(d, i, j) {
-            console.log('text function has this d: ', d, j);
+            //console.log('text function has this d: ', d, j);
             if (d.day) {
                 return d.day.split(' ')[2];
             }

@@ -150,7 +150,6 @@ def update_events(category, value, event_text, arc_pos, day, year, is_update, ol
             event_record = models.Event(category=category, name=event_text, day_link=day_record)
 
         event_record.save()
-
         print(event_record)
 
     except Exception, err:  # there must be a finer-tuned exception class to catch here.
