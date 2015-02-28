@@ -436,17 +436,19 @@ function build_modal(modal_data, modal_data_position) {
                             // That is, mouseover junk, fill, category labels, etc.
 
                             arc_obj.attr("class", "modal_path")
+                                    .style("fill", '#DDDADA').transition().duration(500)
                                     .style("fill", function(d, i) {
                                         if (d) {
-                                            //return color(i + 1);  // why does this change on exit/update?
                                             return colour_array[i];
-
                                         }
                                         else {
                                             return '#DDDADA';
-                                        }})
+                                            }
 
-                            .on("mouseover", function(d, i) {
+                                });
+
+
+                            arc_obj.on("mouseover", function(d, i) {
                                 var category = category_array[i];
                                 var current_data = get_active_day_data();
 
@@ -647,13 +649,16 @@ function build_modal(modal_data, modal_data_position) {
 
             function build_category_labels(arc_group) {
 
-                var label_group = arc_group.append('g');
+                var label_group = arc_group.append('g').append('svg:text');
 
-                label_group.append('svg:text')
+                label_group
                 .attr("dy", ".35em")
                 .attr("text-anchor", "middle")
-                .attr('class','category_label')
-                .style("fill", function(d, i) {
+                .attr('class','category_label');
+
+                label_group.style("fill", "#DDDADA");
+
+                label_group.transition().duration(500).style("fill", function(d, i) {
 
                     var current_data = get_active_day_data();
                     if (!current_data[category_array[i]][0] && !current_data[category_array[i]][1]) {
@@ -662,9 +667,10 @@ function build_modal(modal_data, modal_data_position) {
                     else {
                         return colour_array[i];
                     }
-                })
-                .style("font", "bold 14px Helvetica")
-              .attr("transform", function(d, i) { //set the label's origin to the center of the arc
+                });
+
+                label_group.style("font", "bold 14px Helvetica")
+                        .attr("transform", function(d, i) { //set the label's origin to the center of the arc
                 //we have to make sure to set these before calling arc.centroid
                     console.log(d);
                     var pos;
