@@ -129,3 +129,28 @@ Needed still:
 
 
 
+======
+Okay where are we at?
+-> (enhance) add a to-do list popup?
+-> (enhance) add a user model/login
+-> (enhance) deploy to an actual site?
+
+-> update main page pie when event added/removed
+-> update modal when event removed
+-> update table when event added/removed
+-> update main text
+-> update screenshots
+
+
+
+
+
+
+
+
+
+
+
+
+
+

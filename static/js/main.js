@@ -642,8 +642,6 @@ function build_modal(modal_data, modal_data_position) {
 
 
 
-
-
             // Build our category labels attached to arc group:
             build_category_labels(outer_arc_group);
 
