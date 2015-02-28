@@ -164,28 +164,26 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
             }
 
             else {
-                for (var each_datum in data) {
-                    if (data[each_datum].day === active_day) {
+                for (var i=0; i < data.length; i++) {
+                    if (data[i].day === active_day) {
                         console.log('found the event day that I need to update');
-                        console.log(data[each_datum]);
-
-
+                        console.log(data[i]);
 
                         // crap.. so after adding to the array, it also needs to:
                         // redraw the modal, update the main view, and update the table.. ugh.
-                        if (data[each_datum][category][0]===null) {
+                        if (data[i][category][0]===null) {
                             console.log('yep, its null');
-                            data[each_datum][category][0] = event_text;
+                            data[i][category][0] = event_text;
                         }
-                        else if (data[each_datum][category][1]===null) {
+                        else if (data[i][category][1]===null) {
                             console.log('nope, second one is empty though');
-                            data[each_datum][category][1] = event_text;
+                            data[i][category][1] = event_text;
                         }
                         else {
-                            console.log('nothing at all, apaparently... what is going on here? Buggin out!!');
+                            console.log('nothing at all, apparently... what is going on here? Buggin out!!');
                         }
 
-
+                        build_modal(data[i], i);
                     }
 
                 }
@@ -407,7 +405,8 @@ function build_modal(modal_data, modal_data_position) {
             });
 
 
-        //d3.select('.modal_chart').select('svg').remove();  //<------ remove chart cut in.
+        console.log('removing original chart.');
+        d3.select('.modal_chart').select('svg').remove();  //<------ remove chart cut in.
 
 
             // Define 'div' for tooltips
@@ -727,8 +726,8 @@ function build_modal(modal_data, modal_data_position) {
             for (var j=0; j < data.length; j++) {
                 if (data[j].day === active_day) {
                     //console.log('sending off to build modal now...', data.length, j, offset);
-                    //build_modal(data[j+offset], j+offset);  //works
-                    update_arc_group(data[j+offset], j+offset);
+                    build_modal(data[j+offset], j+offset);  //works
+                    //update_arc_group(data[j+offset], j+offset);
 
                     //var oac = outer_arcs.data(compute_arc_array(data[j+offset], {'outer': true})).append('g').attr('class', 'outer_arc group');
                     //outer_arc_group.append("path").attr("d", modal_outer_arc());
