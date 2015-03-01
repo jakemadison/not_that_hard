@@ -34,6 +34,38 @@ document.getElementById('close').onclick = function(){
     };
 
 
+// year modal stuff:
+
+function build_year_modal() {
+    $('.year_modal').modal('show');
+
+
+    function create_year(year_data) {
+
+        console.log('create year is active with data: ', year_data);
+
+        d3.select('.year_modal_chart').append('svg')
+            .attr("class", 'year_chart')
+            .attr("width", 500)
+            .attr("height", 500);
+
+    }
+
+
+    $.get('get_year_data', function(result) {
+        console.log('received year data: ', result);
+        create_year(result.data);
+    })
+
+
+}
+
+
+
+
+
+
+
 // closes the event input box in the modal:
 document.getElementById('event_close').onclick = function(){
         this.parentNode.parentNode

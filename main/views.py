@@ -50,6 +50,13 @@ def get_historical_data(request):
                         content_type="application/json")
 
 
+def get_year_data(request):
+    print('getting year data now')
+
+    return HttpResponse(json.dumps({'message': 'success', 'data': 'data payload'}), content_type="application/json")
+
+
+
 @require_POST
 @csrf_exempt  # temp hack, because csrf junk is BORING
 def update_stuff(request):
