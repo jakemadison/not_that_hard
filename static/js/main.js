@@ -44,7 +44,7 @@ document.getElementById('event_close').onclick = function(){
 
 
 // some cleanup to do when a modal gets dismissed:
-$('.modal').on('hidden.bs.modal', function() {
+$('.day_modal').on('hidden.bs.modal', function() {
     console.log('hiding of modal is happening...');
     $('#modal_textArea').hide();
     $('.modal_notes').show();
@@ -383,7 +383,7 @@ function build_modal(modal_data, modal_data_position) {
             update_pager_buttons(modal_data_position);
 
 
-            $('.modal').modal('show');
+            $('.day_modal').modal('show');
 
 
         // modal init stuff:
