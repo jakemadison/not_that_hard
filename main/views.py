@@ -53,7 +53,9 @@ def get_historical_data(request):
 def get_year_data(request):
     print('getting year data now')
 
-    return HttpResponse(json.dumps({'message': 'success', 'data': 'data payload'}), content_type="application/json")
+    result = controller.construct_year_data()
+
+    return HttpResponse(json.dumps({'message': 'success', 'data': result}), content_type="application/json")
 
 
 
