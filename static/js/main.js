@@ -34,6 +34,38 @@ document.getElementById('close').onclick = function(){
     };
 
 
+// year modal stuff:
+
+function build_year_modal() {
+    $('.year_modal').modal('show');
+
+
+    function create_year(year_data) {
+
+        console.log('create year is active with data: ', year_data);
+
+        d3.select('.year_modal_chart').append('svg')
+            .attr("class", 'year_chart')
+            .attr("width", 500)
+            .attr("height", 500);
+
+    }
+
+
+    $.get('get_year_data', function(result) {
+        console.log('received year data: ', result);
+        create_year(result.data);
+    })
+
+
+}
+
+
+
+
+
+
+
 // closes the event input box in the modal:
 document.getElementById('event_close').onclick = function(){
         this.parentNode.parentNode
@@ -44,7 +76,7 @@ document.getElementById('event_close').onclick = function(){
 
 
 // some cleanup to do when a modal gets dismissed:
-$('.modal').on('hidden.bs.modal', function() {
+$('.day_modal').on('hidden.bs.modal', function() {
     console.log('hiding of modal is happening...');
     $('#modal_textArea').hide();
     $('.modal_notes').show();
@@ -164,28 +196,26 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
             }
 
             else {
-                for (var each_datum in data) {
-                    if (data[each_datum].day === active_day) {
+                for (var i=0; i < data.length; i++) {
+                    if (data[i].day === active_day) {
                         console.log('found the event day that I need to update');
-                        console.log(data[each_datum]);
-
-
+                        console.log(data[i]);
 
                         // crap.. so after adding to the array, it also needs to:
                         // redraw the modal, update the main view, and update the table.. ugh.
-                        if (data[each_datum][category][0]===null) {
+                        if (data[i][category][0]===null) {
                             console.log('yep, its null');
-                            data[each_datum][category][0] = event_text;
+                            data[i][category][0] = event_text;
                         }
-                        else if (data[each_datum][category][1]===null) {
+                        else if (data[i][category][1]===null) {
                             console.log('nope, second one is empty though');
-                            data[each_datum][category][1] = event_text;
+                            data[i][category][1] = event_text;
                         }
                         else {
-                            console.log('nothing at all, apaparently... what is going on here? Buggin out!!');
+                            console.log('nothing at all, apparently... what is going on here? Buggin out!!');
                         }
 
-
+                        build_modal(data[i], i);
                     }
 
                 }
@@ -385,7 +415,7 @@ function build_modal(modal_data, modal_data_position) {
             update_pager_buttons(modal_data_position);
 
 
-            $('.modal').modal('show');
+            $('.day_modal').modal('show');
 
 
         // modal init stuff:
@@ -407,7 +437,8 @@ function build_modal(modal_data, modal_data_position) {
             });
 
 
-        //d3.select('.modal_chart').select('svg').remove();  //<------ remove chart cut in.
+        console.log('removing original chart.');
+        d3.select('.modal_chart').select('svg').remove();  //<------ remove chart cut in.
 
 
             // Define 'div' for tooltips
@@ -437,17 +468,19 @@ function build_modal(modal_data, modal_data_position) {
                             // That is, mouseover junk, fill, category labels, etc.
 
                             arc_obj.attr("class", "modal_path")
+                                    .style("fill", '#DDDADA').transition().duration(500)
                                     .style("fill", function(d, i) {
                                         if (d) {
-                                            //return color(i + 1);  // why does this change on exit/update?
                                             return colour_array[i];
-
                                         }
                                         else {
                                             return '#DDDADA';
-                                        }})
+                                            }
 
-                            .on("mouseover", function(d, i) {
+                                });
+
+
+                            arc_obj.on("mouseover", function(d, i) {
                                 var category = category_array[i];
                                 var current_data = get_active_day_data();
 
@@ -645,20 +678,21 @@ function build_modal(modal_data, modal_data_position) {
 
 
 
-
-
             // Build our category labels attached to arc group:
             build_category_labels(outer_arc_group);
 
             function build_category_labels(arc_group) {
 
-                var label_group = arc_group.append('g');
+                var label_group = arc_group.append('g').append('svg:text');
 
-                label_group.append('svg:text')
+                label_group
                 .attr("dy", ".35em")
                 .attr("text-anchor", "middle")
-                .attr('class','category_label')
-                .style("fill", function(d, i) {
+                .attr('class','category_label');
+
+                label_group.style("fill", "#DDDADA");
+
+                label_group.transition().duration(500).style("fill", function(d, i) {
 
                     var current_data = get_active_day_data();
                     if (!current_data[category_array[i]][0] && !current_data[category_array[i]][1]) {
@@ -667,9 +701,10 @@ function build_modal(modal_data, modal_data_position) {
                     else {
                         return colour_array[i];
                     }
-                })
-                .style("font", "bold 14px Helvetica")
-              .attr("transform", function(d, i) { //set the label's origin to the center of the arc
+                });
+
+                label_group.style("font", "bold 14px Helvetica")
+                        .attr("transform", function(d, i) { //set the label's origin to the center of the arc
                 //we have to make sure to set these before calling arc.centroid
                     console.log(d);
                     var pos;
@@ -731,8 +766,8 @@ function build_modal(modal_data, modal_data_position) {
             for (var j=0; j < data.length; j++) {
                 if (data[j].day === active_day) {
                     //console.log('sending off to build modal now...', data.length, j, offset);
-                    //build_modal(data[j+offset], j+offset);  //works
-                    update_arc_group(data[j+offset], j+offset);
+                    build_modal(data[j+offset], j+offset);  //works
+                    //update_arc_group(data[j+offset], j+offset);
 
                     //var oac = outer_arcs.data(compute_arc_array(data[j+offset], {'outer': true})).append('g').attr('class', 'outer_arc group');
                     //outer_arc_group.append("path").attr("d", modal_outer_arc());

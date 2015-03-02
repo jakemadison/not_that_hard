@@ -46,8 +46,12 @@
         <span aria-hidden="true">&raquo;</span>
       </a>
     </li>
+  <li><a href="#" id="calendar_btn" onclick="build_year_modal();">
+      <span class="glyphicon" aria-hidden="true">C</span></a></li>
+
   </ul>
 </nav>
+
 </div>
 
 
@@ -55,9 +59,39 @@
 
 <p class="lead text-muted pull-right">It's not that hard. &nbsp;</p>
 
+
+<div class="modal year_modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+{#          <span class="event_title pull-right">.</span>#}
+        <h4 class="year-modal-title">Year View</h4>
+      </div>
+
+      <div class="modal-body">
+          <div class="well well-sm">
+              <div class="year_modal_chart"></div>
+          </div>
+
+      </div>
+      <div class="modal-footer"></div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
 {#<div>&nbsp;</div>#}
 
-<div class="modal">
+<div class="modal day_modal">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

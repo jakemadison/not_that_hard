@@ -79,6 +79,19 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
     return parsed_data_array, month_name + ' ' + year, has_next, has_prev, category_counts
 
 
+def construct_year_data():
+
+    # this function should build out totals per category, per month, which will get used to build a real
+    # choropleth map of each month:
+
+    # {'Jan 2015': {'arts': 10, 'smarts': 5, 'health': 10, 'wealth': 15}
+    #  'Feb 2015': {'arts': 12, 'smarts': 25, 'health': 13, 'wealth': 10}
+    #  (etc...)
+    # }
+
+    return 'payload'
+
+
 def update_day_table_to_current():
     print('updating day table to current')
 
