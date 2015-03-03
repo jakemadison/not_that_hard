@@ -89,7 +89,21 @@ def construct_year_data():
     #  (etc...)
     # }
 
-    return 'payload'
+    historical_data = models.Day.objects.all().order_by('date')
+
+    year_array = {}
+
+    for each_day in historical_data:
+        event_data = each_day.events.all()
+        for each_event in event_data:
+            if datetime.strftime(each_day.date, '%b %y') not in year_array:
+                year_array[datetime.strftime(each_day.date, '%b %y')] = {'arts': 0, 'smarts': 0,
+                                                                         'health': 0, 'wealth': 0}
+            year_array[datetime.strftime(each_day.date, '%b %y')][each_event.category] += 1
+
+    print(year_array)
+
+    return year_array
 
 
 def update_day_table_to_current():
