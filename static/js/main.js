@@ -47,7 +47,7 @@ function build_year_modal() {
         d3.select('.year_modal_chart').append('svg')
             .attr("class", 'year_chart')
             .attr("width", 500)
-            .attr("height", 500);
+            .attr("height", 100);
 
     }
 
@@ -60,6 +60,10 @@ function build_year_modal() {
 
 }
 
+$('.year_modal').on('hidden.bs.modal', function() {
+    console.log('year modal hidden!');
+    d3.select('.year_chart').remove();
+});
 
 
 
