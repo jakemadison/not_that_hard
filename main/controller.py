@@ -91,10 +91,6 @@ def construct_year_data():
 
     historical_data = models.Day.objects.all().order_by('date')
 
-    first_month = datetime.strftime(historical_data[0].date, '%b %y')
-
-    category_counter = {'arts': 0, 'smarts': 0, 'health': 0, 'wealth': 0}
-
     year_array = {}
 
     for each_day in historical_data:
