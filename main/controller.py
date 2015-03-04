@@ -129,6 +129,8 @@ def update_day_table_to_current():
 
 def update_day_notes(day, year, notes):
 
+    print('update day notes function is active')
+
     parse_date = datetime.strptime(day+' '+year, '%A %b %d %Y')
     existing_record = models.Day.objects.filter(date=parse_date)[0]
 
