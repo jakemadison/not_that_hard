@@ -67,7 +67,7 @@ def update_stuff(request):
     c = {}
     c.update(csrf(request))
 
-    new_notes = request.POST.get('new_notes', None)
+    new_notes = request.POST.get('new_notes', None).encode('utf-8')
     day = request.POST.get('day', None)
     date = request.POST.get('date', None)
 
