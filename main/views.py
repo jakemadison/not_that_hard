@@ -71,10 +71,17 @@ def update_stuff(request):
     day = request.POST.get('day', None)
     date = request.POST.get('date', None)
 
+    print('got parameters')
+
     if new_notes is not None and day is not None and date is not None:
         year = date.split(' ')[-1]
-        print('i received the following notes: {n}, {d}, {dt}'.format(n=new_notes, d=day, dt=date))
-        operation_result = controller.update_day_notes(day, year, new_notes)
+
+        try:
+            print('i received the following notes: {n}, {d}, {dt}'.format(n=new_notes, d=day, dt=date))
+            operation_result = controller.update_day_notes(day, year, new_notes)
+        except UnicodeEncodeError, u:
+            print('god damn I hate encodings {0}'.format(u))
+            operation_result = 'Encoding Error :<'
 
     else:
         print('apparently I got nothing...')
