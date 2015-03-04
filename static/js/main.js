@@ -43,10 +43,25 @@ function build_year_modal() {
 
         console.log('create year is active with data: ', year_data);
 
-        d3.select('.year_modal_chart').append('svg')
+        var year_chart = d3.select('.year_modal_chart').append('svg')
             .attr("class", 'year_chart')
             .attr("width", 500)
             .attr("height", 100);
+
+        var keyFnYr = function(d, i) {console.log(d, i); return i};
+
+        var year_pies_enter = year_chart.selectAll('.year_pie').data(year_data, keyFnYr).enter();
+        console.log(year_pies_enter);
+
+        var year_pie_group = year_pies_enter.append('svg')
+            .attr('width', 160)
+            .attr('height', 160)
+            .append('g')
+            .attr('transform', 'translate(' + 80 + ',' + 80 + ')');
+
+        var year_arc = create_arc_new({'r':80, 'r_minus':13, 'l': 4, 'space_offset': 0});
+
+
     }
 
 
