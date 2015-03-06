@@ -41,6 +41,8 @@ function build_year_modal() {
 
     function create_year(year_data) {
 
+        year_data = [1,2,3,4,5];
+
         console.log('create year is active with data: ', year_data);
 
         var year_chart = d3.select('.year_modal_chart').append('svg')
@@ -60,6 +62,12 @@ function build_year_modal() {
             .attr('transform', 'translate(' + 80 + ',' + 80 + ')');
 
         var year_arc = create_arc_new({'r':80, 'r_minus':13, 'l': 4, 'space_offset': 0});
+
+        year_pie_group.append("path").attr("class", "year_arc")
+            .attr("d", year_arc())
+            .style("fill", function (d, i) {
+                return '#DDDADA';
+            });
 
 
     }
