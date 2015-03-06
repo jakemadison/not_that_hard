@@ -2,6 +2,7 @@ svg {  margin: 2px;  }
 
 .arc {  stroke: #fff;  }
 
+
 .description_text {
     max-width: 900px;
     word-wrap: break-word;
@@ -198,3 +199,4 @@ div.tooltip {
 
 }
 
+.year_arc {  stroke: #fff;  }
