@@ -6,7 +6,6 @@
 get_historical_data({'amount': null});
 
 
-
 // Helper stuff:
 function getCookie(name) {
     var cookieValue = null;
@@ -37,7 +36,6 @@ document.getElementById('close').onclick = function(){
 // year modal stuff:
 function build_year_modal() {
     $('.year_modal').modal('show');
-
 
     function create_year(year_data) {
 
@@ -84,7 +82,6 @@ function build_year_modal() {
 
     }
 
-
     $.get('get_year_data', function(result) {
         console.log('received year data: ', result);
         create_year(result.data);
@@ -98,8 +95,6 @@ $('.year_modal').on('hidden.bs.modal', function() {
     console.log('year modal hidden!');
     d3.select('.year_chart').remove();
 });
-
-
 
 
 
@@ -122,7 +117,6 @@ $('.day_modal').on('hidden.bs.modal', function() {
 
     $('.event_text').val('');
     $('.modal_entry').hide();
-
 
 });
 
@@ -200,7 +194,7 @@ $('#save_changes_btn').on('click', function () {
 // send a new event, or updated/deleted event to the server:
 function send_event_from_modal(position, value, arc_pos, is_update, old_text, remove_event) {
 
-    console.log('send event from modal received: ', remove_event);
+    //console.log('send event from modal received: ', remove_event);
 
     var category = category_array[position];
 
@@ -224,7 +218,6 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
                              'old_text': old_text, 'remove_event': remove_event},
 
         function(result) {
-
 
             if (result.message !== 'success') {
                console.log('failure!!');
@@ -829,9 +822,9 @@ function build_modal(modal_data, modal_data_position) {
 // Draw out our pies:
 function create_donut() {
 
-    console.log('create donut... ');
+    //console.log('create donut... ');
     console.log('data ->', data);
-    console.log('object keys: ', Object.keys(data[0]));
+    //console.log('object keys: ', Object.keys(data[0]));
 
     var pie = d3.layout.pie()
         .sort(null)
@@ -932,7 +925,6 @@ function create_donut() {
 
     // svg at this point is our D3 groups:
     console.log('svg ->', pies_group);
-
 
     // this should only happen once...
     pies_group.append("text")
