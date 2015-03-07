@@ -200,3 +200,12 @@ div.tooltip {
 }
 
 .year_arc {  stroke: #fff;  }
+
+
+.year_pie {
+    cursor: pointer;
+    opacity: .8;
+    border: none;
+}
+
+.year_pie:hover {  opacity: 1;  }

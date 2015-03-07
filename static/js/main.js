@@ -57,6 +57,7 @@ function build_year_modal() {
         var year_pie_group = year_pies_enter.append('svg')
             .attr('width', 160)
             .attr('height', 160)
+            .attr('class', 'year_pie')
             .append('g')
             .attr('transform', 'translate(' + 80 + ',' + 80 + ')');
 
