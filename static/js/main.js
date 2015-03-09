@@ -714,18 +714,22 @@ function build_modal(modal_data, modal_data_position) {
 
             function build_category_labels(arc_group) {
 
+                var current_data = get_active_day_data();
+
                 var label_group = arc_group.append('g').append('svg:text');
 
                 label_group
                 .attr("dy", ".35em")
                 .attr("text-anchor", "middle")
-                .attr('class','category_label');
+                .attr('class', function(d, i) {
+                     return 'category_label '+category_array[i];
+                    });
 
                 label_group.style("fill", "#DDDADA");
 
                 label_group.transition().duration(500).style("fill", function(d, i) {
 
-                    var current_data = get_active_day_data();
+
                     if (!current_data[category_array[i]][0] && !current_data[category_array[i]][1]) {
                         return '#DDDADA';
                     }
