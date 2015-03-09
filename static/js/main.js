@@ -573,6 +573,9 @@ function build_modal(modal_data, modal_data_position) {
 
                                 $('.modal_entry').show();
 
+                                    $('.category_label.'+category_array[i]).addClass('modal_active_'+category_array[i]); // does not work?
+                                    //$('.category_label.'+category_array[i]).text('modal_ac');
+
                                 var is_update;
                                 var old_text;
                                 var delete_event = false;

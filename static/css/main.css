@@ -105,6 +105,11 @@ svg {  margin: 2px;  }
 
 /*MODAL PREFERENCES: */
 
+.modal_active_health {fill: #98abc5;}
+.modal_active_wealth {fill: #7b6888;}
+.modal_active_arts {fill: #ff8c00;}
+.modal_active_smarts {fill: #d0743c;}
+
 .modal_content_table {  float: right;  }
 
 .modal_path {
