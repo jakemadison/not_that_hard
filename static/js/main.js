@@ -24,28 +24,32 @@ function build_year_modal() {
 
         console.log('create year is active with data: ', year_data);
 
-        var year_chart = d3.select('.year_modal_chart').append('svg')
-            .attr("class", 'year_chart')
-            .attr("width", 500)
-            .attr("height", 200);
+        var year_chart = d3.select('.year_modal_chart');
+            //.append('svg')
+            //.attr("class", 'year_chart')
+            //.attr("width", 500)
+            //.attr("height", 200);
 
         var keyFnYr = function(d, i) {console.log(d, i); return i};
-        var year_arc = create_arc_new({'r':80, 'r_minus':50, 'l': 4, 'space_offset': 0});
 
-        var year_pies_enter = year_chart.selectAll('.year_pie').data(year_data, keyFnYr).enter();
-        console.log(year_pies_enter);
-
-        var year_pie_group = year_pies_enter.append('svg')
+        var years_pie = year_chart.selectAll('.years_pie').data(year_data, keyFnYr);
+        var year_pies_enter = years_pie.enter();
+        var year_pie_group = year_pies_enter.append('svg').attr('class', 'years_pie')
             .attr('width', 160)
-            .attr('height', 160)
-            .attr('class', 'year_pie')
-            .append('g')
-            .attr('transform', 'translate(' + 80 + ',' + 80 + ')');
+            .attr('height', 160).append('g')
+            .attr('transform', 'translate('+80 +','+80+')');
+
+        //var year_pie_group = year_pre_group;
+
+        var year_arc = create_arc_new({'r':80, 'r_minus':50, 'l': 4, 'space_offset': 0});
+        var year_arc_enter = year_pie_group.selectAll('.year_arc').data(year_data, keyFnYr).enter();
+
+
 
         //var each_year_data = year_pie_group.selectAll('.year_arc').data(function(d) {return d});
 
 
-        year_pie_group
+        year_arc_enter
             .append("path").attr("class", "year_arc")
             .attr("d", year_arc())
             .style("fill", function (d, i) {
