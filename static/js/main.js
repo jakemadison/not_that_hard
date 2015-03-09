@@ -20,6 +20,8 @@ function build_year_modal() {
 
     function create_year(year_data) {
 
+        var radius_year = 60;
+
         year_data = [1,2,3,4,5];
 
         console.log('create year is active with data: ', year_data);
@@ -30,18 +32,18 @@ function build_year_modal() {
             //.attr("width", 500)
             //.attr("height", 200);
 
-        var keyFnYr = function(d, i) {console.log(d, i); return i};
+        var keyFnYr = function(d, i) {console.log('me! keyfn!', d, i); return i};
 
         var years_pie = year_chart.selectAll('.years_pie').data(year_data, keyFnYr);
         var year_pies_enter = years_pie.enter();
         var year_pie_group = year_pies_enter.append('svg').attr('class', 'years_pie')
-            .attr('width', 160)
-            .attr('height', 160).append('g')
-            .attr('transform', 'translate('+80 +','+80+')');
+            .attr('width', radius_year*2)
+            .attr('height', radius_year*2).append('g')
+            .attr('transform', 'translate('+radius_year +','+radius_year+')');
 
         //var year_pie_group = year_pre_group;
 
-        var year_arc = create_arc_new({'r':80, 'r_minus':50, 'l': 4, 'space_offset': 0});
+        var year_arc = create_arc_new({'r':radius_year, 'r_minus':radius_year-20, 'l': 4, 'space_offset': 0});
         var year_arc_enter = year_pie_group.selectAll('.year_arc').data(year_data, keyFnYr).enter();
 
 
