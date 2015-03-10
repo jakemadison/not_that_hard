@@ -22,7 +22,11 @@ function build_year_modal() {
 
         var radius_year = 60;
 
-        year_data = [1,2,3,4,5];
+        // btw, here (or probable in the controller actually) we should deliver data as a
+        // percentage of total days (total events / days in month * 2) to normalize across
+        // different month lengths, including whatever the current month is.
+
+        //year_data = [1,2,3,4,5];
 
         console.log('create year is active with data: ', year_data);
 
@@ -32,7 +36,7 @@ function build_year_modal() {
             //.attr("width", 500)
             //.attr("height", 200);
 
-        var keyFnYr = function(d, i) {console.log('me! keyfn!', d, i); return i};
+        var keyFnYr = function(d, i) {console.log('me! keyfn!', d, i); return d.date};
 
         var years_pie = year_chart.selectAll('.years_pie').data(year_data, keyFnYr);
         var year_pies_enter = years_pie.enter();
@@ -43,20 +47,33 @@ function build_year_modal() {
 
         //var year_pie_group = year_pre_group;
 
+        var keyArcFn = function(y_data) {console.log('i am the arc key fn!', y_data);
+
+            var ratio_array = [];
+
+            for (var x=0; x<category_array.length; x++) {
+                var curr_cat = category_array[x];
+                ratio_array.push(y_data.cat_data[curr_cat]/(y_data.total_days*2));
+            }
+
+            console.log('ratio array: ', ratio_array);
+
+            return ratio_array;};
+
         var year_arc = create_arc_new({'r':radius_year, 'r_minus':radius_year-20, 'l': 4, 'space_offset': 0});
-        var year_arc_enter = year_pie_group.selectAll('.year_arc').data(year_data, keyFnYr).enter();
-
-
+        var year_arc_enter = year_pie_group.selectAll('.year_arc').data(function(d, i) {return keyArcFn(year_data[i])}).enter();
 
         //var each_year_data = year_pie_group.selectAll('.year_arc').data(function(d) {return d});
-
 
         year_arc_enter
             .append("path").attr("class", "year_arc")
             .attr("d", year_arc())
             .style("fill", function (d, i) {
-                return '#DDDADA';
-            });
+                console.log('color here: ', d, i);
+                return colour_array[i];
+                //return '#DDDADA';
+            })
+            .style('opacity', function(d) { return d;});
 
 
         year_pie_group.append("text")
@@ -65,7 +82,7 @@ function build_year_modal() {
             .attr("fill", "rgb(128,128,128)")
             .style("text-anchor", "middle")
             .text(function (d) {
-                return d;
+                return d.date;
             });
 
     }
