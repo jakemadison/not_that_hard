@@ -202,8 +202,8 @@ def update_events(category, value, event_text, arc_pos, day, year, is_update, ol
 
     except Exception, err:  # there must be a finer-tuned exception class to catch here.
         print('zomg... super huge exception: {e}'.format(e=err))
-        if event_record:
-            event_record.rollback()
+        # if event_record:
+        #     event_record.rollback()  # there is no rolling back
         return 'there was a db error!'
 
     return 'success'
