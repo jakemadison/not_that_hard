@@ -123,6 +123,8 @@ $('.day_modal').on('hidden.bs.modal', function() {
     $('.event_text').val('');
     $('.modal_entry').hide();
 
+    $('.modal_alert').show();
+
 });
 
 

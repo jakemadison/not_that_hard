@@ -113,11 +113,11 @@ def update_event(request):
     old_text = request.POST.get('old_text', None)
     remove_event = request.POST.get('remove_event', None)
 
-    print('i received a bunch of vals!! {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}'.format(category, event_text,
+    print('i received a bunch of vals!! {0}, {1}, {2}, {3}, {4}, {5}, {6}'.format(category, event_text,
                                                                                             day, date,
                                                                                             is_update,
                                                                                             old_text, remove_event))
-
+    print('trying....')
     year = date.split(' ')[-1]
 
     result_message = controller.update_events(category, event_text, day, year,
