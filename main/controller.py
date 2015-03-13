@@ -168,7 +168,7 @@ def update_day_notes(day, year, notes):
         return 'success'
 
 
-def update_events(category, value, event_text, arc_pos, day, year, is_update, old_text, delete_event):
+def update_events(category, event_text, day, year, is_update, old_text, delete_event):
 
     # category_array = ['arts', 'smarts', 'wealth', 'health']
     print('i believe that {0} is category: {1}'.format(event_text, category))
@@ -176,7 +176,7 @@ def update_events(category, value, event_text, arc_pos, day, year, is_update, ol
     date = datetime.strptime(day + ' ' + year, '%A %b %d %Y')
     print(date)
 
-    event_record = None
+    # event_record = None
 
     try:
 

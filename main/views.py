@@ -113,14 +113,14 @@ def update_event(request):
     old_text = request.POST.get('old_text', None)
     remove_event = request.POST.get('remove_event', None)
 
-    print('i received a bunch of vals!! {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}'.format(category, value, event_text,
-                                                                                            arc_pos, day, date,
+    print('i received a bunch of vals!! {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}'.format(category, event_text,
+                                                                                            day, date,
                                                                                             is_update,
                                                                                             old_text, remove_event))
 
     year = date.split(' ')[-1]
 
-    result_message = controller.update_events(category, value, event_text, arc_pos, day, year,
+    result_message = controller.update_events(category, event_text, day, year,
                                               is_update, old_text, remove_event)
 
     return HttpResponse(json.dumps({'message': result_message}), content_type="application/json")
