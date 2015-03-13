@@ -60,8 +60,8 @@ WSGI_APPLICATION = 'not_that_hard.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'test_db.sqlite3'),  # Test DB
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Personal DB
+        # 'NAME': os.path.join(BASE_DIR, 'test_db.sqlite3'),  # Test DB
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Personal DB
     }
 }
 

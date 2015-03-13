@@ -176,8 +176,6 @@ def update_events(category, event_text, day, year, is_update, old_text, delete_e
     date = datetime.strptime(day + ' ' + year, '%A %b %d %Y')
     print(date)
 
-    # event_record = None
-
     try:
 
         day_record = models.Day.objects.filter(date=date).first()
@@ -203,7 +201,7 @@ def update_events(category, event_text, day, year, is_update, old_text, delete_e
     except Exception, err:  # there must be a finer-tuned exception class to catch here.
         print('zomg... super huge exception: {e}'.format(e=err))
         # okay, so the most recent DB error is because we're using 2 DBs and the migration isn't applying to
-        # both of them, for whatever reason.
+        # both of them, for whatever reason. <- this is fixed with DB cleanup.
 
         # if event_record:
         #     event_record.rollback()  # there is no rolling back
