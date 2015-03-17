@@ -240,8 +240,8 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
 
                         // crap.. so after adding to the array, it also needs to:
                         // redraw the modal, update the main view, and update the table.. ugh.
-                        if (data[i][category][0]===null) {
-                            console.log('yep, its null');
+                        if (data[i][category][0]===null) {  //pretty sure here we're not accounting for updates to existing events.. <-------
+                            console.log('yep, its null');   //probably just need to incorporate "is_update" in if statement.
                             data[i][category][0] = event_text;
                         }
                         else if (data[i][category][1]===null) {
