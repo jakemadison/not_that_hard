@@ -238,18 +238,25 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
                         console.log('found the event day that I need to update');
                         console.log(data[i]);
 
-                        // crap.. so after adding to the array, it also needs to:
-                        // redraw the modal, update the main view, and update the table.. ugh.
-                        if (data[i][category][0]===null) {  //pretty sure here we're not accounting for updates to existing events.. <-------
-                            console.log('yep, its null');   //probably just need to incorporate "is_update" in if statement.
-                            data[i][category][0] = event_text;
-                        }
-                        else if (data[i][category][1]===null) {
-                            console.log('nope, second one is empty though');
-                            data[i][category][1] = event_text;
+                        console.log('arc pos', arc_pos, 'is update:', is_update);
+
+                        if (is_update) {
+                            data[i][category][arc_pos] = event_text;
                         }
                         else {
-                            console.log('nothing at all, apparently... what is going on here? Buggin out!!');
+                            // crap.. so after adding to the array, it also needs to:
+                            // redraw the modal, update the main view, and update the table.. ugh.
+                            if (data[i][category][0] === null) {  //pretty sure here we're not accounting for updates to existing events.. <-------
+                                console.log('yep, its null');   //probably just need to incorporate "is_update" in if statement.
+                                data[i][category][0] = event_text;
+                            }
+                            else if (data[i][category][1] === null) {
+                                console.log('nope, second one is empty though');
+                                data[i][category][1] = event_text;
+                            }
+                            else {
+                                console.log('nothing at all, apparently... what is going on here? Buggin out!!');
+                            }
                         }
 
                         build_modal(data[i], i);
@@ -564,7 +571,7 @@ function build_modal(modal_data, modal_data_position) {
                                 delete_event = update_button();
 
                                 $('.event_btn').unbind().on('click', function() {
-                                    send_event_from_modal(i, d, 'inner', is_update, old_text, delete_event);
+                                    send_event_from_modal(i, d, arc_position, is_update, old_text, delete_event);
                                 });
 
                                 event_text_sel.unbind().on('input', function() {
