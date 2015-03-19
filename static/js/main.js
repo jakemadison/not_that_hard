@@ -225,47 +225,44 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
                              'old_text': old_text, 'remove_event': remove_event},
 
         function(result) {
-
             if (result.message !== 'success') {
                console.log('failure!!');
                 $('#modal_error_message').text(result.message);
                 $('.modal_alert').show();
+                return;
             }
 
-            else {
-                for (var i=0; i < data.length; i++) {
-                    if (data[i].day === active_day) {
-                        console.log('found the event day that I need to update');
-                        console.log(data[i]);
+            for (var i=0; i < data.length; i++) {
+                if (data[i].day === active_day) {
+                    console.log('found the event day that I need to update');
+                    console.log(data[i]);
 
-                        console.log('arc pos', arc_pos, 'is update:', is_update);
-
-                        if (is_update) {
-                            data[i][category][arc_pos] = event_text;
-                        }
-                        else {
-                            // crap.. so after adding to the array, it also needs to:
-                            // redraw the modal, update the main view, and update the table.. ugh.
-                            if (data[i][category][0] === null) {  //pretty sure here we're not accounting for updates to existing events.. <-------
-                                console.log('yep, its null');   //probably just need to incorporate "is_update" in if statement.
-                                data[i][category][0] = event_text;
-                            }
-                            else if (data[i][category][1] === null) {
-                                console.log('nope, second one is empty though');
-                                data[i][category][1] = event_text;
-                            }
-                            else {
-                                console.log('nothing at all, apparently... what is going on here? Buggin out!!');
-                            }
-                        }
-
+                    if (is_update) {  // if this is an update, just assign text directly.
+                        data[i][category][arc_pos] = event_text;
                         build_modal(data[i], i);
+                        return;
                     }
 
+                    // crap.. so after adding to the array, it also needs to:
+                    // redraw the modal, update the main view, and update the table.. ugh.
+                    if (data[i][category][0] === null) {  //pretty sure here we're not accounting for updates to existing events.. <-------
+                        console.log('yep, its null');   //probably just need to incorporate "is_update" in if statement.
+                        data[i][category][0] = event_text;
+                    }
+                    else if (data[i][category][1] === null) {
+                        console.log('nope, second one is empty though');
+                        data[i][category][1] = event_text;
+                    }
+                    else {
+                        console.log('nothing at all, apparently... what is going on here? Buggin out!!');
+                    }
+
+                    build_modal(data[i], i);
+                    return;
                 }
+
             }
 
-            console.log('i received a result from the server!!!', result);
 
     })
 
