@@ -125,6 +125,11 @@ $('.day_modal').on('hidden.bs.modal', function() {
 
     $('.modal_alert').hide();
 
+    console.log('what is in data now?', data, 'active day:', active_date);
+
+    //somewhere in here I could attempt to reload whatever is in 'data' on the arcs...
+
+
 });
 
 
@@ -254,7 +259,7 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
                         data[i][category][1] = event_text;
                     }
                     else {
-                        console.log('nothing at all, apparently... what is going on here? Buggin out!!');
+                        console.log('nothing at all, apparently... what is going on here? Buggin" out!!');
                     }
 
                     build_modal(data[i], i);
@@ -914,8 +919,6 @@ function create_donut() {
             }
         });
 
-
-    //console.log('text labels: ', text_labels);
     //d3.selectAll('.legend').exit().transition().duration(2000).remove();
 
     console.log('donut done.');
