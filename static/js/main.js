@@ -129,6 +129,8 @@ $('.day_modal').on('hidden.bs.modal', function() {
 
     //somewhere in here I could attempt to reload whatever is in 'data' on the arcs...
 
+    get_historical_data({'amount': null});
+    console.log('ran a create donut...');
 
 });
 

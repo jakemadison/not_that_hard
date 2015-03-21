@@ -12,7 +12,10 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
 
     category_counts = {'health': 0, 'wealth': 0, 'arts': 0, 'smarts': 0}
 
-    if current_val == 'month':
+    print('entered construct data array with: {} {} {} {}'.format(current_val, amount, has_prev, has_next))
+    print('amount: {}'.format(amount))
+
+    if current_val == 'month' or amount == '':
         new_date = datetime.now(pytz.timezone('US/Pacific'))
         month = str(new_date.month)
         year = str(new_date.year)
@@ -21,6 +24,7 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
         # print('new date: {0}'.format(new_date))
 
     else:
+        print('casting int here....')
         new_date = datetime.strptime(current_val, '%B %Y') + monthdelta.monthdelta(int(amount))
         # print('current date: {0}'.format(new_date))
 
