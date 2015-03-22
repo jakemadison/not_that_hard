@@ -145,6 +145,40 @@ Okay where are we at?
 -> add a requirements.txt
 
 
+======
+new idea here: 'must do's.  This is based on the realization that I'm a lot better at sticking to stuff
+if there is absolutely no room for rationalization/compromise.  Things that will go in this type of category:
+- not smoking
+- not drinking on weekdays
+- some kind of exercise
+
+could be added later:
+- 20-30 mins of french
+
+
+Layout will be another modal.  This will be a lot more like githubs.  I like the small squares look too, we'll keep that.
+each category will get a left-aligned title, followed by a series of squares, ranging from start date of the must do
+to the current date.
+
+Data model:
+each item will have a category name, a schedule (cron based?), and a historical record.
+historical record can be as simple as: date_link-true/false
+
+problems to think about:
+anything that is not scheduled for daily.
+do we just autofill a true box for days off?
+if we don't do that, how do we adjust the schedule?
+logically a streak should be # of days performing the action, and shouldn't include scheduled days off.
+
+Ah, okay.  schedule should only determine if a new day/event element should be created.  This means that historical
+data and present data can be inconsistent, that's fine.  That also makes more sense in terms of what this is accomplishing
+what we care about is: given schedule X at whatever point, how successful were we at actually doing that?
+
+Okay, so click-to-fill (or empty) any given point point, hover will get tool tip with day info.
+We'll show current streak, best streak.
+
+
+
 
 
 
