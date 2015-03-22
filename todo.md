@@ -180,6 +180,8 @@ We'll show current streak, best streak.
 It would also be nice to integrate into the main cal view.  So checking off a "must do" automatically gives you an
 event in the main view.
 
+hard deadline on this is: April 1st.
+
 
 
 
