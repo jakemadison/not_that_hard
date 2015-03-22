@@ -177,6 +177,9 @@ what we care about is: given schedule X at whatever point, how successful were w
 Okay, so click-to-fill (or empty) any given point point, hover will get tool tip with day info.
 We'll show current streak, best streak.
 
+It would also be nice to integrate into the main cal view.  So checking off a "must do" automatically gives you an
+event in the main view.
+
 
 
 
