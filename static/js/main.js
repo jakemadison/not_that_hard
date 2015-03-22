@@ -142,7 +142,7 @@ var data;
 var category_array = ['arts', 'smarts', 'wealth', 'health'];
 var total_record_length = 4;
 var colour_array = ["#ff8c00", "#d0743c", "#7b6888", "#98abc5"];
-var radius = 40;  // this should be altered so we only need to change the one number to affect inner & outer...
+var radius = 34;  // this should be altered so we only need to change the one number to affect inner & outer...
 
 
 // using "active day" find & return the full range of data for that day:
@@ -454,10 +454,10 @@ function build_modal(modal_data, modal_data_position) {
             var modal_chart = d3.select('.modal_chart')
                 .append('svg')
                 .attr("class", 'modal_pie')
-                .attr("width", radius * 8)
-                .attr("height", radius * 4)
+                .attr("width", 40 * 8)
+                .attr("height", 40 * 4)
                     .append('g')
-                .attr('transform', 'translate(' + radius*4 + ',' + radius*2 + ')');
+                .attr('transform', 'translate(' + 40*4 + ',' + 40*2 + ')');
 
             modal_chart.append('g')
                 .attr("class", "labels");
@@ -601,7 +601,7 @@ function build_modal(modal_data, modal_data_position) {
 
 
             // Start building our outer arcs:
-            var modal_outer_arc = create_arc_new({'r': radius*2, 'r_minus': 26,
+            var modal_outer_arc = create_arc_new({'r': 40*2, 'r_minus': 26,
                                                   'l': total_record_length, 'space_offset': 2});
 
             var outer_arcs = modal_chart.selectAll('.modal_arc').attr("class", 'modal_arc_outer');
@@ -833,9 +833,9 @@ function create_donut() {
         })
             .attr('width', function(d) {
                     //console.log('this is pies_data enter datum: ', d);
-                     return radius * 2
+                     return (radius) * 2
         })
-            .attr('height', radius * 2).style('fill-opacity', 0);
+            .attr('height', (radius) * 2).style('fill-opacity', 0);
 
     pies_pre_group.transition().duration(function(d, i) { return i*50+500}).style('fill-opacity', 1);
 
@@ -860,7 +860,7 @@ function create_donut() {
 
     console.log('finished pie building.  starting arc/path building');
 
-    var outer_arc = create_arc_new({'r': radius, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
+    var outer_arc = create_arc_new({'r': radius, 'r_minus': 8, 'l': total_record_length, 'space_offset': 0});
     var inner_arc = create_arc_new({'r': 25, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
 
     // this binds our arc elements to a new set of data.  That data is taken by each day, and is an array
