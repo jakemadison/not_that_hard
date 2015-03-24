@@ -1,5 +1,5 @@
 from django.contrib import admin
-from main.models import Day, Event
+from main.models import Day, Event, MustDoCategories, MustDoHistory
 
 # Register your models here.
 
@@ -14,3 +14,5 @@ class EventAdmin(admin.ModelAdmin):
 
 admin.site.register(Day, DayAdmin)
 admin.site.register(Event, EventAdmin)
+admin.site.register(MustDoCategories)
+admin.site.register(MustDoHistory)
