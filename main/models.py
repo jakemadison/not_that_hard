@@ -35,6 +35,31 @@ class Event(models.Model):
         return unicode(self).encode('utf-8')
 
 
+class MustDoCategories(models.Model):
+
+    name = models.TextField(default='', blank=True, null=True)
+    start_date = models.DateField()
+    schedule = models.TextField(default='*; *', blank=True, null=True)  # semi-cron format, day of month + day of week
+
+    def __unicode__(self):
+        return 'MustDo instance id: {0}, name: {1}, schedule: {2}, start: {3}'.format(self.id,
+                                                                                      self.name,
+                                                                                      self.schedule,
+                                                                                      self.start_date)
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
+
+
+class MustDoHistory(models.Model):
+
+    """the combination of start date and schedule will populate this field."""
+
+    date = models.DateField()
+    category_link = models.ForeignKey('MustDoCategories', related_name='history')
+    done = models.BooleanField(default=False)
+
+
 # Trigger that *should* update event count in our day model:
 def update_event_count(sender, instance, **kwargs):
     day = instance.day_link
