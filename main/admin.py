@@ -12,7 +12,14 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ('day_link', 'category', 'name')
 
 
+class MDCAdmin(admin.ModelAdmin):
+    list_display = ('name', 'start_date', 'schedule')
+
+
+class MDHAdmin(admin.ModelAdmin):
+    list_display = ('date', 'category_link', 'done')
+
 admin.site.register(Day, DayAdmin)
 admin.site.register(Event, EventAdmin)
-admin.site.register(MustDoCategories)
-admin.site.register(MustDoHistory)
+admin.site.register(MustDoCategories, MDCAdmin)
+admin.site.register(MustDoHistory, MDHAdmin)
