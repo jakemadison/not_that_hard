@@ -120,3 +120,12 @@ def update_event(request):
                                               is_update, old_text, remove_event)
 
     return HttpResponse(json.dumps({'message': result_message}), content_type="application/json")
+
+
+# Must Do Views down here:
+def get_must_do_data(request):
+    print('getting must do data...')
+
+    controller.get_must_do_data()
+
+    return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")

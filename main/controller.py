@@ -186,7 +186,9 @@ def update_events(category, event_text, day, year, is_update, old_text, delete_e
 
         if delete_event == 'true':
             print('i am attempting to delete an event')
-            event_record = models.Event.objects.filter(day_link=day_record, category=category, name=old_text).first()
+            event_record = models.Event.objects.filter(day_link=day_record,
+                                                       category=category,
+                                                       name=old_text).first()
 
             print('deleting: {0}'.format(event_record))
             event_record.delete()
@@ -212,6 +214,12 @@ def update_events(category, event_text, day, year, is_update, old_text, delete_e
         return 'there was a db error!'
 
     return 'success'
+
+
+# controller functions for 'must do's will go here.
+def get_must_do_data():
+    must_do_array = models.MustDoHistory.all()
+    print('\n'.join([m for m in must_do_array]))
 
 
 if __name__ == "__main__":
