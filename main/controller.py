@@ -218,8 +218,11 @@ def update_events(category, event_text, day, year, is_update, old_text, delete_e
 
 # controller functions for 'must do's will go here.
 def get_must_do_data():
-    must_do_array = models.MustDoHistory.all()
-    print('\n'.join([m for m in must_do_array]))
+    print('getting must do data')
+    must_do_array = models.MustDoHistory.objects.all()
+    print(must_do_array)
+    must_do_cats = models.MustDoCategories.objects.all()
+    print(must_do_cats)
 
 
 if __name__ == "__main__":
