@@ -39,7 +39,7 @@ class MustDoCategories(models.Model):
 
     name = models.TextField(default='', blank=True, null=True)
     start_date = models.DateField()
-    schedule = models.TextField(default='*; *', blank=True, null=True)  # semi-cron format, day of month + day of week
+    schedule = models.TextField(default='*;*', blank=True, null=True)  # semi-cron format, day of month + day of week
 
     def __unicode__(self):
         return 'MustDo instance id: {0}, name: {1}, schedule: {2}, start: {3}'.format(self.id,

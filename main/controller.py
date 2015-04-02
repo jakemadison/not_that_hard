@@ -230,17 +230,24 @@ def get_must_do_data():
 
 
 def update_must_do_history():
-    print('updatinf must do history...')
+    print('updating must do history...')
     must_do_events = models.MustDoCategories.objects.all()
 
     for each_category in must_do_events:
         print('now updating event: {}'.format(each_category))
+        schedule_array = each_category.schedule.split(';')
+        print('schedule: days: {}, months: {}'.format(schedule_array[0], schedule_array[1]))
+        if schedule_array[0] != '*':
+            day_array = schedule_array.split(',')
+            for each_day in day_array:
+                print('i need to update based on this day: {}'.format(each_day))
+                # this will work because a split with no hits creates a 1 element array...
+                # which means you can still iterate over it!
+
         # this is where we check what the last day was in the history
         # and then add depending on the current schedule set..
 
 
 if __name__ == "__main__":
-    # FAAAACK.
-    # testing final change.
     x = None
     print(x)
