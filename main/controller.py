@@ -238,7 +238,7 @@ def update_must_do_history():
         schedule_array = each_category.schedule.split(';')
         print('schedule: days: {}, months: {}'.format(schedule_array[0], schedule_array[1]))
         if schedule_array[0] != '*':
-            day_array = schedule_array.split(',')
+            day_array = schedule_array[0].split(',')
             for each_day in day_array:
                 print('i need to update based on this day: {}'.format(each_day))
                 # this will work because a split with no hits creates a 1 element array...
