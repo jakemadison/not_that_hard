@@ -217,11 +217,6 @@ def update_events(category, event_text, day, year, is_update, old_text, delete_e
 
 
 # controller functions for 'must do's will go here.
-def update_must_do_history():
-    must_do_cats = models.MustDoCategories.objects.all()
-    for each_category in must_do_cats:
-        print(each_category)
-
 
 def get_must_do_data():
     print('updating must do history now...')
@@ -232,6 +227,16 @@ def get_must_do_data():
     print(must_do_array)
     must_do_cats = models.MustDoCategories.objects.all()
     print(must_do_cats)
+
+
+def update_must_do_history():
+    print('updatinf must do history...')
+    must_do_events = models.MustDoCategories.objects.all()
+
+    for each_category in must_do_events:
+        print('now updating event: {}'.format(each_category))
+        # this is where we check what the last day was in the history
+        # and then add depending on the current schedule set..
 
 
 if __name__ == "__main__":
