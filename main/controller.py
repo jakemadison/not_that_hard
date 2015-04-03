@@ -237,19 +237,19 @@ def update_must_do_history():
         print('now updating event: {}'.format(each_category))
         schedule_array = each_category.schedule.split(';')
         print('schedule: days: {}, months: {}'.format(schedule_array[0], schedule_array[1]))
+
         if schedule_array[0] != '*':
             day_array = schedule_array[0].split(',')
-            for each_day in day_array:
-                print('i need to update based on this day: {}'.format(each_day))
-                # this will work because a split with no hits creates a 1 element array...
-                # which means you can still iterate over it!
+            today = datetime.now().weekday()
+
+            if today in day_array:
+                print('i need to update historical!')
 
         if schedule_array[1] != '*':
             month_array = schedule_array[1].split(',')
-            for each_month in month_array:
-                print('i need to update based on these months: {}'.format(each_month))
-                # basically, is this month in month array?  if so, we need to update
-                # history with a new (default False) value.
+            this_month = datetime.now().month
+            print('is this correct month? {}'.format(this_month))
+            print('month array: {}'.format(month_array))
 
         # this is where we check what the last day was in the history
         # and then add depending on the current schedule set..
