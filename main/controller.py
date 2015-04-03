@@ -244,6 +244,13 @@ def update_must_do_history():
                 # this will work because a split with no hits creates a 1 element array...
                 # which means you can still iterate over it!
 
+        if schedule_array[1] != '*':
+            month_array = schedule_array[1].split(',')
+            for each_month in month_array:
+                print('i need to update based on these months: {}'.format(each_month))
+                # basically, is this month in month array?  if so, we need to update
+                # history with a new (default False) value.
+
         # this is where we check what the last day was in the history
         # and then add depending on the current schedule set..
 
