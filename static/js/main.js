@@ -2,9 +2,6 @@
  * Created by jmadison on 1/2/15.
  */
 
-// on init, grab our historical data:
-get_historical_data({'amount': null});
-
 
 // Helper stuff:
 //function getCookie(name) {
@@ -13,14 +10,12 @@ get_historical_data({'amount': null});
 //document.getElementById('close').onclick = function(){
 
 
-
 // year modal stuff:
 function build_year_modal() {
+    'use strict';
     $('.year_modal').modal('show');
 
     function create_year(year_data) {
-
-        var radius_year = 60;
 
         // btw, here (or probable in the controller actually) we should deliver data as a
         // percentage of total days (total events / days in month * 2) to normalize across
@@ -30,20 +25,21 @@ function build_year_modal() {
 
         console.log('create year is active with data: ', year_data);
 
-        var year_chart = d3.select('.year_modal_chart');
+        var radius_year = 60,
+            year_chart = d3.select('.year_modal_chart'),
             //.append('svg')
             //.attr("class", 'year_chart')
             //.attr("width", 500)
             //.attr("height", 200);
 
-        var keyFnYr = function(d, i) {console.log('me! keyfn!', d, i); return d.date};
+            keyFnYr = function (d, i) { console.log('me! keyfn!', d, i); return d.date; },
 
-        var years_pie = year_chart.selectAll('.years_pie').data(year_data, keyFnYr);
-        var year_pies_enter = years_pie.enter();
-        var year_pie_group = year_pies_enter.append('svg').attr('class', 'years_pie')
-            .attr('width', radius_year*2)
-            .attr('height', radius_year*2).append('g')
-            .attr('transform', 'translate('+radius_year +','+radius_year+')');
+            years_pie = year_chart.selectAll('.years_pie').data(year_data, keyFnYr),
+            year_pies_enter = years_pie.enter(),
+            year_pie_group = year_pies_enter.append('svg').attr('class', 'years_pie')
+                .attr('width', radius_year * 2)
+                .attr('height', radius_year * 2).append('g')
+                .attr('transform', 'translate(' + radius_year + ',' + radius_year + ')');
 
         //var year_pie_group = year_pre_group;
 
@@ -94,6 +90,10 @@ function build_year_modal() {
 
 
 }
+
+
+// on init, grab our historical data:
+get_historical_data({'amount': null});
 
 // destroy year chart on modal hidden:
 $('.year_modal').on('hidden.bs.modal', function() {
