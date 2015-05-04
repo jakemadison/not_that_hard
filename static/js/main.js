@@ -39,18 +39,17 @@ function build_year_modal() {
             year_pie_group = year_pies_enter.append('svg').attr('class', 'years_pie')
                 .attr('width', radius_year * 2)
                 .attr('height', radius_year * 2).append('g')
-                .attr('transform', 'translate(' + radius_year + ',' + radius_year + ')');
+                .attr('transform', 'translate(' + radius_year + ',' + radius_year + ')'),
 
         //var year_pie_group = year_pre_group;
+            keyArcFn = function (y_data) {console.log('i am the arc key fn!', y_data);
 
-        var keyArcFn = function(y_data) {console.log('i am the arc key fn!', y_data);
+                var ratio_array = [];
 
-            var ratio_array = [];
-
-            for (var x=0; x<category_array.length; x++) {
+                for (var x=0; x<category_array.length; x++) {
                 var curr_cat = category_array[x];
-                ratio_array.push(y_data.cat_data[curr_cat]/(y_data.total_days*2));
-            }
+                    ratio_array.push(y_data.cat_data[curr_cat]/(y_data.total_days*2));
+                }
 
             console.log('ratio array: ', ratio_array);
 
