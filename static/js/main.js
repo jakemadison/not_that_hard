@@ -12,7 +12,7 @@
 
 // year modal stuff:
 function build_year_modal() {
-    'use strict';
+    "use strict";
     $('.year_modal').modal('show');
 
     function create_year(year_data) {
@@ -42,18 +42,20 @@ function build_year_modal() {
                 .attr('transform', 'translate(' + radius_year + ',' + radius_year + ')'),
 
         //var year_pie_group = year_pre_group;
-            keyArcFn = function (y_data) {console.log('i am the arc key fn!', y_data);
+            keyArcFn = function (y_data) {
+                console.log('i am the arc key fn!', y_data);
 
                 var ratio_array = [];
 
                 for (var x=0; x<category_array.length; x++) {
-                var curr_cat = category_array[x];
+                    var curr_cat = category_array[x];
                     ratio_array.push(y_data.cat_data[curr_cat]/(y_data.total_days*2));
                 }
 
-            console.log('ratio array: ', ratio_array);
+                console.log('ratio array: ', ratio_array);
 
-            return ratio_array;};
+                return ratio_array;
+            };
 
         var year_arc = create_arc_new({'r':radius_year, 'r_minus':radius_year-20, 'l': 4, 'space_offset': 0});
         var year_arc_enter = year_pie_group.selectAll('.year_arc').data(function(d, i) {return keyArcFn(year_data[i])}).enter();
