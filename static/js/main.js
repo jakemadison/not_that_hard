@@ -174,7 +174,7 @@ $('#save_changes_btn').on('click', function () {
 
         if (old_text === new_text) {
             console.log('no changes detected');
-            return
+            return;
         }
 
         modal_notes_select.text(new_text);
@@ -816,7 +816,7 @@ function create_donut() {
     //chart.selectAll('.pie').remove();
 
     // data binding is done by index, but we need to specify keys instead:
-    var keyFn = function(d) {return d.day;};
+    var keyFn = function(d) { return d.day; };
 
     // each datum on pies_data is a full day, including notes, etc.
     var pies_data = chart.selectAll('.pie').data(data, keyFn);
@@ -832,11 +832,11 @@ function create_donut() {
             //console.log('adding id: ', d.day);
             return d.day;
         })
-            .attr('width', function(d) {
-                    //console.log('this is pies_data enter datum: ', d);
-                     return (radius) * 2
+        .attr('width', function(d) {
+                //console.log('this is pies_data enter datum: ', d);
+                 return (radius) * 2
         })
-            .attr('height', (radius) * 2).style('fill-opacity', 0);
+        .attr('height', (radius) * 2).style('fill-opacity', 0);
 
     pies_pre_group.transition().duration(function(d, i) { return i*50+500}).style('fill-opacity', 1);
 
@@ -924,7 +924,7 @@ function create_donut() {
 
     //d3.selectAll('.legend').exit().transition().duration(2000).remove();
 
-    console.log('donut done.');
+    console.log('done.');
 }
 
 
