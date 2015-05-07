@@ -51,13 +51,13 @@ svg {  margin: 2px;  }
 
 /*TABLE BUILDING PREFERENCES: */
 
-.smarts_col {  color: #d0743c;  }
+.smarts_col {  color: #d0743c; cursor: default; }
 
-.arts_col {  color: #ff8c00;  }
+.arts_col {  color: #ff8c00; cursor: default; }
 
-.health_col {  color: #8a89a6;  }
+.health_col {  color: #8a89a6; cursor: default;  }
 
-.wealth_col {  color: #7b6888;  }
+.wealth_col {  color: #7b6888; cursor: default; }
 
 .health_row:hover {  color: #8a89a6;  }
 
