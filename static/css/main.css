@@ -2,6 +2,9 @@ svg {  margin: 2px;  }
 
 .arc {  stroke: #fff;  }
 
+/*.journal_done {*/
+    /*color: #02749c;*/
+/*}*/
 
 .description_text {
     max-width: 900px;

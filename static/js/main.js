@@ -909,8 +909,21 @@ function create_donut() {
     // this should only happen once...
     pies_group.append("text")
         .attr("dy", ".35em")
-        .attr("class", "legend")
-        .attr("fill", "rgb(128,128,128)")
+        .attr("class", function(d) {
+            // if we have notes for this day, add the "journal done" class to change day layout
+            if (d.notes !== "") {
+                return "legend journal_done";
+            }
+            else {
+                return "legend";
+            }
+
+        })
+        .attr("fill", function(d) {
+            if (d.notes === "") {
+                return "rgb(128,128,128)";
+            }
+        })
         .style("text-anchor", "middle")
         .text(function(d, i, j) {
             //console.log('text function has this d: ', d, j);
