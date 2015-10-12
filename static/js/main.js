@@ -856,6 +856,7 @@ function create_donut() {
 
     pies_pre_group.transition().duration(function(d, i) { return i*5+500}).style('fill-opacity', 1);
 
+    // main group for each day group.  controls click for building a modal for the day, hover stuff on month view, etc.
     var pies_group = pies_pre_group.append('g')
             .attr('transform', 'translate(' + radius + ',' + radius + ')')
         .on("click", function(d, i) {
@@ -864,10 +865,12 @@ function create_donut() {
         })
         .on("mouseover", function(d, i, j) {
 
+                // controls the hover text and position for individual days:
+
                 var tt_day = d.day;
                 var hover_pos = $(this).position();
-                console.log(hover_pos);
 
+            // switch up tool tip opacity and position:
             day_div.transition()
                 .duration(500)
                 .style("opacity", .7);
