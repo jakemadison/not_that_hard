@@ -835,7 +835,7 @@ function create_donut() {
         })
         .attr('height', (radius) * 2).style('fill-opacity', 0);
 
-    pies_pre_group.transition().duration(function(d, i) { return i*50+500}).style('fill-opacity', 1);
+    pies_pre_group.transition().duration(function(d, i) { return i*5+500}).style('fill-opacity', 1);
 
     var pies_group = pies_pre_group.append('g')
             .attr('transform', 'translate(' + radius + ',' + radius + ')')

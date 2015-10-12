@@ -184,6 +184,15 @@ hard deadline on this is: April 1st.
 
 Ha Ha Just kidding.
 
+======
+
+Okay, so where from here?  There are a couple of possibilities.  1) incorporate future plans as well.  Somehow call
+in to Google Cal Services?  So make a switch that goes from Backward-looking to Forward-Looking?  I really like the idea
+of that kind of integration and because it ties in what you've done, with what you're planning to do, and you can
+look back on your history and kind of plan accordingly.  Plus with the google events, it makes that part accessible
+on multiple devices, while the reflective, journal parts are only once you've settled down.
+
+Okay, I like that.  Also, there are still a metric shit tonne of bugs to correct on this fucking thing.
 
 
 

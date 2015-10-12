@@ -214,6 +214,7 @@ div.tooltip {
 /*YEAR MODAL PREFERENCES: */
 
 #calendar_btn {
+    display: none;
     margin-left: 5px;
 
 }
