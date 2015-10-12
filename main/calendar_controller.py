@@ -12,11 +12,11 @@ from oauth2client import tools
 
 import datetime
 
-try:
-    import argparse
-    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-except ImportError:
-    flags = None
+# try:
+#     import argparse
+#     flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+# except ImportError:
+flags = None
 
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
@@ -63,18 +63,22 @@ def get_calendar_data():
 
     now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
     print('Getting the upcoming 10 events')
-    eventsResult = service.events().list(
-        calendarId='primary', timeMin=now, maxResults=10, singleEvents=True,
-        orderBy='startTime').execute()
+
+    eventsResult = service.events().list(calendarId='lqm45a6aqdinoeno89fs6vhl2g@group.calendar.google.com', timeMin=now,
+                                         maxResults=10, singleEvents=True,
+                                         orderBy='startTime').execute()
+
     events = eventsResult.get('items', [])
 
     if not events:
         print('No upcoming events found.')
+
+    compiled_events = []
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
+        compiled_events.append({'date': start, 'event': event['summary']})
 
-    return cal_data
+    return compiled_events
 
 
 if __name__ == '__main__':

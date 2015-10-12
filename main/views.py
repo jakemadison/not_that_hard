@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt
-
+import calendar_controller as cc
 
 # Create your views here.
 @ensure_csrf_cookie
@@ -24,7 +24,8 @@ def index(request):
 
 def get_calendar_data(request):
     print('getting google cal data')
-    result = 'data!!!'
+
+    result = cc.get_calendar_data()
 
     return HttpResponse(json.dumps({'message': 'success', 'data': result}), content_type="application/json")
 

@@ -53,5 +53,6 @@ function get_google_cal_data(options) {
 
 function build_calendar_data() {
         console.log("building calendar data.");
+        console.log('now ready to build front end with calendar data: ', calendar_data);
 
 }
