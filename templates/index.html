@@ -14,6 +14,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 {#    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>#}
     <script src="{% static "js/d3.js" %}"></script>
+    <link rel="shortcut icon" href="{% static 'assets/favicon2.png' %}"/>
 
 
 </head>
@@ -36,22 +37,35 @@
   <ul class="pagination pagination-sm">
     <li id="has_prev_btn">
       <a href="#" aria-label="Previous"
-         onclick="get_historical_data({'amount': -1, 'has_next': true});">
+         onclick="$(this).blur(); get_historical_data({'amount': -1, 'has_next': true});">
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>
     <li id="month_label"><span class="text-muted" id="month_name">month</span></li>
     <li id="has_next_btn">
-      <a href="#" aria-label="Next" onclick="get_historical_data({'amount': 1, 'has_prev': true});">
+      <a href="#" aria-label="Next" onclick="$(this).blur(); get_historical_data({'amount': 1, 'has_prev': true});">
         <span aria-hidden="true">&raquo;</span>
       </a>
     </li>
-  <li><a href="#" id="calendar_btn" onclick="build_year_modal();">
-      <span class="glyphicon" aria-hidden="true">C</span></a></li>
 
 
-  <li><a href="#" id="calendar_btn" onclick="build_must_modal();">
-      <span class="glyphicon" aria-hidden="true">M</span></a></li>
+      <li><a href="#" id="calendar_btn" onclick="build_year_modal();">
+          <span class="glyphicon" aria-hidden="true">C</span></a></li>
+
+
+      <li><a href="#" id="calendar_btn" onclick="build_must_modal();">
+          <span class="glyphicon" aria-hidden="true">M</span></a></li>
+
+      <li>
+          <a href="#" id="journal_toggle" onclick="$(this).blur(); journal_toggle();">
+              <span class="text-muted" aria-hidden="true" id="journal_toggle_text">Journal</span>
+          </a>
+      </li>
+
+
+
+
+
 
 
   </ul>
@@ -302,6 +316,7 @@
 <script src="{% static "js/table_functions.js" %}"></script>
 <script src="{% static "js/main.js" %}"></script>
 <script src="{% static "js/must_functions.js" %}"></script>
+<script src="{% static "js/calendar_hookin.js" %}"></script>
 
 </body>
 </html>

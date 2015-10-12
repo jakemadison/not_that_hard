@@ -134,6 +134,9 @@ $('.day_modal').on('hidden.bs.modal', function() {
 
 
 // Some Outer Scope Vars:
+
+var journal_mode = true;
+
 var active_date;
 var active_day;
 var data;
@@ -747,6 +750,9 @@ function build_modal(modal_data, modal_data_position) {
 
 
         $('.pager_control').unbind('click').on('click', function () {
+
+            this.blur();
+
            console.log('day pager is active');
 
             var offset;

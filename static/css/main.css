@@ -219,6 +219,10 @@ div.tooltip {
 
 }
 
+#journal_toggle {
+    margin-left: 5px;
+}
+
 .year_arc {  stroke: #fff;  }
 
 
@@ -229,3 +233,10 @@ div.tooltip {
 }
 
 .year_pie:hover {  opacity: 1;  }
+
+
+.pagination>li>a:focus {
+    color: #444444;
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+}
