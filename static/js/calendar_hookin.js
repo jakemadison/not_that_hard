@@ -12,7 +12,7 @@ function journal_toggle() {
     journal_mode = !journal_mode;
 
     var journal_text = $('#journal_toggle_text');
-    
+
     if (journal_mode) {
         journal_text.html('Journal');
         get_historical_data({'amount': null});
@@ -34,5 +34,7 @@ function get_google_cal_data(options) {
     // or not.  Except that donuts are maybe not the best repr of calendar data.  What is?  Should Future things
     // mirror journal things?  Should we plan for H, W, A, S? Should we only have two events?  That doesn't really
     // make any sense though, because actually planning things involves a lot of other factors.
+
+
 
 }

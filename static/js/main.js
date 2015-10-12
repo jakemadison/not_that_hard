@@ -815,6 +815,14 @@ function create_donut() {
 
     console.log('starting svg building.');
 
+
+    // Define 'div' for tooltips on days
+    var day_div = d3.select("body")
+        .append("div") // declare the tooltip div
+        .attr("class", "tooltip") // apply the 'tooltip' class
+        .style("opacity", 0); // set the opacity to nil
+
+
     var chart = d3.select('.chart');
     //chart.selectAll('.pie').remove();
 
@@ -841,13 +849,47 @@ function create_donut() {
         })
         .attr('height', (radius) * 2).style('fill-opacity', 0);
 
+        //.on("mouseout", function(d, i) {
+        //    $('.event_title').text('');
+        //    $('.category_title').text('');
+        //
+
     pies_pre_group.transition().duration(function(d, i) { return i*5+500}).style('fill-opacity', 1);
 
     var pies_group = pies_pre_group.append('g')
             .attr('transform', 'translate(' + radius + ',' + radius + ')')
         .on("click", function(d, i) {
+                day_div.transition().duration(50).style("opacity", 0);
             build_modal(d, i);
-        });
+        })
+        .on("mouseover", function(d, i, j) {
+
+                var tt_day = d.day;
+                var hover_pos = $(this).position();
+                console.log(hover_pos);
+
+            day_div.transition()
+                .duration(500)
+                .style("opacity", .7);
+            day_div.html(function(d, i) {
+                //console.log(d, i);
+                //return d.day + "<br/>"
+                return tt_day.split(" ")[0];
+
+            })
+                //.style("left", (d3.event.pageX) + "px")
+                //.style("top", (d3.event.pageY - 28) + "px");
+                .style("left", hover_pos.left + 'px')
+                .style("top", hover_pos.top -20 + 'px');
+
+
+        })
+            .on("mouseout", function () {
+                day_div.transition()
+                    .duration(100)
+                    .style("opacity", 0)
+            })
+        ;
 
     console.log('pies enter is: ', pies_data_enter);
     console.log('pies group though is: ', pies_group);
