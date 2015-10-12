@@ -2,17 +2,15 @@
  * Created by jmadison on 1/2/15.
  */
 
-
 // Helper stuff:
 //function getCookie(name) {
 
-//// closes the info box:
-//document.getElementById('close').onclick = function(){
-
 
 // year modal stuff:
+// this should get moved.  This file is already too bloated.
 function build_year_modal() {
     "use strict";
+
     $('.year_modal').modal('show');
 
     function create_year(year_data) {
@@ -108,7 +106,6 @@ $('.year_modal').on('hidden.bs.modal', function() {
 document.getElementById('event_close').onclick = function(){
         this.parentNode.parentNode
         .style.display = "none";
-
         return false;
     };
 
@@ -130,7 +127,7 @@ $('.day_modal').on('hidden.bs.modal', function() {
 
     //somewhere in here I could attempt to reload whatever is in 'data' on the arcs...
 
-    get_historical_data({'amount': null});
+    //get_historical_data({'amount': null});
     console.log('ran a create donut...');
 
 });
@@ -851,11 +848,12 @@ function create_donut() {
 
     // this specifies what to do on each removal of a full day
     pies_data.exit()
-        .transition()
-        .duration(function(d, i) {
-            console.log('removing pie: ', d);
-            return i*50;
-        })
+        //.transition()
+        //.duration(function(d, i) {
+        //    console.log('removing pie: ', d);
+        //    return i*50;
+            //return 0;
+        //})
         .style("fill-opacity", 0)
     .remove();
 

@@ -10,19 +10,15 @@ function build_must_modal() {
     $('.must_modal').modal('show');
 
 
+    function do_something_with_data(data) {
+        console.log('i have data! ', data, 'I should do something with it...');
+    }
+
+
     $.get('/get_must_do_data', function(result) {
         console.log('getting must do data....');
         do_something_with_data(result);
     });
-
-
-
-    function do_something_with_data(data) {
-        console.log('i have data! ', data, 'I should do something with it...');
-
-    }
-
-
 
 }
 

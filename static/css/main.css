@@ -90,7 +90,13 @@ svg {  margin: 2px;  }
     margin-right: 5px;
 }
 
+/*do not need desc text right now.*/
+.description_text {
+    display: none;
+}
+
 #close {
+
     float:right;
     display:inline-block;
     padding:2px 5px;
