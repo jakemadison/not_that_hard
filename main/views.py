@@ -22,6 +22,14 @@ def index(request):
     return render_to_response('index.html', context)
 
 
+def get_calendar_data(request):
+    print('getting google cal data')
+    result = 'data!!!'
+
+    return HttpResponse(json.dumps({'message': 'success', 'data': result}), content_type="application/json")
+
+
+
 def get_historical_data(request):
 
     print('getting historical data...')

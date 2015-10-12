@@ -25,7 +25,7 @@ function journal_toggle() {
 
 }
 
-
+var calendar_data = null;
 
 function get_google_cal_data(options) {
 
@@ -35,6 +35,23 @@ function get_google_cal_data(options) {
     // mirror journal things?  Should we plan for H, W, A, S? Should we only have two events?  That doesn't really
     // make any sense though, because actually planning things involves a lot of other factors.
 
+    if (calendar_data === null) {  // NB this will need to check for current day or whatever.
 
+        console.log('calendar data is null.  getting server to retrieve it please..');
+
+        $.get('get_calendar_data', options,
+            function (result) {
+                calendar_data = result.data;
+                build_calendar_data();
+            });
+
+    } else {
+        build_calendar_data();
+    }
+}
+
+
+function build_calendar_data() {
+        console.log("building calendar data.");
 
 }
