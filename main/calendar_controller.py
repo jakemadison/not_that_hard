@@ -11,6 +11,7 @@ from oauth2client import client
 from oauth2client import tools
 
 import datetime
+import calendar
 
 # try:
 #     import argparse
@@ -53,25 +54,48 @@ def get_credentials():
     return credentials
 
 
+def retrieve_google_data(timeMin, timeMax):
 
-def get_calendar_data():
-    cal_data = None
-
+    # get calendar creds:
     credentials = get_credentials()
+
+    # auth and create a service.
     http = credentials.authorize(httplib2.Http())
     service = discovery.build('calendar', 'v3', http=http)
 
-    now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
+    print('Getting events')
 
-    eventsResult = service.events().list(calendarId='lqm45a6aqdinoeno89fs6vhl2g@group.calendar.google.com', timeMin=now,
-                                         maxResults=10, singleEvents=True,
+    eventsResult = service.events().list(calendarId='lqm45a6aqdinoeno89fs6vhl2g@group.calendar.google.com',
+                                         timeMin=timeMin, timeMax=timeMax,
+                                         maxResults=10000, singleEvents=True,
                                          orderBy='startTime').execute()
 
     events = eventsResult.get('items', [])
 
+    return events
+
+
+def get_calendar_data(year=None, month=None):
+    cal_data = None
+
+    now = datetime.datetime.now()
+
+    if year is None and month is None:
+        min_day = datetime.datetime(year=now.year, month=now.month, day=1)
+        max_day = datetime.datetime(year=now.year, month=now.month, day=calendar.monthrange(now.year, now.month)[1])
+    else:
+        min_day = datetime.datetime(year=year, month=month, day=1)
+        max_day = datetime.datetime(year=year, month=month, day=calendar.monthrange(year, month)[1])
+
+    # covert dates into a useable format for google requests:
+    timeMin = min_day.isoformat() + 'Z'
+    timeMax = max_day.isoformat() + 'Z'
+
+    # grab our events from google:
+    events = retrieve_google_data(timeMin, timeMax)
+
     if not events:
-        print('No upcoming events found.')
+        print('No events found.')
 
     compiled_events = []
     for event in events:
