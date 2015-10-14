@@ -76,7 +76,6 @@ def retrieve_google_data(timeMin, timeMax):
 
 
 def get_calendar_data(year=None, month=None):
-    cal_data = None
 
     now = datetime.datetime.now()
 
@@ -87,22 +86,60 @@ def get_calendar_data(year=None, month=None):
         min_day = datetime.datetime(year=year, month=month, day=1)
         max_day = datetime.datetime(year=year, month=month, day=calendar.monthrange(year, month)[1])
 
-    # covert dates into a useable format for google requests:
+    # covert dates into a usable format for google requests:
     timeMin = min_day.isoformat() + 'Z'
     timeMax = max_day.isoformat() + 'Z'
 
     # grab our events from google:
     events = retrieve_google_data(timeMin, timeMax)
 
-    if not events:
-        print('No events found.')
-
     compiled_events = []
     for event in events:
         start = event['start'].get('dateTime', event['start'].get('date'))
         compiled_events.append({'date': start, 'event': event['summary']})
 
-    return compiled_events
+    if not events:
+        print('No events found.')
+
+    all_parsed_data = []
+    curr_day = min_day
+
+    while True:
+        parsed_datum = {'health': [None, None],
+                        'wealth': [None, None],
+                        'arts': [None, None],
+                        'smarts': [None, None]}
+
+        print(curr_day.strftime('%m %d'), end=': ')
+        parsed_datum['date'] = curr_day.strftime('%A %b %d')
+
+        # go through all events and add in those activities that match the current date.  compiled events
+        # then doesn't have to care about order.  Although, it is ordered above as well.  Meh.
+        for each_event in compiled_events:
+            event_date = datetime.datetime.strptime(each_event['date'][:-6], '%Y-%m-%dT%H:%M:%S')
+
+            # if event is the same date, add to datum.
+            if event_date.strftime('%Y %m %d') == curr_day.strftime('%Y %m %d'):
+                try:
+                    category, activity = each_event['event'].split(':')
+                    activity = activity.strip()
+
+                    if parsed_datum[category][0] is None:
+                        parsed_datum[category][0] = activity
+                    elif parsed_datum[category][1] is None:
+                        parsed_datum[category][1] = activity
+
+                except ValueError:  # no ':' found in event.  malformed event probably.
+                    pass
+        # done dealing with events.
+
+        all_parsed_data.append(parsed_datum)
+
+        curr_day += datetime.timedelta(days=1)
+        if curr_day > max_day:
+            break
+
+    return all_parsed_data
 
 
 if __name__ == '__main__':
