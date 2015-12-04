@@ -194,9 +194,24 @@ on multiple devices, while the reflective, journal parts are only once you've se
 
 Okay, I like that.  Also, there are still a metric shit tonne of bugs to correct on this fucking thing.
 
+=====
+
+For non-auth'd usage, how about randomly creating events?  I guess that's tricky if you also want to showcase the
+saving/editing of days..  but how else do you keep it current to today??  Hm... some combination of the two, possibly.
 
 
 
+=====
+An easier way to START doing the event stuff would just be to copy the db tables/logic of the existing days
+and basically just move data between them.  Fuck, you could even just make a flag of some kind.
+
+Another option would be to make a different format for planned events.  Like, a list of possible things, for managing
+the day.  Hrrrrm.  What's the most useful?
+
+The nice thing about integration with google, is that suddenly your planner is everywhere, and your journal is at home.
+That kind of makes intuitive sense doesn't it?
+
+More thought clearly needed on how to go forward on this.
 
 
 

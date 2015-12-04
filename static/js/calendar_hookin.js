@@ -43,6 +43,7 @@ function get_google_cal_data(options) {
             function (result) {
                 calendar_data = result.data;
                 build_calendar_data();
+                populate_page(result);  // actually builds out the table data
             });
 
     } else {
@@ -54,5 +55,7 @@ function get_google_cal_data(options) {
 function build_calendar_data() {
         console.log("building calendar data.");
         console.log('now ready to build front end with calendar data: ', calendar_data);
+        data = calendar_data;
+        create_donut();  // creates our donuts based on new global data
 
 }

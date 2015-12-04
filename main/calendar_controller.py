@@ -111,7 +111,7 @@ def get_calendar_data(year=None, month=None):
                         'smarts': [None, None]}
 
         print(curr_day.strftime('%m %d'), end=': ')
-        parsed_datum['date'] = curr_day.strftime('%A %b %d')
+        parsed_datum['day'] = curr_day.strftime('%A %b %d')
 
         # go through all events and add in those activities that match the current date.  compiled events
         # then doesn't have to care about order.  Although, it is ordered above as well.  Meh.

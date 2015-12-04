@@ -827,7 +827,15 @@ function create_donut() {
     //chart.selectAll('.pie').remove();
 
     // data binding is done by index, but we need to specify keys instead:
-    var keyFn = function(d) { return d.day; };
+    var keyFn = function(d) {
+        if (journal_mode) {
+            return 'journal ' + d.day;
+        }
+        else {
+
+            return 'calendar ' + d.day;  // this should force a refresh of the page.
+        }
+    };
 
     // each datum on pies_data is a full day, including notes, etc.
     var pies_data = chart.selectAll('.pie').data(data, keyFn);
@@ -915,7 +923,23 @@ function create_donut() {
 
     // this binds our arc elements to a new set of data.  That data is taken by each day, and is an array
     // of true/false values based on whether there is an event there or not
-    var svg_inner_arcs_data = pies_group.selectAll('.arc').data(function(d) {return compute_arc_array(d, {outer: false})});
+
+    var compute_arrays = function(d) {
+        return compute_arc_array(d, {outer: false})
+    };
+
+    var arcKeyFn = function(d, i) {
+        if (journal_mode) {
+            return i;
+        } else {
+            return 'cal: ' + i;
+        }
+    };
+
+    var svg_inner_arcs_data = pies_group.selectAll('.arc').data(compute_arrays, arcKeyFn);
+        //.data(function(d) {
+        //    return compute_arc_array(d, {outer: false})
+        //});
 
     // define the "enter" selection for what to do on new data entering
     var svg_inner_arc_enter = svg_inner_arcs_data.enter();
@@ -931,7 +955,14 @@ function create_donut() {
             }
         });
 
-    //svg_inner_arcs_data.exit().transition().duration(100).remove();
+    //svg_inner_arcs_data.exit().style("fill", function(d, i) {
+    //    if (d) {
+    //        return colour_array[i];
+    //    }
+    //    else {
+    //        return '#DDDADA';
+    //    }
+    //});
 
     var svg_outer_arcs = pies_group.selectAll('.arc_outer')
         .data(function(d) {return compute_arc_array(d, {outer: true})});
@@ -950,6 +981,8 @@ function create_donut() {
                 return '#E9E2E2';
             }
         });
+
+
 
 
     // svg at this point is our D3 groups:

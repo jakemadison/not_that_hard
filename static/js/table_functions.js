@@ -2,7 +2,7 @@
  * Created by jmadison on 3/9/15.
  */
 
-
+/*global $ */
 
 // Build our table:
 function populate_page(result) {
@@ -25,9 +25,9 @@ function populate_page(result) {
         arts = (row_data.arts[1] ? arts + ' <b>+</b> ' + row_data.arts[1] : arts);
         smarts = (row_data.smarts[1] ? smarts + ' <b>+</b> ' + row_data.smarts[1] : smarts);
 
-        return '<tr class="row_data"> <td>'+day+':</td><td class="health_row">'+
-            health+'</td><td class="wealth_row">'+ wealth+'</td><td class="arts_row">'+arts+
-            '</td><td class="smarts_row">'+smarts+'</td></tr>';
+        return '<tr class="row_data"> <td>' + day + ':</td><td class="health_row">' +
+            health + '</td><td class="wealth_row">' +  wealth + '</td><td class="arts_row">' + arts +
+            '</td><td class="smarts_row">' + smarts + '</td></tr>';
 
 
     }
@@ -45,11 +45,14 @@ function populate_page(result) {
 
     }
 
-    $('#health_badge').text(result.category_counts.health);
-    $('#wealth_badge').text(result.category_counts.wealth);
-    $('#arts_badge').text(result.category_counts.arts);
-    $('#smarts_badge').text(result.category_counts.smarts);
+    // calendar data is not setting category counts yet.  I guess that could be added.
+    if (result.category_counts !== undefined) {
 
+        $('#health_badge').text(result.category_counts.health);
+        $('#wealth_badge').text(result.category_counts.wealth);
+        $('#arts_badge').text(result.category_counts.arts);
+        $('#smarts_badge').text(result.category_counts.smarts);
+    }
 
 
 }
