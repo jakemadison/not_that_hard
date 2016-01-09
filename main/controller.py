@@ -15,7 +15,7 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
     print('entered construct data array with: {} {} {} {}'.format(current_val, amount, has_prev, has_next))
     print('amount: {}'.format(amount))
 
-    if current_val == 'month' or amount == '':
+    if current_val == 'month' or amount == '' or current_val == 'year':
         new_date = datetime.now(pytz.timezone('US/Pacific'))
         month = str(new_date.month)
         year = str(new_date.year)
@@ -37,7 +37,11 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
     # now to actually get our data:
     parsed_data_array = []
 
-    historical_data = models.Day.objects.all().order_by('date').filter(date__year=year, date__month=month)
+    if current_val == 'year':
+        print('getting year vals...')
+        historical_data = models.Day.objects.all().order_by('date').filter(date__year=year)
+    else:
+        historical_data = models.Day.objects.all().order_by('date').filter(date__year=year, date__month=month)
 
     # print('now checking for existence of has_prev/next')
     if has_prev is None:
@@ -79,6 +83,9 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
                         'wealth': [None, None],
                         'arts': [None, None],
                         'smarts': [None, None]}
+
+    # for ea in parsed_data_array:
+    #     print(ea)
 
     return parsed_data_array, month_name + ' ' + year, has_next, has_prev, category_counts
 

@@ -62,7 +62,15 @@
           </a>
       </li>
 
+      <li>
+          <a href="#" id="year_toggle"
+             onclick="$(this).blur();
+                      get_historical_data({'amount': null, 'has_prev': false, 'has_next': false, 'full_year': true});"
+                  >
 
+              <span class="text-muted" aria-hidden="true" id="year_toggle_text">Year</span>
+          </a>
+      </li>
 
 
 

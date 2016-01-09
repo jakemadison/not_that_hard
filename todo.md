@@ -213,12 +213,16 @@ That kind of makes intuitive sense doesn't it?
 
 More thought clearly needed on how to go forward on this.
 
+====
+
+Here's an easy one to start with: create a year view that just dumps everything from Jan 1st to present in one
+page.  May need to change the keyFn that it uses.  Not sure where month labels will go.
 
 
 
-
-
-
-
+====
+here's an idea for the weekend:
+- send an email after x days (3?, config?) mentioning, hey, it's been this long since you've done one of these.
+Beacause it's always shocking how long it's been since, eg, exercise.
 
 

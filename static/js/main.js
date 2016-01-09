@@ -92,7 +92,10 @@ function build_year_modal() {
 
 
 // on init, grab our historical data:
-get_historical_data({'amount': null});
+//get_historical_data({'amount': null});
+
+get_historical_data({'amount': null, 'has_prev': false, 'has_next': false, 'full_year': true});
+
 
 // destroy year chart on modal hidden:
 $('.year_modal').on('hidden.bs.modal', function() {
@@ -291,7 +294,12 @@ function get_historical_data(options) {
         return
     }
 
-    options.current = $('#month_name').text();
+    if (options.full_year === true) {
+        options.current = 'year';
+    }
+    else {
+        options.current = $('#month_name').text();
+    }
 
     $.get('get_historical_data', options,
 
@@ -1023,7 +1031,10 @@ function create_donut() {
 }
 
 
+function year_toggle() {
+//    okay... so this is going to redraw with all data for the entire year... somehow.
 
+}
 
 
 
