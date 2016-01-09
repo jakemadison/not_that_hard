@@ -15,6 +15,7 @@ import json
 import sqlite3 as db
 from not_that_hard.settings import DATABASES
 from datetime import datetime
+from django.core.mail import EmailMessage
 
 
 def get_config():
@@ -56,19 +57,58 @@ def get_suggestion_for_event(event_type):
 
 
 def create_email_reminder(reminders):
-    pass
+    html = """
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>html title</title>
+  <style type="text/css" media="screen">
+    table{
+        background-color: #AAD373;
+        empty-cells:hide;
+    }
+    td.cell{
+        background-color: white;
+    }
+  </style>
+</head>
+<body>
+<p>Hey, it looks like you haven't added to your events lately.  </p>
+"""
+
+    reminder_template = """
+    <p>
+    It's been <b>{}</b> days since you last did something to contribute to your <b>{}</b>.  Something in the
+    past you did for
+    that category was <b>{}</b>.  Maybe you could do that again?
+    </p>
+    """
+
+    for each_reminder in reminders:
+        html += reminder_template.format(each_reminder['days_since'],
+                                         each_reminder['name'],
+                                         each_reminder['suggestion'])
+        html += '<br>'
+
+    html += """
+    </body>
+    """
+
+    return html
 
 
-def send_email(raw_content, address):
+def send_email(raw_content, address, sender='noreply@notthathard.jakemadison.com'):
 
     print 'constructing email'
     email_content = create_email_reminder(raw_content)
-
 
     print 'sending email content now to {}'.format(address)
 
     # everything should be good here, just send the stupid email
     print email_content
+
+    msg = EmailMessage('A friendsly reminder from NTH :)', email_content, sender, [address])
+    msg.content_subtype = "html"  # Main content is now text/html
+    return msg.send()
 
 
 def main():
@@ -103,9 +143,6 @@ def main():
     send_email(reminder_array, reminder_config['email_address'])
 
     print 'done!'
-
-
-
 
 
 
