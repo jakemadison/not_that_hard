@@ -1,0 +1,10 @@
+{
+  "turned_on": {
+    "arts": true,
+    "smarts": false,
+    "health": true,
+    "wealth": false
+  },
+  "days_until_reminder": 1,
+  "email_address": "hot6lpyxis@gmail.com"
+}
