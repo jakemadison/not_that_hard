@@ -9,6 +9,15 @@ That can be a V2 though.  For now, KISS.
 
 For now the config will be a simple json file, later it will probably be a DB thing.
 
+To Do:
+- Fix perms on server side
+- only send on periodicity (every x days) to not get super annoying.
+- better suggestions
+- better emails formatting, pictures
+- inspiring quotes?  too cheesy?
+- change settings on the front end
+- send some kind of graphic snapshot of the recent week using phantomJS or whatever
+
 """
 
 import json
