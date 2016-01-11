@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """
 Regular cron job that runs once per day, reads a config for options, checks the DB for the last time something
 was done, creates suggestions if appropriate, and emails out.
@@ -20,15 +22,23 @@ To Do:
 
 """
 
+import os
+
+### server_specific stuff:
+# import sys
+# sys.path.insert(0, "/var/www/nth")
+# os.environ['DJANGO_SETTINGS_MODULE'] = 'not_that_hard.settings'
+####
+
 import json
 import sqlite3 as db
-from not_that_hard.settings import DATABASES
+from not_that_hard.settings import DATABASES, REMINDER_DIR
 from datetime import datetime
 from django.core.mail import EmailMessage
 
 
 def get_config():
-    with open('reminder_config.json') as f:
+    with open(os.path.join(REMINDER_DIR, 'reminder_config.json')) as f:
         config = json.load(f)
     return config
 
@@ -80,9 +90,20 @@ def create_email_reminder(reminders):
     }
   </style>
 </head>
-<body>
-<p>Hey, it looks like you haven't added to your events lately.  </p>
-"""
+<body>"""
+
+    negative_intro = """
+                    <p>Hey, it looks like you haven't added to your events lately.  </p>
+                """
+
+    positive_intro = """ <p>Hey, it looks like you're keeping up with the events you care about.  Good job, you!  </p>
+
+    """
+
+    if len(reminders) > 0:
+        html += negative_intro
+    else:
+        html += positive_intro
 
     reminder_template = """
     <p>
@@ -99,6 +120,9 @@ def create_email_reminder(reminders):
         html += '<br>'
 
     html += """
+<a href="http://journal.jakemadison.com" target=_blank>journal.jakemadison.com</a><br>
+    <p>Keep it up though, you're doing great!  You're great! Yay!</p>
+    <p>From you in the past. :)</p>
     </body>
     """
 
@@ -115,7 +139,7 @@ def send_email(raw_content, address, sender='noreply@notthathard.jakemadison.com
     # everything should be good here, just send the stupid email
     print email_content
 
-    msg = EmailMessage('A friendsly reminder from NTH :)', email_content, sender, [address])
+    msg = EmailMessage('A friendly reminder from NTH :)', email_content, sender, [address])
     msg.content_subtype = "html"  # Main content is now text/html
     return msg.send()
 

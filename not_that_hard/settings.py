@@ -93,6 +93,8 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,  'templates'),
 )
 
+REMINDER_DIR = os.path.join(BASE_DIR,  'reminders')
+
 
 # debugging email :
 # EMAIL_PORT = 1025
