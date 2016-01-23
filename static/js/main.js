@@ -245,12 +245,14 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
 
             for (var i=0; i < data.length; i++) {
                 if (data[i].day === active_day) {
-                    console.log('found the event day that I need to update');
+                    console.log('found the event day that I need to update....');
+
                     console.log(data[i]);
 
                     if (is_update) {  // if this is an update, just assign text directly.
                         data[i][category][arc_pos] = event_text;
                         build_modal(data[i], i);
+                        populate_page({'data': data});
                         return;
                     }
 
@@ -268,15 +270,14 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
                         console.log('nothing at all, apparently... what is going on here? Buggin" out!!');
                     }
 
+                    populate_page({'data': data});
                     build_modal(data[i], i);
                     return;
                 }
 
             }
 
-
     })
-
 
 }
 
@@ -1031,10 +1032,7 @@ function create_donut() {
 }
 
 
-function year_toggle() {
-//    okay... so this is going to redraw with all data for the entire year... somehow.
 
-}
 
 
 

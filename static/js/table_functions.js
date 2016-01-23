@@ -7,6 +7,8 @@
 // Build our table:
 function populate_page(result) {
 
+    console.log('populate page running');
+
     function build_row(row_data) {
         //console.log('building a new row...');
 
@@ -36,13 +38,8 @@ function populate_page(result) {
 
     var test_table = $('.test_body');
     for (var i=0; i<result.data.length; i++) {
-        //console.log('building row: ', result.data[i]);
-
         var this_row = build_row(result.data[i]);
-
-        //console.log('this row: ', this_row);
         test_table.append(this_row);
-
     }
 
     // calendar data is not setting category counts yet.  I guess that could be added.
@@ -56,3 +53,4 @@ function populate_page(result) {
 
 
 }
+
