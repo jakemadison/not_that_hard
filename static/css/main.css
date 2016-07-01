@@ -59,6 +59,10 @@ svg {  margin: 2px;  }
 
 /*TABLE BUILDING PREFERENCES: */
 
+.day_label {
+    color: #afafaf;
+}
+
 .smarts_col {  color: #d0743c; cursor: default; }
 
 .arts_col {  color: #ff8c00; cursor: default; }

@@ -30,7 +30,6 @@ def get_calendar_data(request):
     return HttpResponse(json.dumps({'message': 'success', 'data': result}), content_type="application/json")
 
 
-
 def get_historical_data(request):
 
     print('getting historical data...')
@@ -40,8 +39,8 @@ def get_historical_data(request):
     has_prev_received = request.GET.get('has_prev', None)
     has_next_received = request.GET.get('has_next', None)
 
-    # print('i received current: {c}, amount: {a}, p: {p}, n: {n}'.format(c=current_val, a=amount,
-    #                                                                     p=has_prev_received, n=has_next_received))
+    print('i received current: {c}, amount: {a}, p: {p}, n: {n}'.format(c=current_val, a=amount,
+                                                                        p=has_prev_received, n=has_next_received))
 
     data_array, month, has_next, has_prev, category_counts = controller.construct_data_array(current_val, amount,
                                                                                              has_prev_received,

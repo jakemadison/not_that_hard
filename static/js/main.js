@@ -98,7 +98,7 @@ function build_year_modal() {
 // on init, grab our historical data:
 //get_historical_data({'amount': null});
 
-get_historical_data({'amount': null, 'has_prev': false, 'has_next': false, 'full_year': false});
+get_historical_data({'amount': null, 'has_prev': null, 'has_next': null, 'full_year': false});
 
 
 // destroy year chart on modal hidden:
@@ -155,16 +155,26 @@ var radius = 34;  // this should be altered so we only need to change the one nu
 
 // using "active day" find & return the full range of data for that day:
 function get_active_day_data() {
-    for (var x=0; x < data.length; x++) {
-        if (data[x].day === active_day) {
-           return data[x];
-        }
-    }
+
+    // console.log('active day test: ');
+
+    var active = data.filter(function (d) {return d.day === active_day});
+    return active[0];
+
+    // for (var x=0; x < data.length; x++) {
+    //     if (data[x].day === active_day) {
+    //         console.log(data[x]);
+    //        return data[x];
+    //     }
+    // }
 }
 
 
-// for saving changes to a day's notes, post the new value (if new) to server:
 $('#save_changes_btn').on('click', function () {
+
+    /*
+     for saving changes to a day's notes, post the new value (if new) to server:
+     */
 
        //$('.modal').modal('hide');
         var modal_text_select = $('#modal_textArea');
@@ -247,10 +257,10 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
                 return;
             }
 
+            // TODO: replace with filter/map?
             for (var i=0; i < data.length; i++) {
                 if (data[i].day === active_day) {
                     console.log('found the event day that I need to update....');
-
                     console.log(data[i]);
 
                     if (is_update) {  // if this is an update, just assign text directly.
@@ -350,7 +360,8 @@ var arcScale = d3.scale.linear().domain([0, 100]).range([0, 2*Math.PI]);
 function create_arc_new(config) {
 
         return function myArc() {
-              var arc_obj = d3.svg.arc().innerRadius(config.r - config.r_minus)
+
+              return d3.svg.arc().innerRadius(config.r - config.r_minus)
                 .outerRadius(config.r)
                 .startAngle(function(d, i) {
                     //console.log('start angle for i: ', i, 'on data point d: ', d);
@@ -360,9 +371,9 @@ function create_arc_new(config) {
                     return arcScale((25 - (config.space_offset/2) ) + ((i)*(100/config.l)));
                 });
 
-                return arc_obj;
         }
     }
+
 
 function compute_arc_array(d, config) {
             var ignore_vals = ['id', 'day', 'notes'];

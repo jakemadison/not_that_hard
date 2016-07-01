@@ -15,7 +15,7 @@ function populate_page(result) {
         //var notes = row_data.notes || '-';
 
         var day_array = row_data.day.split(" ");
-        var day = day_array[1] + ' ' + day_array[2];
+        var day = day_array[0].substring(0, 3); // + ' ' + day_array[1] + ' ' + day_array[2];
 
         var health = row_data.health[0] || '-';
         var wealth = row_data.wealth[0] || '-';
@@ -27,7 +27,7 @@ function populate_page(result) {
         arts = (row_data.arts[1] ? arts + ' <b>+</b> ' + row_data.arts[1] : arts);
         smarts = (row_data.smarts[1] ? smarts + ' <b>+</b> ' + row_data.smarts[1] : smarts);
 
-        return '<tr class="row_data"> <td>' + day + ':</td><td class="health_row">' +
+        return '<tr class="row_data"> <td class="day_label">' + day + ':</td><td class="health_row">' +
             health + '</td><td class="wealth_row">' +  wealth + '</td><td class="arts_row">' + arts +
             '</td><td class="smarts_row">' + smarts + '</td></tr>';
 

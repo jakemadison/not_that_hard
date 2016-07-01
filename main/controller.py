@@ -10,6 +10,8 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
 
     # should be in the form: array = [{day: date, wealth: [1, 2], health}]
 
+    # print('constructing data array with: {} {} {} {}'.format(current_val, amount, has_next, has_prev))
+
     category_counts = {'health': 0, 'wealth': 0, 'arts': 0, 'smarts': 0}
 
     print('entered construct data array with: {} {} {} {}'.format(current_val, amount, has_prev, has_next))
