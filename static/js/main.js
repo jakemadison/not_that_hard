@@ -50,6 +50,10 @@ function build_year_modal() {
                     ratio_array.push(y_data.cat_data[curr_cat]/(y_data.total_days*2));
                 }
 
+                //category_array.forEach(function(e, i, a) {
+                //    ratio_array
+                //})
+
                 console.log('ratio array: ', ratio_array);
 
                 return ratio_array;
@@ -85,7 +89,7 @@ function build_year_modal() {
     $.get('get_year_data', function(result) {
         console.log('received year data: ', result);
         create_year(result.data);
-    })
+    });
 
 
 }
@@ -94,7 +98,7 @@ function build_year_modal() {
 // on init, grab our historical data:
 //get_historical_data({'amount': null});
 
-get_historical_data({'amount': null, 'has_prev': false, 'has_next': false, 'full_year': true});
+get_historical_data({'amount': null, 'has_prev': false, 'has_next': false, 'full_year': false});
 
 
 // destroy year chart on modal hidden:

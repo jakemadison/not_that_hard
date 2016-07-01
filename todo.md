@@ -226,3 +226,64 @@ here's an idea for the weekend:
 Beacause it's always shocking how long it's been since, eg, exercise.
 
 
+=====
+Really, all days in the table view (at least) should be drawn out for the month.  Just greyed out lightly for 
+future days vs today.
+
+=====
+Something that would be really cool to have is a min number per day (2) that gets drawn out.  But, if there are
+more events than just the two, split that section up into its constituent events.  keep splitting each area up
+i guess until a max.
+
+- problems are going to be with rendering the table itself, how to add a new event past two rather than overwriting
+the existing event.
+
+=====
+
+Incorporate historical weather patterns for analysis??  That might be kind of cool... Hmm...
+
+Okay, so immediate hover gives you the day, and then calls to some api (that hopefully exists) and gets you what the
+weather that day was, and renders it in the tool tip...
+
+
+=====
+
+I realize that I've been keeping a bunch of "fake events" in my iCal calendar that are just kind of reminders to do
+things on certain days, or "sometime in the future", and they just kind of float around like that and are dumb.
+
+-> feature request: make a collapsable sidebar that holds these items, does not care about what month it is,
+i guess for now, are not tied to any particular day (although could be down the line).  And are just sort of little
+reminders to hang out with people, or vague plans for future.
+
+each one can be killable with a click, moveable?, add a little box for adding them to the sidebar.
+
+
+=======
+Nice easy-ish thing would be to have the front end be able to drill down on categories with a click.
+hopefully just a class change thing?  maybe use opacity to just make the remaining categories pop out?
+
+- could do the same for items in a category too.
+
+========
+
+Break down the "notes" part into sections?  At some point I want to move from using this as my journal, and get back
+into writing an actual, physical journal.  So the notes here will actually be truer to their name.
+
+========
+
+Some kind of emotional marker would be really good.  I'd really like to track that stuff.  What dimensions would it
+have though?  What scale?  What implementation? 
+
+High/Low Energy 
+Happy/Sad
+Anxious/Confident
+Stressed/Relaxed
+
+
+
+
+
+
+
+
+
