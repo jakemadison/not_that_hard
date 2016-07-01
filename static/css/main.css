@@ -2,6 +2,11 @@ svg {  margin: 2px;  }
 
 .arc {  stroke: #fff;  }
 
+
+.feelings_arc {
+    opacity: .3;
+}
+
 /*.journal_done {*/
     /*color: #02749c;*/
 /*}*/

@@ -120,6 +120,9 @@ document.getElementById('event_close').onclick = function(){
 // some cleanup to do when a modal gets dismissed:
 $('.day_modal').on('hidden.bs.modal', function() {
     console.log('hiding of modal is happening...');
+
+    save_slider_info();
+
     $('#modal_textArea').hide();
     $('.modal_notes').show();
     $('#click_to_edit').show();
@@ -150,7 +153,8 @@ var data;
 var category_array = ['arts', 'smarts', 'wealth', 'health'];
 var total_record_length = 4;
 var colour_array = ["#ff8c00", "#d0743c", "#7b6888", "#98abc5"];
-var radius = 34;  // this should be altered so we only need to change the one number to affect inner & outer...
+var radius = 39;  // this should be altered so we only need to change the one number to affect inner & outer...
+var outer_radius = 34;
 // var radius = 40;
 
 // using "active day" find & return the full range of data for that day:
@@ -170,11 +174,42 @@ function get_active_day_data() {
 }
 
 
+
+
+function save_slider_info() {
+    console.log('saving slider data...');
+
+    var sliders = $('.feeling_slider');
+
+    var slider_results = {};
+
+    sliders.map(function (s) {
+        slider_results[sliders[s].name] = sliders[s].value;
+    });
+
+    console.log(slider_results);
+
+    var csrftoken = getCookie('csrftoken');
+
+    $.post('/update_sliders', slider_results, function (result) {
+        console.log(result);
+    });
+
+}
+
+
+
+
+
 $('#save_changes_btn').on('click', function () {
 
     /*
      for saving changes to a day's notes, post the new value (if new) to server:
      */
+
+        console.log('saving.....');
+
+    save_slider_info();
 
        //$('.modal').modal('hide');
         var modal_text_select = $('#modal_textArea');
@@ -195,6 +230,7 @@ $('#save_changes_btn').on('click', function () {
         }
 
         modal_notes_select.text(new_text);
+
 
         var csrftoken = getCookie('csrftoken');
 
@@ -415,6 +451,8 @@ function compute_arc_array(d, config) {
             }
 
     }
+
+
 
 function build_modal(modal_data, modal_data_position) {
 
@@ -824,6 +862,7 @@ function build_modal(modal_data, modal_data_position) {
 
         // this should probably destroy chart data on modal dismiss...
 
+
     }  // End of Build Modal
 
 // Draw out our pies:
@@ -890,6 +929,7 @@ function create_donut() {
 
     // main group for each day group.  controls click for building a modal for the day, hover stuff on month view, etc.
     var pies_group = pies_pre_group.append('g')
+            // .attr('transform', 'translate(' + 40 + ',' + 40 + ')')
             .attr('transform', 'translate(' + radius + ',' + radius + ')')
         .on("click", function(d, i) {
                 day_div.transition().duration(50).style("opacity", 0);
@@ -943,9 +983,11 @@ function create_donut() {
     console.log('finished pie building.  starting arc/path building');
 
     // TODO: these need to not be so terribly hardcoded here.
-    var outer_arc = create_arc_new({'r': radius, 'r_minus': 8, 'l': total_record_length, 'space_offset': 0});  // was r/8
+    var outer_arc = create_arc_new({'r': outer_radius, 'r_minus': 8, 'l': total_record_length, 'space_offset': 0});  // was r/8
     var inner_arc = create_arc_new({'r': 25, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});  //was 25/13
-    var feelings_arc = create_arc_new({'r': 50, 'r_minus': 10, 'l': total_record_length, 'space_offset': 0});  //was 25/13
+
+    var f_r = 50;
+    var feelings_arc = create_arc_new({'r': 44, 'r_minus': 7, 'l': total_record_length, 'space_offset': 0});  //was 25/13
 
     // this binds our arc elements to a new set of data.  That data is taken by each day, and is an array
     // of true/false values based on whether there is an event there or not
@@ -1009,12 +1051,14 @@ function create_donut() {
             }
         });
 
-    
+
         var feelings_colour_scale = d3.scale.linear()
-        .domain([0, 100])
+        .domain([0, 50, 100])
         .interpolate(d3.interpolateRgb)
         // .range(['#061c38', '#ff720e']);
-            .range(["darkgrey", "#ffc800"]);
+            .range(["darkgrey",
+                '#f4f4f4',  // this is actually the background, so in theory, vals of 50% should be invisible.
+                "#ffc800"]);
 
 
     var svg_feelings_arc = pies_group.selectAll('.feelings_arc')
@@ -1029,7 +1073,14 @@ function create_donut() {
         .attr("d", feelings_arc())
         .style("fill", function(d, i) {
 
-            return feelings_colour_scale(Math.floor((Math.random() * 100) + 1));
+            // right, so check if null here, otherwise, do it
+
+            if (Math.random() > .5) {
+                return feelings_colour_scale(Math.floor((Math.random() * 100) + 1));
+            }
+            else {
+                return '#FFFFFF';
+            }
             //
             // if (d) {
             //

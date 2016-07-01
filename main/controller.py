@@ -181,6 +181,14 @@ def update_day_notes(day, year, notes):
         return 'success'
 
 
+def update_slider_data(slider_data, day):
+
+    print('updating_slider_data')
+
+
+
+
+
 def update_events(category, event_text, day, year, is_update, old_text, delete_event):
 
     # category_array = ['arts', 'smarts', 'wealth', 'health']
