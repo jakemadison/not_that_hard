@@ -151,7 +151,7 @@ var category_array = ['arts', 'smarts', 'wealth', 'health'];
 var total_record_length = 4;
 var colour_array = ["#ff8c00", "#d0743c", "#7b6888", "#98abc5"];
 var radius = 34;  // this should be altered so we only need to change the one number to affect inner & outer...
-
+// var radius = 40;
 
 // using "active day" find & return the full range of data for that day:
 function get_active_day_data() {
@@ -942,8 +942,10 @@ function create_donut() {
 
     console.log('finished pie building.  starting arc/path building');
 
-    var outer_arc = create_arc_new({'r': radius, 'r_minus': 8, 'l': total_record_length, 'space_offset': 0});
-    var inner_arc = create_arc_new({'r': 25, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});
+    // TODO: these need to not be so terribly hardcoded here.
+    var outer_arc = create_arc_new({'r': radius, 'r_minus': 8, 'l': total_record_length, 'space_offset': 0});  // was r/8
+    var inner_arc = create_arc_new({'r': 25, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});  //was 25/13
+    var feelings_arc = create_arc_new({'r': 50, 'r_minus': 10, 'l': total_record_length, 'space_offset': 0});  //was 25/13
 
     // this binds our arc elements to a new set of data.  That data is taken by each day, and is an array
     // of true/false values based on whether there is an event there or not
@@ -1000,10 +1002,44 @@ function create_donut() {
             if (d) {
                 //return color(i + 1);
                 return colour_array[i];
+
             }
             else {
                 return '#E9E2E2';
             }
+        });
+
+    
+        var feelings_colour_scale = d3.scale.linear()
+        .domain([0, 100])
+        .interpolate(d3.interpolateRgb)
+        // .range(['#061c38', '#ff720e']);
+            .range(["darkgrey", "#ffc800"]);
+
+
+    var svg_feelings_arc = pies_group.selectAll('.feelings_arc')
+        .data(function (d) {
+            // return true;
+            return compute_arc_array(d, {outer: true})
+        });
+
+    svg_feelings_arc.enter()
+        .append("path")
+        .attr("class", "feelings_arc")
+        .attr("d", feelings_arc())
+        .style("fill", function(d, i) {
+
+            return feelings_colour_scale(Math.floor((Math.random() * 100) + 1));
+            //
+            // if (d) {
+            //
+            //     return '#000000';
+            //     //return color(i + 1);
+            //     return colour_array[i];
+            // }
+            // else {
+            //     return '#E9E2E2';
+            // }
         });
 
 

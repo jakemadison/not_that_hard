@@ -226,7 +226,45 @@
             </li>
           </ul>
         </nav>
-        </div>
+        </div>  <!-- End of day nav-->
+
+{#          High/Low Energy#}
+{#          Happy/Sad#}
+{#          Anxious/Confident#}
+{#          Stressed/Relaxed#}
+
+
+
+          <p>Feelings</p>
+
+          <div class="well well-sm modal_emotions_well">
+{#              <span class="modal_emotions"></span>#}
+              <hr>
+
+
+              <label>Low Energy</label>
+              <label class="pull-right">High Energy</label>
+              <input type="range" min="0" max="100" value="50" id="energy_slider" name="energy_slider">
+
+              <label>Sad</label>
+              <label class="pull-right">Happy</label>
+              <input type="range" min="0" max="100" value="50" id="happysad_slider" name="happysad_slider">
+
+              <label>Anxious</label>
+              <label class="pull-right">Confident</label>
+              <input type="range" min="0" max="100" value="50" id="anxiety_slider" name="anxiety_slider">
+
+              <label>Stressed</label>
+              <label class="pull-right">Relaxed</label>
+              <input type="range" min="0" max="100" value="50" id="stress_slider" name="stress_slider">
+{#              <input type="range" min="0" max="50" value="30" id="spending_slider" name="daily">#}
+{#              <span class="help-block" id="click_to_edit">Click to edit</span>#}
+
+              <hr>
+
+          </div>
+
+
 
           <p>Notes</p>
           <div class="well well-sm modal_note_well">
