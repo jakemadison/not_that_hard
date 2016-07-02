@@ -58,7 +58,10 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
     parsed_datum = {'health': [None, None],
                     'wealth': [None, None],
                     'arts': [None, None],
-                    'smarts': [None, None]}
+                    'smarts': [None, None],
+                    'feelings': {}}
+
+    feeling_types = ['happysad', 'anxiety', 'energy', 'stress']
 
     for each_day in historical_data:
 
@@ -80,11 +83,25 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
                 parsed_datum[str(each_event.category)][1] = str(each_event.name)
                 category_counts[str(each_event.category)] += 1
 
+        # god this is ugly. change it.
+        feeling_record = each_day.slider_day.first()
+        if feeling_record is not None:
+            parsed_datum['feelings']['happysad'] = feeling_record.happysad
+            parsed_datum['feelings']['anxiety'] = feeling_record.anxiety
+            parsed_datum['feelings']['energy'] = feeling_record.energy
+            parsed_datum['feelings']['stress'] = feeling_record.stress
+        else:
+            parsed_datum['feelings']['happysad'] = 50
+            parsed_datum['feelings']['anxiety'] = 50
+            parsed_datum['feelings']['energy'] = 50
+            parsed_datum['feelings']['stress'] = 50
+
         parsed_data_array.append(parsed_datum)
         parsed_datum = {'health': [None, None],
                         'wealth': [None, None],
                         'arts': [None, None],
-                        'smarts': [None, None]}
+                        'smarts': [None, None],
+                        'feelings': {}}
 
     # for ea in parsed_data_array:
     #     print(ea)

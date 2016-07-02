@@ -428,7 +428,7 @@ function create_arc_new(config) {
 
 
 function compute_arc_array(d, config) {
-            var ignore_vals = ['id', 'day', 'notes'];
+            var ignore_vals = ['id', 'day', 'notes', 'feelings'];
             var arc_array = [];
             var outer_arc_array = [];
 
