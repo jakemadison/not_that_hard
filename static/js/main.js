@@ -174,6 +174,19 @@ function get_active_day_data() {
 }
 
 
+function get_proper_date() {
+    /*
+    * This is a horrible hack.
+    *
+    * */
+
+    var current_day = get_active_day_data().day;
+    var day_of_month = current_day.split(' ')[2];
+    var proper_date = day_of_month + ' ' + active_date;
+    console.log(proper_date);
+    return proper_date;
+}
+
 
 
 function save_slider_info() {
@@ -188,6 +201,9 @@ function save_slider_info() {
     });
 
     console.log(slider_results);
+    get_proper_date();
+
+    slider_results['proper_date'] = get_proper_date();
 
     var csrftoken = getCookie('csrftoken');
 

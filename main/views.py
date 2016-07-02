@@ -103,13 +103,14 @@ def update_stuff(request):
 @require_POST
 @csrf_exempt  # temp hack, because csrf junk is BORING
 def update_sliders(request):
-    print('updating yer sliders!!!')
-    print(request.POST)
 
+    print('updating sliders!!!')
     slider_data = request.POST.dict()
     print('----- slider data: {}'.format(slider_data))
 
-    return HttpResponse(json.dumps({'message': 'yep!'}), content_type="application/json")
+    controller_response = controller.update_slider_data(slider_data)
+
+    return HttpResponse(json.dumps({'message': controller_response}), content_type="application/json")
 
 
 # These could probably be the same view on backend and function on front end,

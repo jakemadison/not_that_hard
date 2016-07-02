@@ -181,12 +181,31 @@ def update_day_notes(day, year, notes):
         return 'success'
 
 
-def update_slider_data(slider_data, day):
+def update_slider_data(slider_data):
 
     print('updating_slider_data')
 
+    try:
+        target_date = slider_data['proper_date']
+        parsed_date = datetime.strptime(target_date, '%d %B %Y')
+        print(parsed_date)
+        day_record = models.Day.objects.filter(date=parsed_date).first()
+        slider_record = models.Slider.objects.filter(day_link=day_record).first()
 
+        if slider_record is None:
+            slider_record = models.Slider(day_link=day_record)
 
+        slider_record.happysad = int(slider_data['happysad_slider'])
+        slider_record.anxiety = int(slider_data['anxiety_slider'])
+        slider_record.energy = int(slider_data['energy_slider'])
+        slider_record.happysad = int(slider_data['stress_slider'])
+
+        slider_record.save()
+
+    except Exception, e:
+        return 'major exception! {} {}'.format(e, e.message)
+
+    return 'success'
 
 
 def update_events(category, event_text, day, year, is_update, old_text, delete_event):

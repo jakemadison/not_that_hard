@@ -35,6 +35,22 @@ class Event(models.Model):
         return unicode(self).encode('utf-8')
 
 
+class Slider(models.Model):
+
+    day_link = models.ForeignKey('Day', related_name='slider_day')
+
+    happysad = models.IntegerField(default=50)
+    stress = models.IntegerField(default=50)
+    anxiety = models.IntegerField(default=50)
+    energy = models.IntegerField(default=50)
+
+    # def __unicode__(self):
+    #     return 'Slider day: {}'.format(self)
+    #
+    # def __str__(self):
+    #     return unicode(self).encode('utf-8')
+
+
 class MustDoCategories(models.Model):
 
     name = models.TextField(default='', blank=True, null=True)
