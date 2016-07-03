@@ -215,7 +215,7 @@ def update_slider_data(slider_data):
         slider_record.happysad = int(slider_data['happysad_slider'])
         slider_record.anxiety = int(slider_data['anxiety_slider'])
         slider_record.energy = int(slider_data['energy_slider'])
-        slider_record.happysad = int(slider_data['stress_slider'])
+        slider_record.stress = int(slider_data['stress_slider'])
 
         slider_record.save()
 

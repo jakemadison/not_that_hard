@@ -207,8 +207,23 @@ function save_slider_info() {
 
     var csrftoken = getCookie('csrftoken');
 
+    for (var each_datum in data) {
+        if (data[each_datum].day === active_day) {
+
+            console.log('got my day....');
+            for (var k in data[each_datum].feelings) {
+                data[each_datum].feelings[k] = $('#'+k+'_slider').val();
+            }
+        }
+    }
+
     $.post('/update_sliders', slider_results, function (result) {
         console.log(result);
+        if (result.message !== 'success') {
+            console.log('failure!!');
+            $('#modal_error_message').text(result.message);
+            $('.modal_alert').show();
+        }
     });
 
 }
@@ -428,6 +443,22 @@ function create_arc_new(config) {
 
 
 function compute_arc_array(d, config) {
+
+            if (config.feelings) {
+                var feeling_array = [];
+                console.log('d!', d['feelings']);
+
+                for (var k in d.feelings) {
+                    feeling_array.push(d.feelings[k]);
+                }
+                // console.log(feeling_array);
+                return feeling_array;
+
+            }
+
+
+
+
             var ignore_vals = ['id', 'day', 'notes', 'feelings'];
             var arc_array = [];
             var outer_arc_array = [];
@@ -516,6 +547,14 @@ function build_modal(modal_data, modal_data_position) {
                 $('#click_to_edit').hide();
                 $('#save_changes_btn').removeClass('disabled');
             });
+
+        console.log('modal data: ', modal_data);
+        console.log('setting feelings sliders');
+
+    for (var k in modal_data.feelings) {
+        var cur_slider = '#' + k + '_slider';
+        $(cur_slider).val(modal_data.feelings[k]);
+    }
 
 
         console.log('removing original chart.');
@@ -832,6 +871,7 @@ function build_modal(modal_data, modal_data_position) {
             this.blur();
 
            console.log('day pager is active');
+            save_slider_info();
 
             var offset;
             if (this.parentNode.id == 'has_prev_day_btn') {
@@ -1079,38 +1119,18 @@ function create_donut() {
 
     var svg_feelings_arc = pies_group.selectAll('.feelings_arc')
         .data(function (d) {
-            // return true;
-            return compute_arc_array(d, {outer: true})
+            return compute_arc_array(d, {feelings: true})
         });
+
+    console.log('svg_feelings_arc', svg_feelings_arc);
 
     svg_feelings_arc.enter()
         .append("path")
         .attr("class", "feelings_arc")
         .attr("d", feelings_arc())
         .style("fill", function(d, i) {
-
-            // right, so check if null here, otherwise, do it
-
-            if (Math.random() > .5) {
-                return feelings_colour_scale(Math.floor((Math.random() * 100) + 1));
-            }
-            else {
-                return '#FFFFFF';
-            }
-            //
-            // if (d) {
-            //
-            //     return '#000000';
-            //     //return color(i + 1);
-            //     return colour_array[i];
-            // }
-            // else {
-            //     return '#E9E2E2';
-            // }
+            return feelings_colour_scale(d);
         });
-
-
-
 
     // svg at this point is our D3 groups:
     console.log('svg ->', pies_group);
