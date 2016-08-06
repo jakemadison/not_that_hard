@@ -444,17 +444,17 @@ function create_arc_new(config) {
 
 function compute_arc_array(d, config) {
 
-            if (config.feelings) {
-                var feeling_array = [];
-                console.log('d!', d['feelings']);
-
-                for (var k in d.feelings) {
-                    feeling_array.push(d.feelings[k]);
-                }
-                // console.log(feeling_array);
-                return feeling_array;
-
-            }
+            // if (config.feelings) {
+            //     var feeling_array = [];
+            //     console.log('d!', d['feelings']);
+            //
+            //     for (var k in d.feelings) {
+            //         feeling_array.push(d.feelings[k]);
+            //     }
+            //     // console.log(feeling_array);
+            //     return feeling_array;
+            //
+            // }
 
 
 
@@ -549,12 +549,12 @@ function build_modal(modal_data, modal_data_position) {
             });
 
         console.log('modal data: ', modal_data);
-        console.log('setting feelings sliders');
-
-    for (var k in modal_data.feelings) {
-        var cur_slider = '#' + k + '_slider';
-        $(cur_slider).val(modal_data.feelings[k]);
-    }
+    //     console.log('setting feelings sliders');
+    //
+    // for (var k in modal_data.feelings) {
+    //     var cur_slider = '#' + k + '_slider';
+    //     $(cur_slider).val(modal_data.feelings[k]);
+    // }
 
 
         console.log('removing original chart.');
@@ -1042,8 +1042,8 @@ function create_donut() {
     var outer_arc = create_arc_new({'r': outer_radius, 'r_minus': 8, 'l': total_record_length, 'space_offset': 0});  // was r/8
     var inner_arc = create_arc_new({'r': 25, 'r_minus': 13, 'l': total_record_length, 'space_offset': 0});  //was 25/13
 
-    var f_r = 50;
-    var feelings_arc = create_arc_new({'r': 44, 'r_minus': 7, 'l': total_record_length, 'space_offset': 0});  //was 25/13
+    // var f_r = 50;
+    // var feelings_arc = create_arc_new({'r': 44, 'r_minus': 7, 'l': total_record_length, 'space_offset': 0});  //was 25/13
 
     // this binds our arc elements to a new set of data.  That data is taken by each day, and is an array
     // of true/false values based on whether there is an event there or not
@@ -1108,29 +1108,29 @@ function create_donut() {
         });
 
 
-        var feelings_colour_scale = d3.scale.linear()
-        .domain([0, 50, 100])
-        .interpolate(d3.interpolateRgb)
-        // .range(['#061c38', '#ff720e']);
-            .range(["darkgrey",
-                '#f4f4f4',  // this is actually the background, so in theory, vals of 50% should be invisible.
-                "#ffc800"]);
-
-
-    var svg_feelings_arc = pies_group.selectAll('.feelings_arc')
-        .data(function (d) {
-            return compute_arc_array(d, {feelings: true})
-        });
-
-    console.log('svg_feelings_arc', svg_feelings_arc);
-
-    svg_feelings_arc.enter()
-        .append("path")
-        .attr("class", "feelings_arc")
-        .attr("d", feelings_arc())
-        .style("fill", function(d, i) {
-            return feelings_colour_scale(d);
-        });
+    //     var feelings_colour_scale = d3.scale.linear()
+    //     .domain([0, 50, 100])
+    //     .interpolate(d3.interpolateRgb)
+    //     // .range(['#061c38', '#ff720e']);
+    //         .range(["darkgrey",
+    //             '#f4f4f4',  // this is actually the background, so in theory, vals of 50% should be invisible.
+    //             "#ffc800"]);
+    //
+    //
+    // var svg_feelings_arc = pies_group.selectAll('.feelings_arc')
+    //     .data(function (d) {
+    //         return compute_arc_array(d, {feelings: true})
+    //     });
+    //
+    // console.log('svg_feelings_arc', svg_feelings_arc);
+    //
+    // svg_feelings_arc.enter()
+    //     .append("path")
+    //     .attr("class", "feelings_arc")
+    //     .attr("d", feelings_arc())
+    //     .style("fill", function(d, i) {
+    //         return feelings_colour_scale(d);
+    //     });
 
     // svg at this point is our D3 groups:
     console.log('svg ->', pies_group);

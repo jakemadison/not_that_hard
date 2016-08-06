@@ -55,12 +55,21 @@ WSGI_APPLICATION = 'not_that_hard.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
+
+# CURRENT_VERSION = 'main'
+CURRENT_VERSION = 'personal_dev'
+
+if CURRENT_VERSION == 'main':
+    DB_NAME = 'main_db.sqlite3'
+elif CURRENT_VERSION == 'personal_dev':
+    DB_NAME = 'db.sqlite3'
+elif CURRENT_VERSION == 'test':
+    DB_NAME = 'test_db.sqlite3'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR, 'test_db.sqlite3'),  # Test DB
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Personal DB
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3.new'),  # New DB
+        'NAME': os.path.join(BASE_DIR, DB_NAME),  # Personal DB
     }
 }
 
@@ -94,7 +103,6 @@ TEMPLATE_DIRS = (
 )
 
 REMINDER_DIR = os.path.join(BASE_DIR,  'reminders')
-
 
 # debugging email :
 # EMAIL_PORT = 1025
