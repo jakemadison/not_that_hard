@@ -14,9 +14,10 @@ import controllers.calendar_controller as cc
 # Create your views here.
 @ensure_csrf_cookie
 def index(request):
-    print('entered index view rendering')
+    current_user = request.user
+    print('entered index view rendering for user: {}, id: {}'.format(current_user, current_user.id))
     context = RequestContext(request)
-    controller.update_day_table_to_current()
+    controller.update_day_table_to_current(current_user.id)
 
     print('finished all prep.  Rendering Template now')
     return render_to_response('index.html', context)
@@ -41,6 +42,10 @@ def get_historical_data(request):
 
     print('getting historical data...')
 
+    current_user_id = request.user.id
+    if current_user_id is None:
+        return HttpResponse(json.dumps({'message': 'major failure.  improper user id.'}))
+
     amount = request.GET.get('amount', None)
     current_val = request.GET.get('current', None)
     has_prev_received = request.GET.get('has_prev', None)
@@ -49,7 +54,9 @@ def get_historical_data(request):
     print('i received current: {c}, amount: {a}, p: {p}, n: {n}'.format(c=current_val, a=amount,
                                                                         p=has_prev_received, n=has_next_received))
 
-    data_array, month, has_next, has_prev, category_counts = controller.construct_data_array(current_val, amount,
+    data_array, month, has_next, has_prev, category_counts = controller.construct_data_array(current_user_id,
+                                                                                             current_val,
+                                                                                             amount,
                                                                                              has_prev_received,
                                                                                              has_next_received)
 
@@ -86,6 +93,10 @@ def update_stuff(request):
 
     print('updating stuff')
 
+    current_user_id = request.user.id
+    if current_user_id is None:
+        return HttpResponse(json.dumps({'message': 'major failure.  improper user id.'}))
+
     c = {}
     c.update(csrf(request))
 
@@ -100,7 +111,7 @@ def update_stuff(request):
 
         try:
             print('i received the following notes: {n}, {d}, {dt}'.format(n=new_notes, d=day, dt=date))
-            operation_result = controller.update_day_notes(day, year, new_notes)
+            operation_result = controller.update_day_notes(current_user_id, day, year, new_notes)
         except UnicodeEncodeError, u:
             print('god damn I hate encodings {0}'.format(u))
             operation_result = 'Encoding Error :<'
@@ -148,6 +159,10 @@ def update_event(request):
 
     print('updating event')
 
+    current_user_id = request.user.id
+    if current_user_id is None:
+        return HttpResponse(json.dumps({'message': 'major failure.  improper user id.'}))
+
     category = request.POST.get('category', None)
     event_text = request.POST.get('event_text', None)
     day = request.POST.get('day', None)
@@ -161,7 +176,7 @@ def update_event(request):
                                                                                     old_text, remove_event))
     year = date.split(' ')[-1]
 
-    result_message = controller.update_events(category, event_text, day, year,
+    result_message = controller.update_events(current_user_id, category, event_text, day, year,
                                               is_update, old_text, remove_event)
 
     return HttpResponse(json.dumps({'message': result_message}), content_type="application/json")

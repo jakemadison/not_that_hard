@@ -9,3 +9,4 @@
 # Personal DB and DB backup
 db.sqlite3.bk
 db.sqlite3
+main_db.sqlite3
