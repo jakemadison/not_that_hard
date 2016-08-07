@@ -1,16 +1,30 @@
+"""
+This is the main controller module.  It is responsible for dealing with the getting/setting/updating of basic
+day and event information for a particular user.
+
+"""
+
 from __future__ import print_function
 from datetime import datetime, timedelta
-import models
+import main.models as models
 import monthdelta
 from django.db.models import Q
 import pytz
+from slider_controller import get_day_feelings
 
 
-def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=None):
+def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=None, sliders_active=False):
 
-    # should be in the form: array = [{day: date, wealth: [1, 2], health}]
+    """
+    Construct a data array object of our basic event info and day info for a particular user.  Checks to see if
+    we need to have next/prev buttons if they are not already explicitly passed in.
 
-    # print('constructing data array with: {} {} {} {}'.format(current_val, amount, has_next, has_prev))
+    :param current_val:
+    :param amount:
+    :param has_prev:
+    :param has_next:
+    :return:
+    """
 
     category_counts = {'health': 0, 'wealth': 0, 'arts': 0, 'smarts': 0}
 
@@ -23,17 +37,13 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
         year = str(new_date.year)
         month_name = new_date.strftime('%B')
         new_date = datetime.strptime(month + ' ' + year, '%m %Y')
-        # print('new date: {0}'.format(new_date))
 
     else:
-        print('casting int here....')
         new_date = datetime.strptime(current_val, '%B %Y') + monthdelta.monthdelta(int(amount))
-        # print('current date: {0}'.format(new_date))
 
         month = new_date.strftime('%m')
         year = new_date.strftime('%Y')
         month_name = new_date.strftime('%B')
-
         # if we're here, then we don't know about next or prev
 
     # now to actually get our data:
@@ -61,8 +71,6 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
                     'smarts': [None, None],
                     'feelings': {}}
 
-    feeling_types = ['happysad', 'anxiety', 'energy', 'stress']
-
     for each_day in historical_data:
 
         # get associated events:
@@ -74,7 +82,6 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
         # print('adding events for day: {0}'.format(each_day))
 
         for each_event in day_events:
-
             if parsed_datum[str(each_event.category)][0] is None:
                 parsed_datum[str(each_event.category)][0] = str(each_event.name)
                 category_counts[str(each_event.category)] += 1
@@ -83,18 +90,9 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
                 parsed_datum[str(each_event.category)][1] = str(each_event.name)
                 category_counts[str(each_event.category)] += 1
 
-        # god this is ugly. change it.
-        feeling_record = each_day.slider_day.first()
-        if feeling_record is not None:
-            parsed_datum['feelings']['happysad'] = feeling_record.happysad
-            parsed_datum['feelings']['anxiety'] = feeling_record.anxiety
-            parsed_datum['feelings']['energy'] = feeling_record.energy
-            parsed_datum['feelings']['stress'] = feeling_record.stress
-        else:
-            parsed_datum['feelings']['happysad'] = 50
-            parsed_datum['feelings']['anxiety'] = 50
-            parsed_datum['feelings']['energy'] = 50
-            parsed_datum['feelings']['stress'] = 50
+        if sliders_active:
+            feeling_record = each_day.slider_day.first()
+            parsed_datum['feelings'] = get_day_feelings(feeling_record)
 
         parsed_data_array.append(parsed_datum)
         parsed_datum = {'health': [None, None],
@@ -103,55 +101,17 @@ def construct_data_array(current_val=None, amount=None, has_prev=None, has_next=
                         'smarts': [None, None],
                         'feelings': {}}
 
-    # for ea in parsed_data_array:
-    #     print(ea)
-
     return parsed_data_array, month_name + ' ' + year, has_next, has_prev, category_counts
 
 
-def construct_year_data():
-
-    # this function should build out totals per category, per month, which will get used to build a real
-    # choropleth map of each month:
-
-    # {'Jan 2015': {'arts': 10, 'smarts': 5, 'health': 10, 'wealth': 15}
-    #  'Feb 2015': {'arts': 12, 'smarts': 25, 'health': 13, 'wealth': 10}
-    #  (etc...)
-    # } [{date: 'blah', data: {blah, blah, blah}},
-    # [date, arts, smarts, health, wealth, total]
-
-    historical_data = models.Day.objects.all().order_by('date')
-
-    year_array = []
-    year_datum = {'date': datetime.strftime(historical_data[0].date, '%b %y'), 'total_days': 0}
-
-    for each_day in historical_data:
-        year_datum['total_days'] += 1
-
-        event_data = each_day.events.all()
-        for each_event in event_data:
-
-            if datetime.strftime(each_day.date, '%b %y') == year_datum['date']:
-                if 'cat_data' in year_datum:
-                    year_datum['cat_data'][each_event.category] += 1
-                else:
-                    year_datum['cat_data'] = {'arts': 0, 'smarts': 0, 'health': 0, 'wealth': 0}
-                    year_datum['cat_data'][each_event.category] += 1
-
-            else:
-                year_array.append(year_datum)
-                year_datum = {'date': datetime.strftime(each_day.date, '%b %y'), 'total_days': 0,
-                              'cat_data': {'arts': 0, 'smarts': 0, 'health': 0, 'wealth': 0}}
-                year_datum['cat_data'][each_event.category] += 1
-
-    year_array.append(year_datum)
-
-    print(year_array)
-
-    return year_array
-
-
 def update_day_table_to_current():
+
+    """
+    Instead of using a cron job, we just wait until user logs in, then fill in whatever missing days they need.
+
+    :return:
+    """
+
     print('updating day table to current')
 
     current_day = datetime.now().date()
@@ -178,6 +138,15 @@ def update_day_table_to_current():
 
 def update_day_notes(day, year, notes):
 
+    """
+    Given some note data, add that to the proper day.  Could/should be generalized to any data item.
+
+    :param day:
+    :param year:
+    :param notes:
+    :return:
+    """
+
     print('update day notes function is active')
 
     parse_date = datetime.strptime(day+' '+year, '%A %b %d %Y')
@@ -198,36 +167,21 @@ def update_day_notes(day, year, notes):
         return 'success'
 
 
-def update_slider_data(slider_data):
-
-    print('updating_slider_data')
-
-    try:
-        target_date = slider_data['proper_date']
-        parsed_date = datetime.strptime(target_date, '%d %B %Y')
-        print(parsed_date)
-        day_record = models.Day.objects.filter(date=parsed_date).first()
-        slider_record = models.Slider.objects.filter(day_link=day_record).first()
-
-        if slider_record is None:
-            slider_record = models.Slider(day_link=day_record)
-
-        slider_record.happysad = int(slider_data['happysad_slider'])
-        slider_record.anxiety = int(slider_data['anxiety_slider'])
-        slider_record.energy = int(slider_data['energy_slider'])
-        slider_record.stress = int(slider_data['stress_slider'])
-
-        slider_record.save()
-
-    except Exception, e:
-        return 'major exception! {} {}'.format(e, e.message)
-
-    return 'success'
-
-
 def update_events(category, event_text, day, year, is_update, old_text, delete_event):
 
-    # category_array = ['arts', 'smarts', 'wealth', 'health']
+    """
+    Update, insert, or deleting events in our event table.
+
+    :param category:
+    :param event_text:
+    :param day:
+    :param year:
+    :param is_update:
+    :param old_text:
+    :param delete_event:
+    :return:
+    """
+
     print('i believe that {0} is category: {1}'.format(event_text, category))
 
     date = datetime.strptime(day + ' ' + year, '%A %b %d %Y')
@@ -267,45 +221,6 @@ def update_events(category, event_text, day, year, is_update, old_text, delete_e
         return 'there was a db error!'
 
     return 'success'
-
-
-# controller functions for 'must do's will go here.
-
-def get_must_do_data():
-    print('updating must do history now...')
-    update_must_do_history()
-
-    print('getting must do data')
-    must_do_array = models.MustDoHistory.objects.all()
-    print(must_do_array)
-    must_do_cats = models.MustDoCategories.objects.all()
-    print(must_do_cats)
-
-
-def update_must_do_history():
-    print('updating must do history...')
-    must_do_events = models.MustDoCategories.objects.all()
-
-    for each_category in must_do_events:
-        print('now updating event: {}'.format(each_category))
-        schedule_array = each_category.schedule.split(';')
-        print('schedule: days: {}, months: {}'.format(schedule_array[0], schedule_array[1]))
-
-        if schedule_array[0] != '*':
-            day_array = schedule_array[0].split(',')
-            today = datetime.now().weekday()
-
-            if today in day_array:
-                print('i need to update historical!')
-
-        if schedule_array[1] != '*':
-            month_array = schedule_array[1].split(',')
-            this_month = datetime.now().month
-            print('is this correct month? {}'.format(this_month))
-            print('month array: {}'.format(month_array))
-
-        # this is where we check what the last day was in the history
-        # and then add depending on the current schedule set..
 
 
 if __name__ == "__main__":

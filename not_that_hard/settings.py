@@ -56,8 +56,8 @@ WSGI_APPLICATION = 'not_that_hard.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-# CURRENT_VERSION = 'main'
-CURRENT_VERSION = 'personal_dev'
+CURRENT_VERSION = 'main'
+# CURRENT_VERSION = 'personal_dev'
 
 if CURRENT_VERSION == 'main':
     DB_NAME = 'main_db.sqlite3'
@@ -65,6 +65,8 @@ elif CURRENT_VERSION == 'personal_dev':
     DB_NAME = 'db.sqlite3'
 elif CURRENT_VERSION == 'test':
     DB_NAME = 'test_db.sqlite3'
+else:
+    DB_NAME = ''
 
 DATABASES = {
     'default': {

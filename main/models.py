@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -6,6 +7,7 @@ from django.db import models
 class Day(models.Model):
 
     date = models.DateField()
+    user_link = models.ForeignKey(User, related_name='users')
     number_events = models.IntegerField(default=0)
     notes = models.TextField(default='', blank=True, null=True)
 

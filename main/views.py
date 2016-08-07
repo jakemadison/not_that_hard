@@ -3,19 +3,19 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 import json
 from django.http import HttpResponse
-import controller
+from controllers import controller, year_controller, slider_controller, must_do_controller
 from django.views.decorators.http import require_POST
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt
-import calendar_controller as cc
+import controllers.calendar_controller as cc
+
 
 # Create your views here.
 @ensure_csrf_cookie
 def index(request):
     print('entered index view rendering')
     context = RequestContext(request)
-
     controller.update_day_table_to_current()
 
     print('finished all prep.  Rendering Template now')
@@ -31,6 +31,13 @@ def get_calendar_data(request):
 
 
 def get_historical_data(request):
+
+    """
+    Main async request to get historical data from the front end.  Gets and munges it from the controller.
+
+    :param request:
+    :return:
+    """
 
     print('getting historical data...')
 
@@ -61,15 +68,22 @@ def get_historical_data(request):
 def get_year_data(request):
     print('getting year data now')
 
-    result = controller.construct_year_data()
+    result = year_controller.construct_year_data()
 
     return HttpResponse(json.dumps({'message': 'success', 'data': result}), content_type="application/json")
 
 
-
 @require_POST
-@csrf_exempt  # temp hack, because csrf junk is BORING
+@csrf_exempt  # temp hack, because csrf junk is BORING  # TODO: this matters now.
 def update_stuff(request):
+
+    """
+    Async request to update some backend Notes data.  Need to grab current user from session here.
+
+    :param request:
+    :return:
+    """
+
     print('updating stuff')
 
     c = {}
@@ -99,16 +113,22 @@ def update_stuff(request):
     return HttpResponse(json.dumps({'message': operation_result}), content_type="application/json")
 
 
-
 @require_POST
 @csrf_exempt  # temp hack, because csrf junk is BORING
 def update_sliders(request):
+
+    """
+    Get some slider data from the front end and update it on the DB.
+
+    :param request:
+    :return:
+    """
 
     print('updating sliders!!!')
     slider_data = request.POST.dict()
     print('----- slider data: {}'.format(slider_data))
 
-    controller_response = controller.update_slider_data(slider_data)
+    controller_response = slider_controller.update_slider_data(slider_data)
 
     return HttpResponse(json.dumps({'message': controller_response}), content_type="application/json")
 
@@ -116,12 +136,17 @@ def update_sliders(request):
 # These could probably be the same view on backend and function on front end,
 # and view could deal with event vs notes... later.
 @require_POST
-@csrf_exempt  # temp hack, because csrf junk is BORING
+@csrf_exempt  # temp hack, because csrf junk is BORING  # TODO: this matters now.
 def update_event(request):
-    print('updating event')
 
-    # if we just want to test response:
-    # return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")
+    """
+    Update events on the backend.
+
+    :param request:
+    :return:
+    """
+
+    print('updating event')
 
     category = request.POST.get('category', None)
     event_text = request.POST.get('event_text', None)
@@ -144,8 +169,16 @@ def update_event(request):
 
 # Must Do Views down here:
 def get_must_do_data(request):
+
+    """
+    Deprecated.  This should get moved somewhere else.
+
+    :param request:
+    :return:
+    """
+
     print('getting must do data...')
 
-    controller.get_must_do_data()
+    must_do_controller.get_must_do_data()
 
     return HttpResponse(json.dumps({'message': 'success'}), content_type="application/json")
