@@ -10,3 +10,5 @@
 db.sqlite3.bk
 db.sqlite3
 main_db.sqlite3
+not_that_hard/local_settings.py
+main/client_secret.json

@@ -107,7 +107,7 @@ def construct_data_array(user_id, current_val=None, amount=None, has_prev=None, 
     return parsed_data_array, month_name + ' ' + year, has_next, has_prev, category_counts
 
 
-def update_day_table_to_current(user_id):
+def update_day_table_to_current(current_user):
 
     """
     Instead of using a cron job, we just wait until user logs in, then fill in whatever missing days they need.
@@ -118,7 +118,7 @@ def update_day_table_to_current(user_id):
     print('updating day table to current')
 
     current_day = datetime.now().date()
-    most_recent_day = models.Day.objects.filter(user_link=user_id).all().order_by('-date')
+    most_recent_day = models.Day.objects.filter(user_link=current_user).all().order_by('-date')
 
     if most_recent_day:
         print(most_recent_day)
@@ -126,7 +126,9 @@ def update_day_table_to_current(user_id):
 
     if most_recent_day is None:
         print('no data found at all... creating a day for today and exiting')
-        models.Day(date=current_day, user_link=user_id).save()  # NB: this might fail.
+
+        # this needs to be an instance, not just the ID.  Sigh.
+        models.Day(date=current_day, user_link=current_user).save()  # NB: this might fail.
         return
 
     if most_recent_day >= current_day:
@@ -136,15 +138,15 @@ def update_day_table_to_current(user_id):
     while most_recent_day != current_day:
         print('i need to do some work! cur: {c}, mrd: {m}'.format(c=current_day, m=most_recent_day))
         most_recent_day += timedelta(days=1)
-        models.Day(date=most_recent_day, user_link=user_id).save()  # NB: this might fail.
+        models.Day(date=most_recent_day, user_link=current_user).save()  # NB: this might fail.
 
 
-def update_day_notes(user_id, day, year, notes):
+def update_day_notes(current_user, day, year, notes):
 
     """
     Given some note data, add that to the proper day.  Could/should be generalized to any data item.
 
-    :param user_id:
+    :param current_user:
     :param day:
     :param year:
     :param notes:
@@ -154,7 +156,7 @@ def update_day_notes(user_id, day, year, notes):
     print('update day notes function is active')
 
     parse_date = datetime.strptime(day+' '+year, '%A %b %d %Y')
-    existing_record = models.Day.objects.filter(date=parse_date, user_link=user_id)[0]
+    existing_record = models.Day.objects.filter(date=parse_date, user_link=current_user)[0]
 
     try:
         if existing_record is None:
@@ -171,12 +173,12 @@ def update_day_notes(user_id, day, year, notes):
         return 'success'
 
 
-def update_events(user_id, category, event_text, day, year, is_update, old_text, delete_event):
+def update_events(current_user, category, event_text, day, year, is_update, old_text, delete_event):
 
     """
     Update, insert, or deleting events in our event table.
 
-    :param user_id:
+    :param current_user:
     :param category:
     :param event_text:
     :param day:
@@ -194,7 +196,7 @@ def update_events(user_id, category, event_text, day, year, is_update, old_text,
 
     try:
 
-        day_record = models.Day.objects.filter(date=date, user_link=user_id).first()
+        day_record = models.Day.objects.filter(date=date, user_link=current_user).first()
 
         if delete_event == 'true':
             print('i am attempting to delete an event')

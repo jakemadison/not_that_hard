@@ -1,8 +1,11 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import url, include
+
 from django.contrib import admin
 from main import views
 
-urlpatterns = patterns('',
+admin.autodiscover()
+
+urlpatterns = [
     # Examples:
     # url(r'^$', 'not_that_hard.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
@@ -16,4 +19,4 @@ urlpatterns = patterns('',
     url(r'^update_event$', views.update_event, name='update_event'),
     # url(r'^update_sliders$', views.update_sliders, name='update_sliders'),
     # url(r'^get_must_do_data$', views.get_must_do_data, name='get_must_do_data'),
-)
+]

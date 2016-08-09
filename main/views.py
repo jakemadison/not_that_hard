@@ -5,19 +5,18 @@ import json
 from django.http import HttpResponse
 from controllers import controller, year_controller, slider_controller, must_do_controller
 from django.views.decorators.http import require_POST
-from django.core.context_processors import csrf
+# from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.decorators.csrf import csrf_exempt
+# from django.views.decorators.csrf import csrf_exempt
 import controllers.calendar_controller as cc
 
 
-# Create your views here.
-@ensure_csrf_cookie
+@ensure_csrf_cookie  # forces cookie to get set.
 def index(request):
     current_user = request.user
     print('entered index view rendering for user: {}, id: {}'.format(current_user, current_user.id))
     context = RequestContext(request)
-    controller.update_day_table_to_current(current_user.id)
+    controller.update_day_table_to_current(current_user)
 
     print('finished all prep.  Rendering Template now')
     return render_to_response('index.html', context)
@@ -81,7 +80,6 @@ def get_year_data(request):
 
 
 @require_POST
-@csrf_exempt  # temp hack, because csrf junk is BORING  # TODO: this matters now.
 def update_stuff(request):
 
     """
@@ -93,12 +91,12 @@ def update_stuff(request):
 
     print('updating stuff')
 
-    current_user_id = request.user.id
-    if current_user_id is None:
+    current_user = request.user
+    if current_user is None:
         return HttpResponse(json.dumps({'message': 'major failure.  improper user id.'}))
 
-    c = {}
-    c.update(csrf(request))
+    # c = {}
+    # c.update(csrf(request))
 
     new_notes = request.POST.get('new_notes', None).encode('utf-8')
     day = request.POST.get('day', None)
@@ -111,7 +109,7 @@ def update_stuff(request):
 
         try:
             print('i received the following notes: {n}, {d}, {dt}'.format(n=new_notes, d=day, dt=date))
-            operation_result = controller.update_day_notes(current_user_id, day, year, new_notes)
+            operation_result = controller.update_day_notes(current_user, day, year, new_notes)
         except UnicodeEncodeError, u:
             print('god damn I hate encodings {0}'.format(u))
             operation_result = 'Encoding Error :<'
@@ -125,7 +123,6 @@ def update_stuff(request):
 
 
 @require_POST
-@csrf_exempt  # temp hack, because csrf junk is BORING
 def update_sliders(request):
 
     """
@@ -147,7 +144,6 @@ def update_sliders(request):
 # These could probably be the same view on backend and function on front end,
 # and view could deal with event vs notes... later.
 @require_POST
-@csrf_exempt  # temp hack, because csrf junk is BORING  # TODO: this matters now.
 def update_event(request):
 
     """
@@ -159,8 +155,8 @@ def update_event(request):
 
     print('updating event')
 
-    current_user_id = request.user.id
-    if current_user_id is None:
+    current_user = request.user
+    if current_user is None:
         return HttpResponse(json.dumps({'message': 'major failure.  improper user id.'}))
 
     category = request.POST.get('category', None)
@@ -176,7 +172,7 @@ def update_event(request):
                                                                                     old_text, remove_event))
     year = date.split(' ')[-1]
 
-    result_message = controller.update_events(current_user_id, category, event_text, day, year,
+    result_message = controller.update_events(current_user, category, event_text, day, year,
                                               is_update, old_text, remove_event)
 
     return HttpResponse(json.dumps({'message': result_message}), content_type="application/json")

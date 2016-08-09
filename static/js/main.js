@@ -2,8 +2,40 @@
  * Created by jmadison on 1/2/15.
  */
 
-// Helper stuff:
-//function getCookie(name) {
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Set crsf token on every request out
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+// send CRSF token on every request.  But not to 3rd parties.
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    }
+});
+
+
+
 
 
 // year modal stuff:
@@ -121,7 +153,7 @@ document.getElementById('event_close').onclick = function(){
 $('.day_modal').on('hidden.bs.modal', function() {
     console.log('hiding of modal is happening...');
 
-    save_slider_info();
+    // save_slider_info();
 
     $('#modal_textArea').hide();
     $('.modal_notes').show();
@@ -240,7 +272,7 @@ $('#save_changes_btn').on('click', function () {
 
         console.log('saving.....');
 
-    save_slider_info();
+    // save_slider_info();
 
        //$('.modal').modal('hide');
         var modal_text_select = $('#modal_textArea');
@@ -869,7 +901,7 @@ function build_modal(modal_data, modal_data_position) {
             this.blur();
 
            console.log('day pager is active');
-            save_slider_info();
+            // save_slider_info();
 
             var offset;
             if (this.parentNode.id == 'has_prev_day_btn') {

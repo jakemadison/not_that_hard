@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-__author__ = 'Madison'
 
 import httplib2
 import os
@@ -13,11 +12,8 @@ from oauth2client import tools
 import datetime
 import calendar
 
-# try:
-#     import argparse
-#     flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-# except ImportError:
 flags = None
+__author__ = 'Madison'
 
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
