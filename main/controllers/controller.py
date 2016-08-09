@@ -123,13 +123,12 @@ def update_day_table_to_current(current_user):
     if most_recent_day:
         print(most_recent_day)
         most_recent_day = most_recent_day[0].date
-
-    if most_recent_day is None:
-        print('no data found at all... creating a day for today and exiting')
-
-        # this needs to be an instance, not just the ID.  Sigh.
-        models.Day(date=current_day, user_link=current_user).save()  # NB: this might fail.
-        return
+    else:
+        print('no data found for any days at all...'.format(most_recent_day))
+        # get the first day of the month & save it out:
+        start_day = current_day - timedelta(days=current_day.day-1)
+        models.Day(date=start_day, user_link=current_user).save()
+        most_recent_day = start_day
 
     if most_recent_day >= current_day:
         print('nothing to do.. most recent is either same or more than current day')
@@ -138,7 +137,7 @@ def update_day_table_to_current(current_user):
     while most_recent_day != current_day:
         print('i need to do some work! cur: {c}, mrd: {m}'.format(c=current_day, m=most_recent_day))
         most_recent_day += timedelta(days=1)
-        models.Day(date=most_recent_day, user_link=current_user).save()  # NB: this might fail.
+        models.Day(date=most_recent_day, user_link=current_user).save()
 
 
 def update_day_notes(current_user, day, year, notes):
