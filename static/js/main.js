@@ -325,7 +325,7 @@ $('#save_changes_btn').on('click', function () {
 // send a new event, or updated/deleted event to the server:
 function send_event_from_modal(position, value, arc_pos, is_update, old_text, remove_event) {
 
-    //console.log('send event from modal received: ', remove_event);
+    console.log('send event from modal received: ', remove_event);
 
     var category = category_array[position];
 
@@ -363,7 +363,14 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
                     console.log(data[i]);
 
                     if (is_update) {  // if this is an update, just assign text directly.
+                        console.log(' i am just an update is why..');
                         data[i][category][arc_pos] = event_text;
+
+                        if (remove_event) {
+                            console.log('regetting historical data why not');
+                            get_historical_data({'amount': null, 'has_prev': null, 'has_next': null, 'full_year': false});
+                        }
+
                         build_modal(data[i], i);
                         populate_page({'data': data});
                         return;
@@ -383,7 +390,12 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
                         console.log('nothing at all, apparently... what is going on here? Buggin" out!!');
                     }
 
-                    populate_page({'data': data});
+                    // server data has been saved.  Update the table:
+                    // populate_page({'data': data});
+
+                    console.log('regetting historical data why not');
+                    get_historical_data({'amount': null, 'has_prev': null, 'has_next': null, 'full_year': false});
+
                     build_modal(data[i], i);
                     return;
                 }
@@ -954,7 +966,7 @@ function build_modal(modal_data, modal_data_position) {
 // Draw out our pies:
 function create_donut() {
 
-    //console.log('create donut... ');
+    console.log('main create donut function is now running... ');
     console.log('data ->', data);
     //console.log('object keys: ', Object.keys(data[0]));
 
@@ -973,7 +985,7 @@ function create_donut() {
 
 
     var chart = d3.select('.chart');
-    //chart.selectAll('.pie').remove();
+    chart.selectAll('.pie').remove();
 
     // data binding is done by index, but we need to specify keys instead:
     var keyFn = function(d) {
