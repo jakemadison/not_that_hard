@@ -362,18 +362,22 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
                     console.log('found the event day that I need to update....');
                     console.log(data[i]);
 
-                    if (is_update) {  // if this is an update, just assign text directly.
+                    if (is_update && !remove_event) {  // if this is an update, just assign text directly.
                         console.log(' i am just an update is why..');
                         data[i][category][arc_pos] = event_text;
+                    }
 
-                        if (remove_event) {
-                            console.log('regetting historical data why not');
-                            get_historical_data({'amount': null, 'has_prev': null, 'has_next': null, 'full_year': false});
+                    if (remove_event) {
+
+                        // console.log('vals pre juggle: ', data[i][category][0],data[i][category][1]);
+                        if (arc_pos === 0) {
+                            console.log('juggling the inner value...');
+                            data[i][category][0] = data[i][category][1]
                         }
+                        data[i][category][1] = null;
 
-                        build_modal(data[i], i);
-                        populate_page({'data': data});
-                        return;
+                        // console.log('object after juggle: ', data[i]);
+                        // console.log('vals post juggle: ', data[i][category][0],data[i][category][1]);
                     }
 
                     // crap.. so after adding to the array, it also needs to:
@@ -387,16 +391,15 @@ function send_event_from_modal(position, value, arc_pos, is_update, old_text, re
                         data[i][category][1] = event_text;
                     }
                     else {
+                        console.log('what are my values??: ', data[i][category][0],data[i][category][1]);
                         console.log('nothing at all, apparently... what is going on here? Buggin" out!!');
                     }
 
-                    // server data has been saved.  Update the table:
-                    // populate_page({'data': data});
-
                     console.log('regetting historical data why not');
-                    get_historical_data({'amount': null, 'has_prev': null, 'has_next': null, 'full_year': false});
+                    get_historical_data({'amount': null, 'has_prev': null, 'has_next': null, 'full_year': false,
+                    'new_modal': {data:data[i], i:i}});
 
-                    build_modal(data[i], i);
+                    // build_modal(data[i], i);
                     return;
                 }
 
@@ -453,6 +456,12 @@ function get_historical_data(options) {
 
             populate_page(result);  // actually builds out the table data
             create_donut();  // creates our donuts based on new global data
+
+            if (options.new_modal !== undefined) {
+                console.log('building the modal again from historical data....');
+                build_modal(options.new_modal.data, options.new_modal.i);
+            }
+
 
     });
 
