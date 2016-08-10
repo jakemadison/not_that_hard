@@ -5,10 +5,9 @@ import json
 from django.http import HttpResponse
 from controllers import controller, year_controller, slider_controller, must_do_controller
 from django.views.decorators.http import require_POST
-# from django.core.context_processors import csrf
 from django.views.decorators.csrf import ensure_csrf_cookie
-# from django.views.decorators.csrf import csrf_exempt
 import controllers.calendar_controller as cc
+from not_that_hard.utilities import execute_git_log
 
 
 @ensure_csrf_cookie  # forces cookie to get set.
@@ -176,6 +175,16 @@ def update_event(request):
                                               is_update, old_text, remove_event)
 
     return HttpResponse(json.dumps({'message': result_message}), content_type="application/json")
+
+
+def get_git_info(request):
+    """
+    Grab git info for the front end
+    :param request:
+    :return:
+    """
+    git_info = execute_git_log()
+    return HttpResponse(json.dumps({'message': 'success', 'data': git_info}), content_type="application/json")
 
 
 # Must Do Views down here:

@@ -2,6 +2,19 @@
  * Created by jmadison on 1/2/15.
  */
 
+
+// get our git info
+(function get_git_info() {
+
+    $.get('/get_git_info', function(r) {
+        console.log('getting info returned: ', r);
+        $("#git_label").text(r.data.label);
+    });
+})();
+
+
+
+
 // using jQuery
 function getCookie(name) {
     var cookieValue = null;

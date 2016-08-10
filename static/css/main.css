@@ -413,3 +413,11 @@ div.tooltip {
 .range.range-danger input[type="range"] {
     outline-color: rgb(217, 83, 79);
 }
+
+
+
+
+
+.version_number {
+    margin-top: 20px;
+}

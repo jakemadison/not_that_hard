@@ -17,6 +17,7 @@ urlpatterns = [
     # url(r'^get_year_data$', views.get_year_data, name='get_year_data'),
     url(r'^update_stuff$', views.update_stuff, name='update_stuff'),
     url(r'^update_event$', views.update_event, name='update_event'),
+    url(r'^get_git_info$', views.get_git_info, name='get_git_info')
     # url(r'^update_sliders$', views.update_sliders, name='update_sliders'),
     # url(r'^get_must_do_data$', views.get_must_do_data, name='get_must_do_data'),
 ]

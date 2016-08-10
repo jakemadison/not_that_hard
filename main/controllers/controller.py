@@ -1,3 +1,4 @@
+
 """
 This is the main controller module.  It is responsible for dealing with the getting/setting/updating of basic
 day and event information for a particular user.
@@ -232,9 +233,6 @@ def update_events(current_user, category, event_text, day, year, is_update, old_
 
     except Exception, err:  # there must be a finer-tuned exception class to catch here.
         print('zomg... super huge exception: {e}'.format(e=err))
-        # okay, so the most recent DB error is because we're using 2 DBs and the migration isn't applying to
-        # both of them, for whatever reason. <- this is fixed with DB cleanup.
-
         # if event_record:
         #     event_record.rollback()  # there is no rolling back
         return 'there was a db error!'
