@@ -8,64 +8,23 @@ from __future__ import print_function
 from datetime import datetime, timedelta
 import main.models as models
 import monthdelta
-from django.db.models import Q
 import pytz
 from slider_controller import get_day_feelings
 
 
-def construct_data_array(user_id, current_val=None, amount=None, has_prev=None, has_next=None, sliders_active=False):
+def parse_historical_data(historical_data_array, sliders_active=False):
 
     """
-    Construct a data array object of our basic event info and day info for a particular user.  Checks to see if
-    we need to have next/prev buttons if they are not already explicitly passed in.
+    Does all the munging of historical data from the DB and returns it as usable objects.
 
-    :param user_id:
-    :param current_val:
-    :param amount:
-    :param has_prev:
-    :param has_next:
+    :param historical_data_array:
+    :param sliders_active
     :return:
     """
 
-    category_counts = {'health': 0, 'wealth': 0, 'arts': 0, 'smarts': 0}
-
-    print('entered construct data array with: {} {} {} {}'.format(current_val, amount, has_prev, has_next))
-    print('amount: {}'.format(amount))
-
-    if current_val == 'month' or amount == '' or current_val == 'year':
-        new_date = datetime.now(pytz.timezone('US/Pacific'))
-        month = str(new_date.month)
-        year = str(new_date.year)
-        month_name = new_date.strftime('%B')
-        new_date = datetime.strptime(month + ' ' + year, '%m %Y')
-
-    else:
-        new_date = datetime.strptime(current_val, '%B %Y') + monthdelta.monthdelta(int(amount))
-
-        month = new_date.strftime('%m')
-        year = new_date.strftime('%Y')
-        month_name = new_date.strftime('%B')
-        # if we're here, then we don't know about next or prev
-
     # now to actually get our data:
     parsed_data_array = []
-
-    if current_val == 'year':
-        print('getting year vals...')
-        historical_data = models.Day.objects.all().order_by('date').filter(date__year=year, user_link=user_id)
-    else:
-        historical_data = models.Day.objects.all().order_by('date').filter(date__year=year, date__month=month,
-                                                                           user_link=user_id)
-
-    # print('now checking for existence of has_prev/next')
-    if has_prev is None:
-        has_prev = models.Day.objects.filter(user_link=user_id).filter(Q(date__lt=new_date) |
-                                                                       Q(date__lt=new_date)).exists()  # review this..
-        # why is it doing less than date or less than date???? there must have been a reason....?
-
-    if has_next is None:
-        has_next = models.Day.objects.filter(user_link=user_id).filter(Q(date__gte=new_date+monthdelta.monthdelta(1)) |
-                                             Q(date__gte=new_date+monthdelta.monthdelta(1))).exists()
+    category_counts = {'health': 0, 'wealth': 0, 'arts': 0, 'smarts': 0}
 
     # print('now building historical array from data')
     parsed_datum = {'health': [None, None],
@@ -74,7 +33,7 @@ def construct_data_array(user_id, current_val=None, amount=None, has_prev=None, 
                     'smarts': [None, None],
                     'feelings': {}}
 
-    for each_day in historical_data:
+    for each_day in historical_data_array:
 
         # get associated events:
         day_events = each_day.events.all()
@@ -103,6 +62,60 @@ def construct_data_array(user_id, current_val=None, amount=None, has_prev=None, 
                         'arts': [None, None],
                         'smarts': [None, None],
                         'feelings': {}}
+
+    return parsed_data_array, category_counts
+
+
+def construct_data_array(user_id, current_val=None, amount=None, has_prev=None, has_next=None, sliders_active=False):
+
+    """
+    Construct a data array object of our basic event info and day info for a particular user.  Checks to see if
+    we need to have next/prev buttons if they are not already explicitly passed in.
+
+    :param user_id:
+    :param current_val:
+    :param amount:
+    :param has_prev:
+    :param has_next:
+    :return:
+    """
+
+    print('entered construct data array with: {} {} {} {}'.format(current_val, amount, has_prev, has_next))
+    print('amount: {}'.format(amount))
+
+    # figure out start dates to query DB on:
+    if current_val == 'month' or amount == '' or current_val == 'year':
+        new_date = datetime.now(pytz.timezone('US/Pacific'))
+        month = str(new_date.month)
+        year = str(new_date.year)
+        month_name = new_date.strftime('%B')
+        new_date = datetime.strptime(month + ' ' + year, '%m %Y')
+
+    else:
+        new_date = datetime.strptime(current_val, '%B %Y') + monthdelta.monthdelta(int(amount))
+
+        month = new_date.strftime('%m')
+        year = new_date.strftime('%Y')
+        month_name = new_date.strftime('%B')
+        # if we're here, then we don't know about next or prev
+
+    if current_val == 'year':
+        print('getting year vals...')
+        historical_data = models.Day.objects.all().order_by('date').filter(date__year=year, user_link=user_id)
+    else:
+        historical_data = models.Day.objects.all().order_by('date').filter(date__year=year, date__month=month,
+                                                                           user_link=user_id)
+
+    # now munge our historical data into something usable:
+    parsed_data_array, category_counts = parse_historical_data(historical_data, sliders_active)
+
+    # determine if there are previous/next months after the current one, if it wasn't explicitly passed in:
+    if has_prev in (None, ""):
+        has_prev = models.Day.objects.filter(user_link=user_id).filter(date__lt=new_date).exists()
+
+    if has_next in (None, ""):
+        has_next = models.Day.objects.filter(user_link=user_id)
+        has_next = has_next.filter(date__gte=new_date+monthdelta.monthdelta(1)).exists()
 
     return parsed_data_array, month_name + ' ' + year, has_next, has_prev, category_counts
 
