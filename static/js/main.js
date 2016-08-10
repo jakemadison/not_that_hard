@@ -8,7 +8,7 @@
 
     $.get('/get_git_info', function(r) {
         console.log('getting info returned: ', r);
-        $("#git_label").text(r.data.label);
+        $("#git_label").text(r.data.label + ' (' + r.data.commit + ')');
     });
 })();
 

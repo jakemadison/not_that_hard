@@ -17,12 +17,12 @@ def execute_git_log():
 
         history = history.split("\n")[0:6]
 
-        commit = {"commit": history[0],
+        commit = {"commit": history[0][7:14],
                   "author": history[1],
                   "date": history[2],
                   "message": history[4].strip()}
 
-        label = ' '.join(commit['date'].split(' ')[3:7])
+        label = ' '.join(commit['date'].split(' ')[3:6])
         commit['label'] = label
 
     except Exception, e:
